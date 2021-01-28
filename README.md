@@ -19,7 +19,7 @@
 * James	El Tayar - 40097755
 
 ## Getting Started
-* Download Node,js from `https://nodejs.org/en/download/`
+* Download Node,js from https://nodejs.org/en/download/
 * Clone/Download the project
 * In the main folder and the client folder install all missing depencies by typing `npm install` 
 
