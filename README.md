@@ -6,7 +6,7 @@
 ## Technologies Used
 * ReactJS
 * NodeJs
-* Firebase
+* MongoDB
 
 ## Team Members
 * Shashank Patel  - 40094236
