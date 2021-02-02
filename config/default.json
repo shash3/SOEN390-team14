@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://soen390shop:Soen390project@cluster0.bmif3.mongodb.net/ERP_DB?retryWrites=true&w=majority",
+    "jwtSecret": "secretToken"
+}
