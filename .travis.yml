@@ -1,23 +1,23 @@
 matrix:
   include:
-    -language: node_js
-     node_js:
-      - "stable"
-     addons: 
-      chrome: stable
-     before_script:
-      - npm install
-     script:
-      -npm test
-    -language: react_js
-      react_js:
-        -"stable"
+    - language: node_js
+      node_js:
+        - "stable"
       addons:
-       chrome: stable
+        chrome: stable
+      before_script:
+        - npm install
+      script:
+        - npm test
+    - language: node_js
+      node_js:
+        - "stable"
+      addons:
+        chrome: stable
       services:
-        - mongoDB
+        - mongodb
       before_script:
         - cd client
         - npm install
       script:
-       - npm test
+        - npm test
