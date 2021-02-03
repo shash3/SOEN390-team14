@@ -10,7 +10,7 @@ const User = require("../../../models/User");
 
 // Register user
 router.post(
-  "/",
+  "/register",
   [
     // form validation
     check("name", "A name is required").not().isEmpty(),
