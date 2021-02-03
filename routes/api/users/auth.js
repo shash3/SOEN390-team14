@@ -20,7 +20,7 @@ router.get("/", auth, async (req, res) => {
 
 // Login: Auth user, get token
 router.post(
-  "/",
+  "/login",
   [
     // form validation
     check("email", "Please include a valid email").isEmail(),

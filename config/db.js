@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('config');
-const db = config.get('mongoURI');
+const db = config.get('mongoURI'); // cloud database
+const connectionString = 'mongodb://mongo:27017/erp'; // local database
 
 const connectDB = async () =>{
     try{
