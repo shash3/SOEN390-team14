@@ -1,21 +1,20 @@
-version: '3.4'
+version: "3"
 services:
   react-app:
-    image: react-app
+    build: ./client 
+    image: soen390team14/frontend:latest
     stdin_open: true
     ports: 
       - "3000:3000"
     networks:
-      - mern-app
+      - erp-app
   api-server:
-    image: api-server
+    build: .
+    image: soen390team14/backend:latest
     ports:
       - "5000:5000"
     networks:
-      - mern-app
+      - erp-app
 networks:
-  mern-app:
+  erp-app:
     driver: bridge
-volumes:
-  mongo-data:
-    driver: local
