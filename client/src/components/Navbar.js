@@ -9,12 +9,14 @@ import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
+import Shop from '@material-ui/icons/Shop';
+import VpnKey from '@material-ui/icons/VpnKey';
+import Home from '@material-ui/icons/Home';
+import LockOpen from '@material-ui/icons/LockOpen';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -22,7 +24,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-
+import {Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -52,15 +54,6 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
     },
   },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   inputRoot: {
     color: 'inherit',
   },
@@ -84,14 +77,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     [theme.breakpoints.up('md')]: {
       display: 'none',
-    },
-     list: {
-    width: 250,
+    }
+  },
+  list: {
+    width: 220,
+    textDecoration: 'none',
+    color: '#FFFFFF'
   },
   fullList: {
     width: 'auto',
   }
-  },
 }));
 
 export default function Navbar() {
@@ -190,24 +185,23 @@ export default function Navbar() {
 
   const list = (anchor) => (
     <div
-     
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+    className={classes.list}
+    onClick={toggleDrawer(anchor, false)}
+    onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+      <List  className={classes.list}>
+        {[<Link to='/' style={{ textDecoration: 'none'}}>Home</Link>, <Link to='/' style={{ textDecoration: 'none'}}>Shop</Link>].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon>{index % 2 === 0 ? <Home /> : <Shop />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+        {[<Link to='/login' style={{ textDecoration: 'none'}}>Login</Link>].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon>{index % 2 === 0 ? <VpnKey /> : <LockOpen />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -237,11 +231,10 @@ export default function Navbar() {
     </div>
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            BIKESHOP
+            BIKERR
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
             </div>
             <InputBase
               placeholder="Search…"
