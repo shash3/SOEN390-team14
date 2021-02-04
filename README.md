@@ -29,3 +29,10 @@ In the Main Folder
 
 In the Client Folder
 * `npm start` will run front-end only
+
+## Docker
+
+* `docker pull soen390team14/backend1` will pull back-end image
+* `docker pull soen390team14/front1` will pull front-end image
+* `docker run -d --name api-server -it -p 5000:5000 soen390team14/backend1` will run front-end image
+* `docker run -d --link api-server -it -p 3000:3000 soen390team14/front1` will run front-end image
