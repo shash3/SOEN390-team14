@@ -1,38 +1,49 @@
 # SOEN390-Team14 ERP System
-## Objective
+[![Build Status](https://travis-ci.com/shash3/SOEN390-team14.svg?token=yqePnie6vvPik5z1MhQa&branch=master)](https://travis-ci.com/shash3/SOEN390-team14)
+
+## Purpose
+This project is created to satisfy the requirements of SOEN390.
 
 ## Description
+The project is a simplified ERP website for our client who is the owner of a Bike manufacturing company.
 
 ## Technologies Used
 * ReactJS
-* NodeJs
+* NodeJs (Express Framework)
 * MongoDB
 
-## Team Members
-* Shashank Patel  - 40094236
-* Sacha Elkaim - 29779698
-* Derek Ruiz-Cigana - 40096268
-* Michael Takenaka - 40095917
-* Adam Richard - 27059329
-* Jamil	Hirsh	21236962
-* Ashraf Khalil	- 40066289
-* James	El Tayar - 40097755
+## Requirements
+* NodeJS (12 or above) https://nodejs.org/en/download/
+* MongoDB Account
 
-## Getting Started
-* Download Node,js from https://nodejs.org/en/download/
+## Installation
 * Clone/Download the project
 * In the main folder and the client folder install all missing depencies by typing `npm install` 
 
-In the Main Folder
+### In the Main Folder
 * `npm run dev` will run server + front-end
 * `npm run server` will run server only
 
-In the Client Folder
+### In the Client Folder
 * `npm start` will run front-end only
 
-## Docker
-
+### Docker
 * `docker pull soen390team14/backend1` will pull back-end image
 * `docker pull soen390team14/front1` will pull front-end image
 * `docker run -d --name api-server -it -p 5000:5000 soen390team14/backend1` will run front-end image
 * `docker run -d --link api-server -it -p 3000:3000 soen390team14/front1` will run front-end image
+
+### Login Information
+- MongoDB:
+  - Email: soen390shop@gmail.com
+  - Password: Soen390project
+
+## Contributor
+* Adam Richard (Project Manager)
+* Sacha Elkaim (Programming Manager)
+* Shashank Patel
+* Derek Ruiz-Cigana
+* Michael Takenaka 
+* Jamil	Hirsh	
+* Ashraf Khalil	
+* James	El Tayar
