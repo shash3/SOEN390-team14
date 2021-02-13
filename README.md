@@ -1,4 +1,4 @@
-# SOEN390-Team14 ERP System
+# Bikerr
 [![Build Status](https://travis-ci.com/shash3/SOEN390-team14.svg?token=yqePnie6vvPik5z1MhQa&branch=master)](https://travis-ci.com/shash3/SOEN390-team14)
 
 ## Purpose
