@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // reactstrap components
 import {
@@ -15,11 +15,35 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import axios from "axios";
 
 const Profile = () => {
+  const [user, setUser] = useState({});
+  const [logout, setLogout] = useState(false);
+
+    // get user information
+    useEffect(() => {
+      const getUserInformation = async () => {
+        const userToken = JSON.parse(localStorage.getItem("user"));
+  
+        const response = await axios
+          .get("/api/auth", {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .catch((err) => console.log("Error", err));
+        if (response && response.data) {
+          setUser(response.data);
+        }
+      };
+      getUserInformation();
+      console.log(user);
+    }, []);
+
   return (
     <>
-      <UserHeader />
+      <UserHeader user = {user}/>
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -84,7 +108,7 @@ const Profile = () => {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    Jessica Jones
+                    {user.name}
                     <span className="font-weight-light">, 27</span>
                   </h3>
                   <div className="h5 font-weight-300">
@@ -148,7 +172,7 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="lucky.jesse"
+                            defaultValue={user.name}
                             id="input-username"
                             placeholder="Username"
                             type="text"
@@ -166,7 +190,7 @@ const Profile = () => {
                           <Input
                             className="form-control-alternative"
                             id="input-email"
-                            placeholder="jesse@example.com"
+                            defaultValue={user.email}
                             type="email"
                           />
                         </FormGroup>

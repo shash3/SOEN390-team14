@@ -1,5 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
 // reactstrap components
 import {
   DropdownMenu,
@@ -19,6 +20,40 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  const [user, setUser] = useState({});
+  const [logout, setLogout] = useState(false);
+
+  // get user information
+  useEffect(() => {
+    const getUserInformation = async () => {
+      const userToken = JSON.parse(localStorage.getItem("user"));
+
+      const response = await axios
+        .get("/api/auth", {
+          headers: {
+            "x-auth-token": userToken,
+          },
+        })
+        .catch((err) => console.log("Error", err));
+      if (response && response.data) {
+        setUser(response.data);
+      }
+    };
+    getUserInformation();
+    console.log(user);
+  }, []);
+
+  // logout (remove token)
+  const loggingOut = (e) => {
+    localStorage.removeItem("user");
+    setLogout(true);
+  };
+
+  // logout go back to login page
+  if (logout) {
+    return <Redirect to="/auth/login" />;
+  }
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -56,7 +91,7 @@ const AdminNavbar = (props) => {
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
+                      {user.name}
                     </span>
                   </Media>
                 </Media>
@@ -82,7 +117,7 @@ const AdminNavbar = (props) => {
                   <span>Support</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem onClick={(e) => loggingOut(e)}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>
