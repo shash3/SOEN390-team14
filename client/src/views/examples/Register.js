@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -17,6 +18,50 @@ import {
 } from "reactstrap";
 
 const Register = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  });
+
+  const { name, email, password, password2 } = formData;
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (password != password2) {
+      console.log("passwords do not match");
+    } else {
+      const newUser = {
+        name,
+        email,
+        password,
+        password2,
+      };
+      try {
+        const config = {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        console.log(newUser);
+        const body = JSON.stringify(newUser);
+        const res = await axios.post(
+          "/api/users/register",
+          body,
+          config
+        );
+        console.log(res.data);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    }
+  };
+
   return (
     <>
       <Col lg="6" md="8">
@@ -66,7 +111,7 @@ const Register = () => {
             <div className="text-center text-muted mb-4">
               <small>Or sign up with credentials</small>
             </div>
-            <Form role="form">
+            <Form className="form" onSubmit={(e) => onSubmit(e)}>
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
@@ -74,7 +119,13 @@ const Register = () => {
                       <i className="ni ni-hat-3" />
                     </InputGroupText>
                   </InputGroupAddon>
-                  <Input placeholder="Name" type="text" />
+                  <Input
+                    placeholder="Name"
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={(e) => onChange(e)}
+                  />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
@@ -88,6 +139,9 @@ const Register = () => {
                     placeholder="Email"
                     type="email"
                     autoComplete="new-email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => onChange(e)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -99,9 +153,29 @@ const Register = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Password"
                     type="password"
-                    autoComplete="new-password"
+                    placeholder="Password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => onChange(e)}
+                    minLength="6"
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <InputGroup className="input-group-alternative">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <i className="ni ni-lock-circle-open" />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input
+                    type="password"
+                    placeholder="Confirm Password"
+                    name="password2"
+                    value={password2}
+                    onChange={(e) => onChange(e)}
+                    minLength="6"
                   />
                 </InputGroup>
               </FormGroup>
@@ -134,7 +208,7 @@ const Register = () => {
                 </Col>
               </Row>
               <div className="text-center">
-                <Button className="mt-4" color="primary" type="button">
+                <Button className="mt-4" color="primary" type="submit">
                   Create account
                 </Button>
               </div>

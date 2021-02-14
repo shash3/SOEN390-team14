@@ -28,6 +28,7 @@ const Auth = (props) => {
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/auth") {
+        {console.log("im here")}
         return (
           <Route
             path={prop.layout + prop.path}
