@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { Link, Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -17,6 +19,39 @@ import {
 } from "reactstrap";
 
 const Login = () => {
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [isAuthenticated, setAuthenticated] = useState(false) ;
+  const { email, password } = formData;
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+      const body = {
+        email: formData.email,
+        password: formData.password
+      };
+      await axios.post("/api/auth/login", body)
+      .then((response) => {
+        if (response.data.token) {
+          localStorage.setItem("user", JSON.stringify(response.data.token));
+          setAuthenticated(true);
+        }})
+        .catch(function (error) {
+          console.log(error);
+        }) 
+  };
+
+  // redirect when logged in
+  if(isAuthenticated) {
+    return <Redirect to="/admin/user-profile"/>
+  }
+
   return (
     <>
       <Col lg="5" md="7">
@@ -66,7 +101,7 @@ const Login = () => {
             <div className="text-center text-muted mb-4">
               <small>Or sign in with credentials</small>
             </div>
-            <Form role="form">
+            <Form className="form" onSubmit={(e) => onSubmit(e)}>
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
@@ -75,9 +110,11 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Email"
-                    type="email"
-                    autoComplete="new-email"
+                      type="email"
+                     placeholder="Email Address"
+                     name="email"
+                   value={email}
+                     onChange={(e) => onChange(e)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -89,9 +126,12 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Password"
-                    type="password"
-                    autoComplete="new-password"
+                     type="password"
+                     placeholder="Password"
+                     name="password"
+                     value={password}
+                     onChange={(e) => onChange(e)}
+                     minLength="8"
                   />
                 </InputGroup>
               </FormGroup>
@@ -109,7 +149,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="button">
+                <Button className="my-4" color="primary" type="submit">
                   Sign in
                 </Button>
               </div>
