@@ -23,7 +23,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 
-const Tables = () => {
+const Accounting = () => {
   return (
     <>
       <Header />
@@ -1778,4 +1778,4 @@ const Tables = () => {
   );
 };
 
-export default Tables;
+export default Accounting;

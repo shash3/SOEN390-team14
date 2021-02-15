@@ -96,7 +96,7 @@ const MapWrapper = () => {
   );
 };
 
-const Maps = () => {
+const Transportation = () => {
   return (
     <>
       <Header />
@@ -114,4 +114,4 @@ const Maps = () => {
   );
 };
 
-export default Maps;
+export default Transportation;
