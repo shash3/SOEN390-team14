@@ -1,10 +1,10 @@
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Transportation from "views/examples/Transportation.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
-import Accounting from "views/examples/Accounting.js";
-import Production from "views/examples/Production.js";
+import Profile from "views/components/Profile.js";
+import Transportation from "views/components/Transportation.js";
+import Register from "views/components/Register.js";
+import Login from "views/components/Login.js";
+import Accounting from "views/components/Accounting.js";
+import Production from "views/components/Production.js";
 
 var routes = [
   {

@@ -19,8 +19,7 @@ import axios from "axios";
 
 const Profile = () => {
   const [user, setUser] = useState({});
-  const [logout, setLogout] = useState(false);
-
+  
     // get user information
     useEffect(() => {
       const getUserInformation = async () => {
