@@ -37,7 +37,7 @@ const Profile = () => {
         }
       };
       getUserInformation();
-      console.log(user);
+      console.log(user.permission);
     }, []);
 
   return (

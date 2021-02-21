@@ -49,7 +49,7 @@ const Login = () => {
 
   // redirect when logged in
   if(isAuthenticated) {
-    return <Redirect to="/admin/"/>
+    return <Redirect to="/admin/user-profile"/>
   }
 
   return (
