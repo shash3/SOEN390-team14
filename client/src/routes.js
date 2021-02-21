@@ -1,10 +1,10 @@
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Maps from "views/examples/Maps.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
-import Tables from "views/examples/Tables.js";
-import Icons from "views/examples/Icons.js";
+import Profile from "views/components/Profile.js";
+import Transportation from "views/components/Transportation.js";
+import Register from "views/components/Register.js";
+import Login from "views/components/Login.js";
+import Accounting from "views/components/Accounting.js";
+import Production from "views/components/Production.js";
 
 var routes = [
   {
@@ -15,17 +15,24 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
+    path: "/production",
+    name: "Production",
     icon: "ni ni-planet text-blue",
-    component: Icons,
+    component: Production,
     layout: "/admin",
   },
   {
-    path: "/maps",
-    name: "Maps",
+    path: "/transportation",
+    name: "Transportation",
     icon: "ni ni-pin-3 text-orange",
-    component: Maps,
+    component: Transportation,
+    layout: "/admin",
+  },
+  {
+    path: "/accounting",
+    name: "Accounting",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Accounting,
     layout: "/admin",
   },
   {
@@ -33,13 +40,6 @@ var routes = [
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
     layout: "/admin",
   },
   {

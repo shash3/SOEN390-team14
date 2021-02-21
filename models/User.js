@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    permission: {
+        type: String,
+        default: 'user'
+    },
     avatar: {
         type: String
     },

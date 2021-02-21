@@ -1,4 +1,3 @@
-/*eslint-disable*/
 import React from "react";
 
 // reactstrap components
@@ -26,36 +25,12 @@ const Login = () => {
               <Nav className="nav-footer justify-content-center justify-content-xl-end">
                 <NavItem>
                   <NavLink
-                    href="https://www.creative-tim.com?ref=adr-auth-footer"
+                    href="https://github.com/shash3/SOEN390-team14/"
                     target="_blank"
                   >
-                    SOEN390-TEAM14
+                   MINI CAPSTONE: BIKERR ERP SYSTEM 
                   </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    href="https://www.creative-tim.com/presentation?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    About Us
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    href="http://blog.creative-tim.com?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    Blog
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md?ref=adr-auth-footer"
-                    target="_blank"
-                  >
-                    MIT License
-                  </NavLink>
-                </NavItem>
+                  </NavItem>
               </Nav>
             </Col>
           </Row>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Link, Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -18,6 +19,7 @@ import {
 } from "reactstrap";
 
 const Register = () => {
+  const [isAuthenticated, setAuthenticated] = useState(false) ;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -50,66 +52,31 @@ const Register = () => {
         };
         console.log(newUser);
         const body = JSON.stringify(newUser);
-        const res = await axios.post(
+        const response = await axios.post(
           "/api/users/register",
           body,
           config
         );
-        console.log(res.data);
+        localStorage.setItem("user", JSON.stringify(response.data.token));
+        setAuthenticated(true);
       } catch (err) {
         console.log(err.response.data);
       }
     }
   };
 
+// redirect when logged in
+if(isAuthenticated) {
+  return <Redirect to="/admin/user-profile"/>
+}
+
   return (
     <>
       <Col lg="6" md="8">
         <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <div className="text-muted text-center mt-2 mb-4">
-              <small>Sign up with</small>
-            </div>
-            <div className="text-center">
-              <Button
-                className="btn-neutral btn-icon mr-4"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/github.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Github</span>
-              </Button>
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
-            </div>
-          </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
-              <small>Or sign up with credentials</small>
+              <small>Sign up with credentials</small>
             </div>
             <Form className="form" onSubmit={(e) => onSubmit(e)}>
               <FormGroup>

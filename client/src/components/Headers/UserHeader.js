@@ -2,6 +2,7 @@ import React from "react";
 
 // reactstrap components
 import { Button, Container, Row, Col } from "reactstrap";
+import UserWallpaper from "../../assets/img/brand/user-wallpaper.jpg";
 
 const UserHeader = (props) => {
   return (
@@ -10,10 +11,6 @@ const UserHeader = (props) => {
         className="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
         style={{
           minHeight: "600px",
-          backgroundImage:
-            "url(" +
-            require("../../assets/img/theme/profile-cover.jpg").default +
-            ")",
           backgroundSize: "cover",
           backgroundPosition: "center top",
         }}

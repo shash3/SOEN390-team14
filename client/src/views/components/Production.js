@@ -14,7 +14,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 
-const Icons = () => {
+const Production = () => {
   const [copiedText, setCopiedText] = useState();
   return (
     <>
@@ -2766,4 +2766,4 @@ const Icons = () => {
   );
 };
 
-export default Icons;
+export default Production;
