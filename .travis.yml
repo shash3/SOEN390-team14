@@ -6,6 +6,7 @@ matrix:
       addons:
         chrome: stable
       before_script:
+        - cd back-end
         - npm install
       script:
         - npm test
