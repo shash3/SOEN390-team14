@@ -33,7 +33,7 @@ const Production = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [materials, setMaterials] = useState([]);
   // search input
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState("");
 
   const onChange = (e) => setFormData(e.target.value);
 
