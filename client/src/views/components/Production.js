@@ -18,32 +18,66 @@ import {
   Table,
   Container,
   Row,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
   UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
 
 const Production = () => {
+  const userToken = JSON.parse(localStorage.getItem("user"));
   const [materials, setMaterials] = useState([]);
+  // search input
+  const [formData, setFormData] = useState();
+
+  const onChange = (e) => setFormData(e.target.value);
 
   // get user information
   useEffect(() => {
-    const getUserInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
-
-      const response = await axios
-        .get("/api/material", {
-          headers: {
-            "x-auth-token": userToken,
-          },
-        })
-        .catch((err) => console.log("Error", err));
-      if (response && response.data) {
-        setMaterials(response.data);
+    // retrieve information
+    const lookup = async () => {
+      if (formData === "") {
+        await axios
+          .get("/api/material", {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setMaterials(response.data);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        const body = {
+          name: formData,
+        };
+        await axios
+          .post("/api/material", body, {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setMaterials(response.data);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     };
-    getUserInformation();
-  }, []);
+    lookup();
+  }, [formData]);
 
   return (
     <>
@@ -55,7 +89,26 @@ const Production = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Inventory</h3>
+                <h2 className="mb-0">Inventory</h2>
+                <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                  <FormGroup className="mb-3 mt-3">
+                    <InputGroup
+                      className="input-group-alternative"
+                      style={{ backgroundColor: "#0065B9" }}
+                    >
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="fas fa-search" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        placeholder="Search"
+                        type="text"
+                        onChange={(e) => onChange(e)}
+                      />
+                    </InputGroup>
+                  </FormGroup>
+                </Form>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
