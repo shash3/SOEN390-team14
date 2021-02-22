@@ -10,6 +10,10 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "jest"
   },
+  "jest":{
+    "testRegex": "./test/.*.js$",
+    "rootDir": "."
+ },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shash3/SOEN390-team14.git"
