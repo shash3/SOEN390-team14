@@ -19,12 +19,11 @@ import {
 } from "reactstrap";
 
 const Login = () => {
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [isAuthenticated, setAuthenticated] = useState(false) ;
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const { email, password } = formData;
 
   const onChange = (e) =>
@@ -32,31 +31,32 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-      const body = {
-        email: formData.email,
-        password: formData.password
-      };
-      await axios.post("/api/auth/login", body)
+    const body = {
+      email: formData.email,
+      password: formData.password,
+    };
+    await axios
+      .post("/api/auth/login", body)
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data.token));
           setAuthenticated(true);
-        }})
-        .catch(function (error) {
-          console.log(error);
-        }) 
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   // redirect when logged in
-  if(isAuthenticated) {
-    return <Redirect to="/admin/user-profile"/>
+  if (isAuthenticated) {
+    return <Redirect to="/admin/user-profile" />;
   }
 
   return (
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
-        
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
               <small>Sign in with credentials</small>
@@ -70,11 +70,11 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                      type="email"
-                     placeholder="Email Address"
-                     name="email"
-                   value={email}
-                     onChange={(e) => onChange(e)}
+                    type="email"
+                    placeholder="Email Address"
+                    name="email"
+                    value={email}
+                    onChange={(e) => onChange(e)}
                   />
                 </InputGroup>
               </FormGroup>
@@ -86,12 +86,12 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                     type="password"
-                     placeholder="Password"
-                     name="password"
-                     value={password}
-                     onChange={(e) => onChange(e)}
-                     minLength="8"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => onChange(e)}
+                    minLength="8"
                   />
                 </InputGroup>
               </FormGroup>
@@ -117,13 +117,9 @@ const Login = () => {
           </CardBody>
         </Card>
         <Row className="mt-3">
-          <Col xs="6">
-          </Col>
+          <Col xs="6"></Col>
           <Col className="text-right" xs="6">
-            <a
-              className="text-light"
-              href="/auth/register"
-            >
+            <a className="text-light" href="/auth/register">
               <small>Create new account</small>
             </a>
           </Col>
