@@ -5,7 +5,7 @@ import Register from "views/components/Register.js";
 import Login from "views/components/Login.js";
 import Accounting from "views/components/Accounting.js";
 import Production from "views/components/Production.js";
-
+// IN ADMIN.JS AS WELL IF MODIFYING
 var routes = [
   {
     path: "/index",

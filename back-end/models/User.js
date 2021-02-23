@@ -14,9 +14,13 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    location: {
+        type: String,
+        default: ""
+    },
     permission: {
         type: String,
-        default: 'user'
+        default: ""
     },
     avatar: {
         type: String

@@ -40,7 +40,10 @@ const Login = () => {
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data.token));
-          localStorage.setItem("permission",JSON.stringify(response.data.permission))
+          localStorage.setItem(
+            "permission",
+            JSON.stringify(response.data.permission)
+          );
           setAuthenticated(true);
         }
       })
