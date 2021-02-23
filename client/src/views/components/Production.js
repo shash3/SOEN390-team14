@@ -94,7 +94,7 @@ const Production = () => {
                   <FormGroup className="mb-3 mt-3">
                     <InputGroup
                       className="input-group-alternative"
-                      style={{ backgroundColor: "#0065B9" }}
+                      style={{ backgroundColor: "#2181EC" }}
                     >
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -116,8 +116,6 @@ const Production = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
-                    <th scope="col">Quality</th>
-                    <th scope="col">Color</th>
                     <th scope="col" />
                   </tr>
                 </thead>
@@ -140,8 +138,6 @@ const Production = () => {
                           {newlocation.location}
                         </Badge>
                       </td>
-                      <td>{newlocation.quality}</td>
-                      <td>{newlocation.color}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle

@@ -6,12 +6,28 @@ import {
   Card,
   CardHeader,
   CardBody,
-  FormGroup,
-  Form,
-  Input,
+  Col,
+  Badge,
+  CardFooter,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle,
+  Media,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Progress,
+  Table,
   Container,
   Row,
-  Col,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  UncontrolledTooltip,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -19,7 +35,8 @@ import axios from "axios";
 
 const Profile = () => {
   const [user, setUser] = useState({});
-  
+  const permission = JSON.parse(localStorage.getItem("permission"));
+  const [materials, setMaterials] = useState([]);
     // get user information
     useEffect(() => {
       const getUserInformation = async () => {
@@ -43,9 +60,160 @@ const Profile = () => {
     <>
       <UserHeader user = {user}/>
       {/* Page content */}
+      {permission === "admin" && 
       <Container className="mt--7" fluid>
-        <Row>
-        
+      {/* Table */}
+      <Row>
+        <div className="col">
+          <Card className="shadow">
+            <CardHeader className="border-0">
+              <h2 className="mb-0">Inventory</h2>
+              <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+                <FormGroup className="mb-3 mt-3">
+                  <InputGroup
+                    className="input-group-alternative"
+                    style={{ backgroundColor: "#2181EC" }}
+                  >
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="fas fa-search" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input
+                      placeholder="Search"
+                      type="text"
+                   
+                    />
+                  </InputGroup>
+                </FormGroup>
+              </Form>
+            </CardHeader>
+            <Table className="align-items-center table-flush" responsive>
+              <thead className="thead-light">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Location</th>
+                  <th scope="col" />
+                </tr>
+              </thead>
+              <tbody>
+                {materials.map((newlocation) => (
+                  <tr key={newlocation.id} value={newlocation.name}>
+                    <th scope="row">
+                      <Media className="align-items-center">
+                        <Media>
+                          <span className="mb-0 text-sm">
+                            {newlocation.name}
+                          </span>
+                        </Media>
+                      </Media>
+                    </th>
+                    <td>{newlocation.quantity}</td>
+                    <td>
+                      <Badge color="" className="badge-dot mr-4">
+                        <i className="bg-success" />
+                        {newlocation.location}
+                      </Badge>
+                    </td>
+                    <td className="text-right">
+                      <UncontrolledDropdown>
+                        <DropdownToggle
+                          className="btn-icon-only text-light"
+                          href="#pablo"
+                          role="button"
+                          size="sm"
+                          color=""
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <i className="fas fa-ellipsis-v" />
+                        </DropdownToggle>
+                        <DropdownMenu className="dropdown-menu-arrow" right>
+                          <DropdownItem
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            Action
+                          </DropdownItem>
+                          <DropdownItem
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            Another action
+                          </DropdownItem>
+                          <DropdownItem
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            Something else here
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <CardFooter className="py-4">
+              <nav aria-label="...">
+                <Pagination
+                  className="pagination justify-content-end mb-0"
+                  listClassName="justify-content-end mb-0"
+                >
+                  <PaginationItem className="disabled">
+                    <PaginationLink
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                      tabIndex="-1"
+                    >
+                      <i className="fas fa-angle-left" />
+                      <span className="sr-only">Previous</span>
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem className="active">
+                    <PaginationLink
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      2 <span className="sr-only">(current)</span>
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      3
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <i className="fas fa-angle-right" />
+                      <span className="sr-only">Next</span>
+                    </PaginationLink>
+                  </PaginationItem>
+                </Pagination>
+              </nav>
+            </CardFooter>
+          </Card>
+        </div>
+      </Row>
+    </Container>
+      }
+       {permission !== "admin" && 
+      <Container className="mt--7" fluid>
+        <Row> 
           <Col className="order-xl-1" xl="8">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
@@ -221,28 +389,13 @@ const Profile = () => {
                       </Col>
                     </Row>
                   </div>
-                  <hr className="my-4" />
-                  {/* Description */}
-                  <h6 className="heading-small text-muted mb-4">About me</h6>
-                  <div className="pl-lg-4">
-                    <FormGroup>
-                      <label>About Me</label>
-                      <Input
-                        className="form-control-alternative"
-                        placeholder="A few words about you ..."
-                        rows="4"
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and
-                        Open Source."
-                        type="textarea"
-                      />
-                    </FormGroup>
-                  </div>
                 </Form>
               </CardBody>
             </Card>
           </Col>
         </Row>
       </Container>
+}
     </>
   );
 };

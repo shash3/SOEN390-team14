@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
@@ -38,6 +38,7 @@ import {
 var ps;
 
 const Sidebar = (props) => {
+  const permission = JSON.parse(localStorage.getItem("permission"));
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
@@ -54,6 +55,14 @@ const Sidebar = (props) => {
   // creates the links that appear in the left menu / Sidebar
   const createLinks = (routes) => {
     return routes.map((prop, key) => {
+      if(permission === "admin"){
+        routes[4].name = "Admin Panel";
+        routes[4].path = "/admin-panel";
+      }
+      else {
+        routes[4].name = "User Profile";
+        routes[4].path = "/user-profile";
+      }
       return (
         <NavItem key={key}>
           <NavLink
@@ -83,6 +92,8 @@ const Sidebar = (props) => {
       target: "_blank",
     };
   }
+
+
 
   return (
     <Navbar
