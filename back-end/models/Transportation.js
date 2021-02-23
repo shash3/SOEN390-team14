@@ -12,7 +12,15 @@ const TransportationSchema = new mongoose.Schema({
     location: {
         type: String,
         required: true
+    },
+    destination: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true
     }
 });
 
-module.exports = Materials = mongoose.model('transportation', TransportationSchema);
+module.exports = Transportation = mongoose.model('transportation', TransportationSchema);
