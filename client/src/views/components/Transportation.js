@@ -37,7 +37,7 @@ const Transportation = () => {
 
   const onChange = (e) => setFormData(e.target.value);
 
-  // get material information
+  // get shipmeny information
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
@@ -141,6 +141,8 @@ const Transportation = () => {
                           {t.location}
                         </Badge>
                       </td>
+                      <td>{m.destination}</td>
+                      <td>{m.status}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
