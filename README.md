@@ -18,7 +18,7 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 
 ## Installation
 * Clone/Download the project
-* In the main folder and the client folder install all missing depencies by typing `npm install` 
+* In the back-end folder and the client folder install all missing depencies by typing `npm install` 
 
 ### In the Main Folder
 * `npm run dev` will run server + front-end
