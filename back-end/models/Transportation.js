@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TransportationSchema = new mongoose.Schema({
+const Transportation = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -12,15 +12,7 @@ const TransportationSchema = new mongoose.Schema({
     location: {
         type: String,
         required: true
-    },
-    destination: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: String,
-        required: true
     }
 });
 
-module.exports = Transportation = mongoose.model('transportation', TransportationSchema);
+module.exports = Tansportation = mongoose.model('transportation', TransportationSchema);
