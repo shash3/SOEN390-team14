@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-// Retrieve all materials
+// Retrieve all shipments
 router.get("/", auth, async (req, res) => {
   try {
     const transportation = await Transportation.find();
@@ -18,7 +18,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-// Retrieve specific materials by name
+// Retrieve specific shipments by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
  
@@ -31,10 +31,10 @@ router.post("/", auth, async (req, res) => {
     }
   });
 
-// add new material
+// add new shipments
 router.post("/add", auth, async (req, res) => {
   const { name, quantity, location, destination, status } = req.body;
-  material = new Material({
+  transportation = new Transportation({
     name,
     quantity,
     location,

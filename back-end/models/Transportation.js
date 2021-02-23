@@ -21,6 +21,7 @@ const TransportationSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+    
 });
 
 module.exports = Transportation = mongoose.model('transportation', TransportationSchema);
