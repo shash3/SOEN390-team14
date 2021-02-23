@@ -87,7 +87,7 @@ const Profile = () => {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <h2 className="mb-0">Inventory</h2>
+                  <h2 className="mb-0">Registered accounts</h2>
                   <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
                     <FormGroup className="mb-3 mt-3">
                       <InputGroup
