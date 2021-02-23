@@ -45,6 +45,7 @@ const AdminNavbar = (props) => {
   // logout (remove token)
   const loggingOut = (e) => {
     localStorage.removeItem("user");
+    localStorage.removeItem("permission");
     setLogout(true);
   };
 

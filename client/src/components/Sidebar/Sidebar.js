@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
@@ -83,6 +83,8 @@ const Sidebar = (props) => {
       target: "_blank",
     };
   }
+
+
 
   return (
     <Navbar

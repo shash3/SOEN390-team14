@@ -5,6 +5,7 @@ import { Button, Container, Row, Col } from "reactstrap";
 import UserWallpaper from "../../assets/img/brand/user-wallpaper.jpg";
 
 const UserHeader = (props) => {
+  const permission = JSON.parse(localStorage.getItem("permission"));
   return (
     <>
       <div
@@ -21,20 +22,22 @@ const UserHeader = (props) => {
         <Container className="d-flex align-items-center" fluid>
           <Row>
             <Col lg="7" md="10">
-              <h1 className="display-2 text-white">
-                Welcome {props.user.name}
+              <h1 className="display-2 text-white" style={{ width: "500px" }}>
+                {permission === "admin" && <>ADMIN CONTROLS</>}
+                {permission !== "admin" && <> Welcome {props.user.name}</>}
               </h1>
-              <p className="text-white mt-0 mb-5">
-                This is your profile page. You can see the progress you've made
-                with your work and manage your projects or assigned tasks
+              <p className="text-white mt-0 mb-5" style={{ width: "500px" }}>
+                {permission === "admin" && (
+                  <>The admin panel lets you view and edit users permissions.</>
+                )}
+                {permission !== "admin" && (
+                  <>
+                    {" "}
+                    This is your profile page. You can view and edit your
+                    personal information
+                  </>
+                )}
               </p>
-              <Button
-                color="info"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                Edit profile
-              </Button>
             </Col>
           </Row>
         </Container>

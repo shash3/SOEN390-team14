@@ -3,9 +3,10 @@ import Profile from "views/components/Profile.js";
 import Transportation from "views/components/Transportation.js";
 import Register from "views/components/Register.js";
 import Login from "views/components/Login.js";
-import Accounting from "views/components/Accounting.js";
+import Finance from "views/components/Finance.js";
 import Production from "views/components/Production.js";
-
+import QualityAssurance from "views/components/QualityAssurance.js";
+// IN ADMIN.JS AS WELL IF MODIFYING
 var routes = [
   {
     path: "/index",
@@ -29,10 +30,17 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/accounting",
-    name: "Accounting",
+    path: "/finance",
+    name: "Finance",
     icon: "ni ni-bullet-list-67 text-red",
-    component: Accounting,
+    component: Finance,
+    layout: "/admin",
+  },
+  {
+    path: "/Quality-assurance",
+    name: "Quality Assurance",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: QualityAssurance,
     layout: "/admin",
   },
   {

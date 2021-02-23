@@ -40,6 +40,10 @@ const Login = () => {
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data.token));
+          localStorage.setItem(
+            "permission",
+            JSON.stringify(response.data.permission)
+          );
           setAuthenticated(true);
         }
       })
@@ -50,7 +54,7 @@ const Login = () => {
 
   // redirect when logged in
   if (isAuthenticated) {
-    return <Redirect to="/admin/user-profile" />;
+    return <Redirect to="/admin" />;
   }
 
   return (
