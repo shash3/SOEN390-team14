@@ -11,8 +11,9 @@ import Profile from "views/components/Profile.js";
 import Transportation from "views/components/Transportation.js";
 import Register from "views/components/Register.js";
 import Login from "views/components/Login.js";
-import Accounting from "views/components/Accounting.js";
+import Finance from "views/components/Finance.js";
 import Production from "views/components/Production.js";
+import QualityAssurance from "views/components/QualityAssurance.js";
 
 const Admin = (props) => {
   // IN ROUTES.JS AS WELL IF MODIFYING
@@ -39,10 +40,17 @@ const Admin = (props) => {
       layout: "/admin",
     },
     {
-      path: "/accounting",
-      name: "Accounting",
+      path: "/finance",
+      name: "Finance",
       icon: "ni ni-bullet-list-67 text-red",
-      component: Accounting,
+      component: Finance,
+      layout: "/admin",
+    },
+    {
+      path: "/quality-assurance",
+      name: "Quality Assurance",
+      icon: "ni ni-bullet-list-67 text-red",
+      component: QualityAssurance,
       layout: "/admin",
     },
     {
@@ -119,14 +127,14 @@ const Admin = (props) => {
     }
     console.log(permission);
     if (permission === "none" || permission === null) {
-      routes.splice(1, 3);
+      routes.splice(1, 4);
     }
     if (permission === "production") {
-      routes.splice(2, 2);
+      routes.splice(2, 3);
     }
     if (permission === "transportation") {
       routes.splice(1, 1);
-      routes.splice(2, 1);
+      routes.splice(2, 2);
     }
     return routes;
   };
