@@ -31,26 +31,26 @@ import Header from "components/Headers/Header.js";
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const [materials, setMaterials] = useState([]);
+  const [transportation, setTransportation] = useState([]);
   // search input
   const [formData, setFormData] = useState("");
 
   const onChange = (e) => setFormData(e.target.value);
 
-  // get material information
+  // get shipmeny information
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
       if (formData === "") {
         await axios
-          .get("/api/material", {
+          .get("/api/transportation", {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setTransportation(response.data);
             }
           })
           .catch(function (error) {
@@ -61,14 +61,14 @@ const Transportation = () => {
           name: formData,
         };
         await axios
-          .post("/api/material", body, {
+          .post("/api/transportation", body, {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setTransportation(response.data);
             }
           })
           .catch(function (error) {
@@ -122,7 +122,7 @@ const Transportation = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {materials.map((m) => (
+                  {transportation.map((m) => (
                     <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -140,6 +140,8 @@ const Transportation = () => {
                           {m.location}
                         </Badge>
                       </td>
+                      <td>{m.destination}</td>
+                      <td>{m.status}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
