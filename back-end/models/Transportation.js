@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Transportation = new mongoose.Schema({
+const TransportationSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -10,6 +10,14 @@ const Transportation = new mongoose.Schema({
         required: true
     },
     location: {
+        type: String,
+        required: true
+    }
+    destination: {
+        type: String,
+        required: true
+    }
+    status: {
         type: String,
         required: true
     }

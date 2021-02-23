@@ -117,7 +117,7 @@ const Transportation = () => {
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
-                    <th scope="col">ETA</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
