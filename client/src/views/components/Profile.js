@@ -35,6 +35,7 @@ import axios from "axios";
 
 const Profile = () => {
   const [user, setUser] = useState({});
+  const [allUser, setAllUser] = useState([]);
   const permission = JSON.parse(localStorage.getItem("permission"));
   const [materials, setMaterials] = useState([]);
     // get user information
@@ -55,6 +56,25 @@ const Profile = () => {
       };
       getUserInformation();
     }, []);
+
+ // get all user information
+ useEffect(() => {
+  const getUsersInformation = async () => {
+    const userToken = JSON.parse(localStorage.getItem("user"));
+
+    const response = await axios
+      .get("/api/auth/all", {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      })
+      .catch((err) => console.log("Error", err));
+    if (response && response.data) {
+      setAllUser(response.data);
+    }
+  };
+  getUsersInformation();
+}, []);
 
   return (
     <>
@@ -92,28 +112,30 @@ const Profile = () => {
               <thead className="thead-light">
                 <tr>
                   <th scope="col">Name</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Location</th>
+                  <th scope="col">Email</th>
+                   <th scope="col">Location</th>
+                  <th scope="col">Permission</th>
                   <th scope="col" />
                 </tr>
               </thead>
               <tbody>
-                {materials.map((newlocation) => (
-                  <tr key={newlocation.id} value={newlocation.name}>
+                {allUser.map((all) => (
+                  <tr key={all.id} value={all.name}>
                     <th scope="row">
                       <Media className="align-items-center">
                         <Media>
                           <span className="mb-0 text-sm">
-                            {newlocation.name}
+                            {all.name}
                           </span>
                         </Media>
                       </Media>
                     </th>
-                    <td>{newlocation.quantity}</td>
+                    <td>{all.email}</td>
+                    <td>{all.location}</td>
                     <td>
                       <Badge color="" className="badge-dot mr-4">
                         <i className="bg-success" />
-                        {newlocation.location}
+                        {all.permission}
                       </Badge>
                     </td>
                     <td className="text-right">

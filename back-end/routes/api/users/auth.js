@@ -18,6 +18,17 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// Retrieve all users information
+router.get("/all", auth, async (req, res) => {
+  try {
+    const user = await User.find();
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 // Login: Auth user, get token
 router.post(
   "/login",

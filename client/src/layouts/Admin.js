@@ -95,7 +95,7 @@ const Admin = (props) => {
 
   const getBrandText = (path) => {
     for (let i = 0; i < routes.length; i++) {
-      console.log(routes.length)
+      console.log(routes.length);
       if (
         props.location.pathname.indexOf(routes[i].layout + routes[i].path) !==
         -1
@@ -106,29 +106,30 @@ const Admin = (props) => {
     return "Brand";
   };
 
+  // logic to remove nav items depending on permission
   const permissionRoutes = () => {
-    if(permission === "admin"){
+    if (permission === "admin") {
       var i;
       for (i = 0; i < routes.length; i++) {
-        if(routes[i].name === "User Profile"){
+        if (routes[i].name === "User Profile") {
           routes[i].name = "Admin Panel";
           routes[i].path = "/admin-panel";
         }
       }
     }
-    console.log(permission)
-    if(permission === null){
-      routes.splice(1,3);   
+    console.log(permission);
+    if (permission === "none" || permission === null) {
+      routes.splice(1, 3);
     }
-    if(permission === "production"){
-      routes.splice(2,2);   
+    if (permission === "production") {
+      routes.splice(2, 2);
     }
-    if(permission === "transportation"){
-      routes.splice(1,1);   
-      routes.splice(2,1);  
+    if (permission === "transportation") {
+      routes.splice(1, 1);
+      routes.splice(2, 1);
     }
     return routes;
-  }
+  };
 
   return (
     <>

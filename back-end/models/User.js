@@ -16,11 +16,11 @@ const UserSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        default: ""
+        default: "none"
     },
     permission: {
         type: String,
-        default: ""
+        default: "none"
     },
     avatar: {
         type: String

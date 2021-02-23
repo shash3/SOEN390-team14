@@ -37,7 +37,7 @@ const Production = () => {
 
   const onChange = (e) => setFormData(e.target.value);
 
-  // get user information
+  // get material information
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
@@ -120,22 +120,22 @@ const Production = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {materials.map((newlocation) => (
-                    <tr key={newlocation.id} value={newlocation.name}>
+                  {materials.map((m) => (
+                    <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
                             <span className="mb-0 text-sm">
-                              {newlocation.name}
+                              {m.name}
                             </span>
                           </Media>
                         </Media>
                       </th>
-                      <td>{newlocation.quantity}</td>
+                      <td>{m.quantity}</td>
                       <td>
                         <Badge color="" className="badge-dot mr-4">
                           <i className="bg-success" />
-                          {newlocation.location}
+                          {m.location}
                         </Badge>
                       </td>
                       <td className="text-right">
