@@ -15,4 +15,4 @@ const TransportationSchema = new mongoose.Schema({
     }
 });
 
-module.exports = Materials = mongoose.model('transportation', TransportationSchema);
+module.exports = Tansportation = mongoose.model('transportation', TransportationSchema);
