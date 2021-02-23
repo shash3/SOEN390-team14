@@ -23,4 +23,4 @@ const TransportationSchema = new mongoose.Schema({
     }
 });
 
-module.exports = Tansportation = mongoose.model('transportation', TransportationSchema);
+module.exports = Transportation = mongoose.model('transportation', TransportationSchema);
