@@ -31,7 +31,7 @@ import Header from "components/Headers/Header.js";
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const [materials, setMaterials] = useState([]);
+  const [transportation, setTransportation] = useState([]);
   // search input
   const [formData, setFormData] = useState("");
 
@@ -43,14 +43,14 @@ const Transportation = () => {
     const lookup = async () => {
       if (formData === "") {
         await axios
-          .get("/api/material", {
+          .get("/api/transportation", {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setTransportation(response.data);
             }
           })
           .catch(function (error) {
@@ -61,14 +61,14 @@ const Transportation = () => {
           name: formData,
         };
         await axios
-          .post("/api/material", body, {
+          .post("/api/transportation", body, {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setTransportation(response.data);
             }
           })
           .catch(function (error) {
@@ -117,27 +117,28 @@ const Transportation = () => {
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
-                    <th scope="col">ETA</th>
+                    <th scope="col">Status</th>
                     <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
-                  {materials.map((m) => (
-                    <tr key={m.id} value={m.name}>
+                  {transportation.map((t) => (
+                    <tr key={t.id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
                             <span className="mb-0 text-sm">
-                              {m.name}
+                              {t.name}
                             </span>
                           </Media>
                         </Media>
                       </th>
-                      <td>{m.quantity}</td>
+                      <td>{t.quantity}</td>
                       <td>
+                        
                         <Badge color="" className="badge-dot mr-4">
                           <i className="bg-success" />
-                          {m.location}
+                          {t.location}
                         </Badge>
                       </td>
                       <td className="text-right">
