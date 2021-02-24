@@ -47,7 +47,15 @@ router.post("/add", auth, async (req, res) => {
     destination,
     status,
   });
+  
   await transportation.save();
+});
+router.post("/delete",auth,async (req,res) =>{
+  
+const {iid}= req.body;
+console.log(iid);
+
+await Transportation.deleteOne({iid:iid});
 });
 
 router.post("/changeStatus", auth, async (req)=>{
