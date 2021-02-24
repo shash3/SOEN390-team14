@@ -309,8 +309,8 @@ const Transportation = (props) => {
                       <td>
                           {t.location}
                       </td>
-                      <td>{m.destination}</td>
-                      <td>{m.status}</td>
+                      <td>{t.destination}</td>
+                      <td>{t.status}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
