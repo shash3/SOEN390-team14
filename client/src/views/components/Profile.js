@@ -27,21 +27,34 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Label,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import axios from "axios";
 
 const Profile = () => {
+  const userToken = JSON.parse(localStorage.getItem("user"));
   const [user, setUser] = useState({});
   const [allUser, setAllUser] = useState([]);
+  const [newPermission, setNewPermission] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [changedPermition, setChangedPermition] = useState(false);
+  // search input
+  const [formData, setFormData] = useState("");
   const permission = JSON.parse(localStorage.getItem("permission"));
-  // get user information
+  const [modal, setModal] = useState(false);
+  //toggle for modal
+  const toggle = () => setModal(!modal);
+  const onChange = (e) => setFormData(e.target.value);
+
+  // get user-profile user information
   useEffect(() => {
     const getUserInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
-
       const response = await axios
         .get("/api/auth", {
           headers: {
@@ -56,24 +69,69 @@ const Profile = () => {
     getUserInformation();
   }, []);
 
-  // get all user information
+  // get user information search admin-panel
   useEffect(() => {
-    const getUsersInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
-
-      const response = await axios
-        .get("/api/auth/all", {
-          headers: {
-            "x-auth-token": userToken,
-          },
-        })
-        .catch((err) => console.log("Error", err));
-      if (response && response.data) {
-        setAllUser(response.data);
+    // retrieve all users
+    const lookup = async () => {
+      if (formData === "") {
+        const response = await axios
+          .get("/api/auth/all", {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .catch((err) => console.log("Error", err));
+        if (response && response.data) {
+          setAllUser(response.data);
+        }
+      } else {
+        console.log(formData);
+        const body = {
+          name: formData,
+        };
+        const response = await axios
+          .post("/api/auth/name", body, {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .catch((err) => console.log("Error", err));
+        if (response && response.data) {
+          setAllUser(response.data);
+        }
       }
     };
-    getUsersInformation();
-  }, []);
+    lookup();
+  }, [formData, changedPermition]);
+
+  //store dropdown value
+  const handleClick = (e) => {
+    setNewPermission(e);
+  };
+
+  //change submission
+  const submitPermission = async () => {
+    setChangedPermition(false);
+    toggle();
+    const body = {
+      email: userEmail,
+      permission: newPermission,
+    };
+    await axios
+      .put("http://localhost:5000/api/auth/permission", body, {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      })
+      .then((response) => {
+        if (response) {
+          setChangedPermition(true);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -98,7 +156,11 @@ const Profile = () => {
                             <i className="fas fa-search" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Search" type="text" />
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          onChange={(e) => onChange(e)}
+                        />
                       </InputGroup>
                     </FormGroup>
                   </Form>
@@ -114,28 +176,30 @@ const Profile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allUser.map((all) => (
-                      <tr key={all.id} value={all.name}>
+                    {allUser.map((t) => (
+                      <tr key={t.id} value={t.id}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
-                              <span className="mb-0 text-sm">{all.name}</span>
+                              <span className="mb-0 text-sm">{t.name}</span>
                             </Media>
                           </Media>
                         </th>
-                        <td>{all.email}</td>
-                        <td>{all.location}</td>
+                        <td>{t.email}</td>
+                        <td>{t.location}</td>
                         <td>
                           <Badge color="" className="badge-dot mr-4">
                             <i className="bg-success" />
-                            {all.permission}
+                            {t.permission}
                           </Badge>
                         </td>
+
                         <td className="text-right">
-                          <UncontrolledDropdown>
+                          <UncontrolledDropdown
+                            onClick={() => setUserEmail(t.email)}
+                          >
                             <DropdownToggle
                               className="btn-icon-only text-light"
-                              href="#pablo"
                               role="button"
                               size="sm"
                               color=""
@@ -144,23 +208,128 @@ const Profile = () => {
                               <i className="fas fa-ellipsis-v" />
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Action
+                              <DropdownItem onClick={toggle}>
+                                Change Permission
                               </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Another action
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Something else here
+
+                              <Modal isOpen={modal} toggle={toggle}>
+                                <ModalHeader toggle={toggle}>
+                                  Change account permission
+                                </ModalHeader>
+                                <ModalBody>
+                                  Select permission &ensp;
+                                  <Form>
+                                    <br />
+                                    <FormGroup tag="fieldset" row>
+                                      <Col sm={10}>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              value="none"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            None
+                                          </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              type="radio"
+                                              name="radio2"
+                                              value="production"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            Production
+                                          </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              type="radio"
+                                              name="radio2"
+                                              value="transportation"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            Transportation
+                                          </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              type="radio"
+                                              name="radio2"
+                                              value="finance"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            Finance
+                                          </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              type="radio"
+                                              name="radio2"
+                                              value="assurance"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            Quality Assurance
+                                          </Label>
+                                        </FormGroup>
+                                        <FormGroup check>
+                                          <Label check>
+                                            <Input
+                                              type="radio"
+                                              name="radio2"
+                                              type="radio"
+                                              name="radio2"
+                                              value="admin"
+                                              onClick={(e) =>
+                                                handleClick(e.target.value)
+                                              }
+                                            />{" "}
+                                            Admin
+                                          </Label>
+                                        </FormGroup>
+                                      </Col>
+                                    </FormGroup>
+                                  </Form>
+                                </ModalBody>
+                                <ModalFooter>
+                                  <Button
+                                    color="primary"
+                                    type="submit"
+                                    onClick={() => submitPermission()}
+                                  >
+                                    Change
+                                  </Button>{" "}
+                                  <Button color="secondary" onClick={toggle}>
+                                    Cancel
+                                  </Button>
+                                </ModalFooter>
+                              </Modal>
+
+                              <DropdownItem onClick={(e) => e.preventDefault()}>
+                                Change Location
                               </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>
@@ -169,6 +338,7 @@ const Profile = () => {
                     ))}
                   </tbody>
                 </Table>
+
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination

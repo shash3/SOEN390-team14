@@ -21,7 +21,6 @@ router.get("/", auth, async (req, res) => {
 // Retrieve specific inventory by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
- 
     try {
       const inventory = await Inventory.find({ name })
       res.json(inventory);
@@ -31,7 +30,7 @@ router.post("/", auth, async (req, res) => {
     }
   });
 
-// add new material
+// add new inventory
 router.post("/add", async (req, res) => {
   const { name, quantity, location } = req.body;
   inventory = new Inventory({

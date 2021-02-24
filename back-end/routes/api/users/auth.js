@@ -7,11 +7,36 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-// Retrieve user information
+// Retrieve user information by token
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Retrieve user information by name
+router.post("/name", auth, async (req, res) => {
+  const { name } = req.body;
+  console.log(name);
+  try {
+    const user = await User.find({ name }).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Change permission by admin
+router.put("/permission", async (req, res) => {
+  const { email, permission } = req.body;
+  try {
+    const user1 = await User.find({email: email}).updateOne({permission: permission});
+    res.json("changed")
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -43,7 +68,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     const { email, password } = req.body;
-    const user = await User.findOne({email: email}).select("permission");
+    const user = await User.findOne({ email: email }).select("permission");
     const permission = user.permission;
     try {
       // Verify email
