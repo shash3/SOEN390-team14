@@ -25,13 +25,26 @@ import {
   InputGroupText,
   Input,
   UncontrolledTooltip,
+  
 } from "reactstrap";
 // core components
 import Header from "components/Headers/Header.js";
+import { Button } from "bootstrap";
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const [transportation, setTransportation] = useState([]);
+  const [transportation,setTransportation] = useState([]);
+  const [transportationData, setTransportationData] = useState({
+    name: "",
+    quantity: 0,
+    location: "",
+    destination: "",
+    status: ""
+  });
+  const { name, quantity, location, destination,status } = transportationData;
+  const onChangeAdd = (e) => {
+    setFormData({ ...transportationData, [e.target.name]: e.target.value });
+  };
   // search input
   const [formData, setFormData] = useState("");
 
@@ -78,6 +91,37 @@ const Transportation = () => {
     };
     lookup();
   }, [formData]);
+
+  
+  
+  const onAdd =  async () => {
+   
+    
+     
+    
+    const newTransportation = {
+      name,
+      quantity,
+      location,
+      destination,
+      status
+    };
+
+    const body = JSON.stringify(newTransportation);
+     console.log("hello");
+     try {
+     await axios.post("/api/transportation/add", body,{
+      headers: {
+        "x-auth-token": userToken,
+        "Content-Type": "application/json",
+      },
+    });
+     }
+     catch (err) {
+      console.log(err.response.data);
+    }
+    
+  };
 
   return (
     <>
@@ -236,7 +280,9 @@ const Transportation = () => {
             </Card>
           </div>
         </Row>
+        
       </Container>
+     
     </>
   );
 };

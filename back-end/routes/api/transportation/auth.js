@@ -20,6 +20,7 @@ router.get("/", auth, async (req, res) => {
 
 // Retrieve specific shipments by name
 router.post("/", auth, async (req, res) => {
+  console.log(1);
     const { name } = req.body;
  
     try {
@@ -33,6 +34,7 @@ router.post("/", auth, async (req, res) => {
 
 // add new shipments
 router.post("/add", auth, async (req, res) => {
+  console.log("hello1");
   const { name, quantity, location, destination, status } = req.body;
   transportation = new Transportation({
     name,
