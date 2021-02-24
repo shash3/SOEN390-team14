@@ -31,26 +31,26 @@ import Header from "components/Headers/Header.js";
 
 const Production = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const [materials, setMaterials] = useState([]);
+  const [inventory, setInventory] = useState([]);
   // search input
   const [formData, setFormData] = useState("");
 
   const onChange = (e) => setFormData(e.target.value);
 
-  // get material information
+  // get inventory information
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
       if (formData === "") {
         await axios
-          .get("/api/material", {
+          .get("/api/inventory", {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setInventory(response.data);
             }
           })
           .catch(function (error) {
@@ -61,14 +61,14 @@ const Production = () => {
           name: formData,
         };
         await axios
-          .post("/api/material", body, {
+          .post("/api/inventory", body, {
             headers: {
               "x-auth-token": userToken,
             },
           })
           .then((response) => {
             if (response.data) {
-              setMaterials(response.data);
+              setInventory(response.data);
             }
           })
           .catch(function (error) {
@@ -120,7 +120,7 @@ const Production = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {materials.map((m) => (
+                  {inventory.map((m) => (
                     <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">

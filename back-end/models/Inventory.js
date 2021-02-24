@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MaterialSchema = new mongoose.Schema({
+const InventorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -15,4 +15,4 @@ const MaterialSchema = new mongoose.Schema({
     }
 });
 
-module.exports = Materials = mongoose.model('material', MaterialSchema);
+module.exports = Inventory = mongoose.model('inventory', InventorySchema);

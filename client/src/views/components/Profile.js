@@ -37,7 +37,6 @@ const Profile = () => {
   const [user, setUser] = useState({});
   const [allUser, setAllUser] = useState([]);
   const permission = JSON.parse(localStorage.getItem("permission"));
-  const [materials, setMaterials] = useState([]);
   // get user information
   useEffect(() => {
     const getUserInformation = async () => {
