@@ -33,10 +33,10 @@ router.post("/name", auth, async (req, res) => {
 
 // Change permission by admin
 router.put("/permission", async (req, res) => {
-  console.log("hello");
   const { email, permission } = req.body;
   try {
     const user1 = await User.find({email: email}).updateOne({permission: permission});
+    res.json("changed")
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

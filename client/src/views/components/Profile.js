@@ -43,11 +43,11 @@ const Profile = () => {
   const [allUser, setAllUser] = useState([]);
   const [newPermission, setNewPermission] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [changedPermition,setChangedPermition] = useState(false);
   // search input
   const [formData, setFormData] = useState("");
   const permission = JSON.parse(localStorage.getItem("permission"));
   const [modal, setModal] = useState(false);
-  const [dropdownOpen, setOpen] = useState(false);
   //toggle for modal
   const toggle = () => setModal(!modal);
   const onChange = (e) => setFormData(e.target.value);
@@ -103,31 +103,35 @@ const Profile = () => {
     }
   };
   lookup();
-}, [formData]);
+}, [formData, changedPermition]);
 
 //store dropdown value
 const handleClick = (e) => {
-  console.log("hi")
-
   setNewPermission(e);
-  console.log(newPermission)
 }
 
 //change submission
 const submitPermission = async () => {
+  setChangedPermition(false);
+  toggle();
   const body = {
     email: userEmail,
     permission: newPermission
   };
-  console.log(newPermission)
-  console.log(body)
   await axios
     .put("http://localhost:5000/api/auth/permission", body, {
       headers: {
         "x-auth-token": userToken, 
       },
     })
-    .catch((err) => console.log("Error", err));
+    .then(() => {
+      console.log(changedPermition)
+      setChangedPermition(true);
+      
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };
 
   return (
