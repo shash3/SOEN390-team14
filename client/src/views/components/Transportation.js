@@ -33,14 +33,14 @@ const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [transportation,setTransportation] = useState([]);
   const [transportationData, setTransportationData] = useState({
-    iid: "",
+    _id: "",
     name: "",
     quantity: 0,
     location: "",
     destination: "",
     status: ""
   });
-  const { iid,name, quantity, location, destination,status } = transportationData;
+  const { name, quantity, location, destination,status } = transportationData;
   const onChangeAdd = (e) => {
     setTransportationData({ ...transportationData, [e.target.name]: e.target.value });
   };
@@ -48,6 +48,8 @@ const Transportation = (props) => {
   const [formData, setFormData] = useState("");
 
   const onChange = (e) => setFormData(e.target.value);
+
+  const [updated,setUpdated]= useState(false);
 
   // get shipmeny information
   useEffect(() => {
@@ -89,42 +91,53 @@ const Transportation = (props) => {
       }
     };
     lookup();
-  }, [formData]);
+  }, [formData,updated]);
 
   const onAdd =  async (e) => {
+    
+    if(name == ""||quantity==0||location==""||destination==0||status==""){
+      window.alert("Please Enter Data Into All Fields");
+    }
+    else{
     closeModal1();
     
     const newTransportation = {
-      iid,
+      
       name,
       quantity,
       location,
       destination,
       status
     };
+    
 
     const body = JSON.stringify(newTransportation);
-     console.log("hello");
+     
      try {
      await axios.post("/api/transportation/add", body,{
       headers: {
         "x-auth-token": userToken,
         "Content-Type": "application/json",
       },
-    });
+    }).then( () => {setUpdated(!updated)});
+    
+    
+    
      }
      catch (err) {
       console.log(err.response.data);
     }
-    
+   
+  
+  }
   };
 
-  const onDelete = async(iid) => {
+  const onDelete = async(_id) => {
     const shipmentId ={
-      iid
+      _id
     };
     
-    console.log(shipmentId);
+    console.log(_id);
     const body = JSON.stringify(shipmentId);
     try {
       await axios.post("/api/transportation/delete", body,{
@@ -132,7 +145,7 @@ const Transportation = (props) => {
          "x-auth-token": userToken,
          "Content-Type": "application/json",
        },
-     });
+     }).then(setUpdated(!updated));
       }
       catch (err) {
        console.log(err.response.data);
@@ -191,21 +204,21 @@ const Transportation = (props) => {
                   </FormGroup>
                 </Form>
 
-                <Button className="mt-4" color="primary" onClick={closeModal1}>Add Shipment</Button>
+                <Button className="mt-4" color="primary" onClick={() => {
+                  closeModal1();
+                  setTransportationData({
+                    _id: "",
+                    name: "",
+                    quantity: 0,
+                    location: "",
+                    destination: "",
+                    status: ""
+                  });
+                }}>Add Shipment</Button>
                 <Modal isOpen={modal1} changeStatus={closeModal1} className={className}>
                   <ModalHeader changeStatus={closeModal1}>Fill In The Form Below</ModalHeader>
                     <ModalBody>
                       <Form className="form" onSubmit={(e) => onAdd(e)}>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="text"
-                                placeholder="IID"
-                                name="iid"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
                         <FormGroup>
                           <InputGroup>
                             <Input
@@ -270,7 +283,7 @@ const Transportation = (props) => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">IID</th>
+                    <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
@@ -281,12 +294,12 @@ const Transportation = (props) => {
                 </thead>
                 <tbody>
                   {transportation.map((t) => (
-                    <tr key={t.id} value={t.iid}>
+                    <tr key={t._id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
                             <span className="mb-0 text-sm">
-                                  {t.iid}
+                                  {t._id}
                             </span>
                           </Media>
                         </Media>
@@ -329,7 +342,7 @@ const Transportation = (props) => {
                             </Modal>
                             <DropdownItem
                               href="#pablo"
-                              onClick={(e) => onDelete(t.iid) }
+                              onClick={(e) => onDelete(t._id) }
                             >
                               Delete Shipment
                             </DropdownItem>

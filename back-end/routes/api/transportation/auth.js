@@ -37,10 +37,8 @@ router.post("/", auth, async (req, res) => {
 
 // add new shipments
 router.post("/add", auth, async (req, res) => {
-  
-  const { name, quantity, location, destination, status } = req.body;
+  const {name, quantity, location, destination, status } = req.body;
   transportation = new Transportation({
-    iid,
     name,
     quantity,
     location,
@@ -49,19 +47,21 @@ router.post("/add", auth, async (req, res) => {
   });
   
   await transportation.save();
+  res.send(true);
 });
 router.post("/delete",auth,async (req,res) =>{
   
-const {iid}= req.body;
-console.log(iid);
+const {_id}= req.body;
 
-await Transportation.deleteOne({iid:iid});
+
+await Transportation.deleteOne({_id:_id});
+res.send(true);
 });
 
 router.post("/changeStatus", auth, async (req)=>{
   const{
     status,
-    iid
+    _id
   } = req.body;
  
  await Transportation.updateOne({iid:iid},{$set:{status:"uuu"}});
