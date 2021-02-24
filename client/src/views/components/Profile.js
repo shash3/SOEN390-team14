@@ -31,30 +31,30 @@ import {
   ModalHeader, 
   ModalBody, 
   ModalFooter,
-  ButtonDropdown
+  Label
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import axios from "axios";
 
 const Profile = () => {
+  const userToken = JSON.parse(localStorage.getItem("user"));
   const [user, setUser] = useState({});
   const [allUser, setAllUser] = useState([]);
+  const [newPermission, setNewPermission] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   // search input
   const [formData, setFormData] = useState("");
   const permission = JSON.parse(localStorage.getItem("permission"));
   const [modal, setModal] = useState(false);
   const [dropdownOpen, setOpen] = useState(false);
-
-  const toggle1 = () => setOpen(!dropdownOpen);
+  //toggle for modal
   const toggle = () => setModal(!modal);
   const onChange = (e) => setFormData(e.target.value);
 
-  // get user information
+  // get user-profile user information
   useEffect(() => {
     const getUserInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
-
       const response = await axios
         .get("/api/auth", {
           headers: {
@@ -69,11 +69,10 @@ const Profile = () => {
     getUserInformation();
   }, []);
 
- // get user information
+ // get user information search admin-panel
  useEffect(() => {
   // retrieve all users 
   const lookup = async () => {
-    const userToken = JSON.parse(localStorage.getItem("user"));
     if (formData === "") {
       const response = await axios
         .get("/api/auth/all", {
@@ -86,7 +85,6 @@ const Profile = () => {
         setAllUser(response.data);
       }
     } else {
-      const userToken = JSON.parse(localStorage.getItem("user"));
       console.log(formData)
       const body = {
         name: formData,
@@ -106,6 +104,31 @@ const Profile = () => {
   };
   lookup();
 }, [formData]);
+
+//store dropdown value
+const handleClick = (e) => {
+  console.log("hi")
+
+  setNewPermission(e);
+  console.log(newPermission)
+}
+
+//change submission
+const submitPermission = async () => {
+  const body = {
+    email: userEmail,
+    permission: newPermission
+  };
+  console.log(newPermission)
+  console.log(body)
+  await axios
+    .put("http://localhost:5000/api/auth/permission", body, {
+      headers: {
+        "x-auth-token": userToken, 
+      },
+    })
+    .catch((err) => console.log("Error", err));
+};
 
   return (
     <>
@@ -150,28 +173,33 @@ const Profile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allUser.map((all) => (
-                      <tr key={all.id} value={all.name}>
+                    {allUser.map((t) => (
+                      <tr key={t.id} value={t.id}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
-                              <span className="mb-0 text-sm">{all.name}</span>
+                              <span className="mb-0 text-sm">{t.name}</span>
                             </Media>
                           </Media>
                         </th>
-                        <td>{all.email}</td>
-                        <td>{all.location}</td>
+                        <td>{t.email}</td>
+                        <td>{t.location}</td>
                         <td>
                           <Badge color="" className="badge-dot mr-4">
                             <i className="bg-success" />
-                            {all.permission}
+                            {t.permission}
                           </Badge>
                         </td>
+        
                         <td className="text-right">
-                          <UncontrolledDropdown>
+        
+                          <UncontrolledDropdown
+                            
+                              onClick={() =>setUserEmail(t.email)}>
+                          
                             <DropdownToggle
                               className="btn-icon-only text-light"
-                              href="#pablo"
+                      
                               role="button"
                               size="sm"
                               color=""
@@ -181,37 +209,68 @@ const Profile = () => {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                href="#pablo"
+                               
                                 onClick={toggle}
                               >
                                 Change Permission
                               </DropdownItem>
                               
       <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalHeader toggle={toggle}>Change account permission</ModalHeader>
         <ModalBody>
          Select permission &ensp;
-          <ButtonDropdown isOpen={dropdownOpen} toggle={toggle1}>
-      <DropdownToggle caret>
-        Button Dropdown
-      </DropdownToggle>
-      <DropdownMenu style={{boxShadow: "none"}}>
-        <DropdownItem header>Header</DropdownItem>
-        <DropdownItem disabled>Action</DropdownItem>
-        <DropdownItem>Another Action</DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem>Another Action</DropdownItem>
-      </DropdownMenu>
-    </ButtonDropdown>
+                       <Form>  
+     <br/>
+         <FormGroup tag="fieldset" row>
+           <Col sm={10}>
+             <FormGroup check>
+               <Label check>
+               <Input type="radio" name="radio2" value="none" onClick={(e) => handleClick(e.target.value)}/>{' '}
+                 None
+               </Label>
+             </FormGroup>
+             <FormGroup check>
+               <Label check>
+                 <Input type="radio" name="radio2" type="radio" name="radio2" value="production" onClick={(e) => handleClick(e.target.value)}/>{' '}
+                 Production
+               </Label>
+             </FormGroup>
+             <FormGroup check>
+               <Label check>
+                 <Input type="radio" name="radio2"  type="radio" name="radio2" value="transportation" onClick={(e) => handleClick(e.target.value)}/>{' '}
+                 Transportation
+               </Label>
+             </FormGroup>
+             <FormGroup check>
+               <Label check>
+                 <Input type="radio" name="radio2"  type="radio" name="radio2" value="finance" onClick={(e) => handleClick(e.target.value)}/>{' '}
+                 Finance
+               </Label>
+             </FormGroup>
+             <FormGroup check>
+               <Label check>
+                 <Input type="radio" name="radio2" type="radio" name="radio2" value="assurance" onClick={(e) => handleClick(e.target.value)} />{' '}
+                 Quality Assurance
+               </Label>
+             </FormGroup>
+                 <FormGroup check>
+               <Label check>
+                 <Input type="radio" name="radio2" type="radio" name="radio2" value="admin" onClick={(e) => handleClick(e.target.value)} />{' '}
+                 Admin
+               </Label>
+             </FormGroup>
+           </Col>
+         </FormGroup>
+       </Form>  
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+          <Button color="primary" type="submit" onClick={() => submitPermission()}>Change</Button>{' '}
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
 
                               <DropdownItem
-                                href="#pablo"
+                             
                                 onClick={(e) => e.preventDefault()}
                               >
                                 Change Location
@@ -223,6 +282,7 @@ const Profile = () => {
                     ))}
                   </tbody>
                 </Table>
+      
                 <CardFooter className="py-4">
                   <nav aria-label="...">
                     <Pagination
