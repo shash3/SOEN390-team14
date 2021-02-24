@@ -33,15 +33,16 @@ const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [transportation,setTransportation] = useState([]);
   const [transportationData, setTransportationData] = useState({
+    iid: "",
     name: "",
     quantity: 0,
     location: "",
     destination: "",
     status: ""
   });
-  const { name, quantity, location, destination,status } = transportationData;
+  const { iid,name, quantity, location, destination,status } = transportationData;
   const onChangeAdd = (e) => {
-    setFormData({ ...transportationData, [e.target.name]: e.target.value });
+    setTransportationData({ ...transportationData, [e.target.name]: e.target.value });
   };
   // search input
   const [formData, setFormData] = useState("");
@@ -90,9 +91,11 @@ const Transportation = (props) => {
     lookup();
   }, [formData]);
 
-  const onAdd =  async () => {
-
+  const onAdd =  async (e) => {
+    closeModal1();
+    
     const newTransportation = {
+      iid,
       name,
       quantity,
       location,
@@ -116,6 +119,27 @@ const Transportation = (props) => {
     
   };
 
+  const onDelete = async(iid) => {
+    const shipmentId ={
+      iid
+    };
+    
+    console.log(shipmentId);
+    const body = JSON.stringify(shipmentId);
+    try {
+      await axios.post("/api/transportation/delete", body,{
+       headers: {
+         "x-auth-token": userToken,
+         "Content-Type": "application/json",
+       },
+     });
+      }
+      catch (err) {
+       console.log(err.response.data);
+     }
+
+  };
+
   //Info for Modal
   const {
     buttonLabel,
@@ -134,12 +158,7 @@ const Transportation = (props) => {
     setModal1(!modal1);
   }
 
-  //Add Function YOU NEED TO INIT ALL THE "value={variables}" of the inputs
-  function onSubmitADD(e) {
-  }
-
-  //on change of field
-  const onChangeAA = (e) => console;
+ 
 
   return (
     <>
@@ -176,14 +195,14 @@ const Transportation = (props) => {
                 <Modal isOpen={modal1} changeStatus={closeModal1} className={className}>
                   <ModalHeader changeStatus={closeModal1}>Fill In The Form Below</ModalHeader>
                     <ModalBody>
-                      <Form className="form" onSubmit={(e) => onSubmitADD(e)}>
+                      <Form className="form" onSubmit={(e) => onAdd(e)}>
                         <FormGroup>
                           <InputGroup>
                             <Input
                                 type="text"
                                 placeholder="IID"
-                                name="password2"
-                                onChange={(e) => onChangeAA(e)}
+                                name="iid"
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -193,7 +212,7 @@ const Transportation = (props) => {
                                 type="text"
                                 placeholder="NAME"
                                 name="name"
-                                onChange={(e) => onChangeAA(e)}
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -203,7 +222,7 @@ const Transportation = (props) => {
                                 type="number"
                                 placeholder="QUANTITY  (please use scroller on right)"
                                 name="quantity"
-                                onChange={(e) => onChangeAA(e)}
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -213,7 +232,7 @@ const Transportation = (props) => {
                                 type="text"
                                 placeholder="LOCATION"
                                 name="location"
-                                onChange={(e) => onChangeAA(e)}
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -223,7 +242,7 @@ const Transportation = (props) => {
                                 type="text"
                                 placeholder="DESTINATION"
                                 name="destination"
-                                onChange={(e) => onChangeAA(e)}
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -233,12 +252,12 @@ const Transportation = (props) => {
                                 type="text"
                                 placeholder="STATUS"
                                 name="status"
-                                onChange={(e) => onChangeAA(e)}
+                                onChange={(e) => onChangeAdd(e)}
                             />
                           </InputGroup>
                         </FormGroup>
                         <div className="text-center">
-                        <Button color="primary" onClick={closeModal1}>Add Shipment</Button>
+                        <Button color="primary" onClick={(e) => onAdd(e)}>Add Shipment</Button>
                         </div>
                       </Form>
                     </ModalBody>
@@ -310,9 +329,9 @@ const Transportation = (props) => {
                             </Modal>
                             <DropdownItem
                               href="#pablo"
-                              onClick={(e) => e.preventDefault()}
+                              onClick={(e) => onDelete(t.iid) }
                             >
-                              Another action
+                              Delete Shipment
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
