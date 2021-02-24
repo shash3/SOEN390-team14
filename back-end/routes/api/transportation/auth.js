@@ -50,13 +50,14 @@ router.post("/add", auth, async (req, res) => {
   await transportation.save();
 });
 
-router.post("/changeStatus", auth, async (req,)=>{
+router.post("/changeStatus", auth, async (req)=>{
   const{
     status,
     iid
   } = req.body;
-  console.log(status);
-  console.log(iid);
+ 
+ await Transportation.updateOne({iid:iid},{$set:{status:"uuu"}});
+
 });
 
 module.exports = router;
