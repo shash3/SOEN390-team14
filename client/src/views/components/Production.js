@@ -26,10 +26,10 @@ import {
   InputGroupText,
   Input,
   ButtonGroup,
-  Button, 
-  Modal, 
-  ModalHeader, 
-  ModalBody, 
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
   ModalFooter,
 } from "reactstrap";
 
@@ -48,9 +48,8 @@ const Production = (props) => {
   const [formData, setFormData] = useState("");
   const [formProdData, setFormProdData] = useState("");
 
-  const onInvSearchChange = (e) => setFormData(e.target.value );
+  const onInvSearchChange = (e) => setFormData(e.target.value);
   const onProdSearchChange = (e) => setFormProdData(e.target.value);
-
 
   // create product line modals
   const [addModal, setAddModal] = useState(false);
@@ -64,7 +63,7 @@ const Production = (props) => {
   // Toggle product line modal
   const toggleAddModal = () => setAddModal(!addModal);
   const toggleCreateModal = () => setCreateModal(!createModal);
-  
+
   // Retrieve product line location from user
   const getProdLoc = async () => {
     const response = await axios
@@ -74,23 +73,25 @@ const Production = (props) => {
         },
       })
       .catch((err) => console.log("Error", err));
-      if (response && response.data) {
-        var user = response.data;
-        setProdLoc(user.location);
-      }
-  }
+    if (response && response.data) {
+      var user = response.data;
+      setProdLoc(user.location);
+    }
+  };
   getProdLoc();
 
   // Material options for new product modal
-  const [prodMatList, setProdMatList] = useState([{ matName: "", matQuantity: 1 }]);
- 
+  const [prodMatList, setProdMatList] = useState([
+    { matName: "", matQuantity: 1 },
+  ]);
+
   const handleMaterialChange = (e, index) => {
     const { name, value } = e.target;
     const list = [...prodMatList];
     list[index][name] = value;
     setProdMatList(list);
   };
-  const removeMaterial = index => {
+  const removeMaterial = (index) => {
     const list = [...prodMatList];
     list.splice(index, 1);
     setProdMatList(list);
@@ -102,26 +103,23 @@ const Production = (props) => {
   // Adding new Product Line
   const addProduct = async () => {
     //validate entries
-    prodMatList.forEach((prodName, quant) => {
-      
-    });
+    prodMatList.forEach((prodName, quant) => {});
 
     await axios
-      .post("/api/product_line/add", 
-        { name : newProdName}, 
-        { headers: {
-          "x-auth-token": userToken,
-        },
-      })
+      .post(
+        "/api/product_line/add",
+        { name: newProdName },
+        {
+          headers: {
+            "x-auth-token": userToken,
+          },
+        }
+      )
       .catch((err) => console.log("Error", err));
-  }
-  
+  };
 
   // Creating product from product line
-  const createProduct = async () => {
-
-  }
-
+  const createProduct = async () => {};
 
   // get inventory information
   useEffect(() => {
@@ -202,31 +200,26 @@ const Production = (props) => {
       }
     };
     prodLookup();
-
   }, [formData, formProdData]);
 
-  
   // Get all materials
   const getMaterialList = () => {
-    axios.get("/api/material", {
-      headers: {
-        "x-auth-token": userToken,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        setMaterials(response.data);
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+    axios
+      .get("/api/material", {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setMaterials(response.data);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   getMaterialList();
-
-
-
-
 
   return (
     <>
@@ -274,9 +267,7 @@ const Production = (props) => {
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
-                            <span className="mb-0 text-sm">
-                              {m.name}
-                            </span>
+                            <span className="mb-0 text-sm">{m.name}</span>
                           </Media>
                         </Media>
                       </th>
@@ -381,8 +372,8 @@ const Production = (props) => {
           </div>
         </Row>
 
-        <br/>
-        <br/>
+        <br />
+        <br />
 
         {/* Product Line Table */}
         <Row>
@@ -409,12 +400,15 @@ const Production = (props) => {
                     </InputGroup>
                     <ButtonGroup
                       className="btn-group-sm"
-                      style={{ padding : "0px 0px 0px 100px" }}
+                      style={{ padding: "0px 0px 0px 100px" }}
                     >
-                      <Button 
-                        outline 
+                      <Button
+                        outline
                         color="primary"
-                        onClick={() => {toggleAddModal(); setProdMatList([{ matName: "", matQuantity: 1 }]);}}
+                        onClick={() => {
+                          toggleAddModal();
+                          setProdMatList([{ matName: "", matQuantity: 1 }]);
+                        }}
                       >
                         Add New Product Line
                       </Button>
@@ -435,15 +429,16 @@ const Production = (props) => {
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
-                            <span className="mb-0 text-sm">
-                              {m.name}
-                            </span>
+                            <span className="mb-0 text-sm">{m.name}</span>
                           </Media>
                         </Media>
                       </th>
                       <td className="text-right">
                         <Button
-                          onClick={() => {toggleCreateModal(); setProdName(m.name);}}
+                          onClick={() => {
+                            toggleCreateModal();
+                            setProdName(m.name);
+                          }}
                         >
                           Create
                         </Button>
@@ -508,129 +503,175 @@ const Production = (props) => {
           </div>
         </Row>
       </Container>
-      
+
       {/** Modal For Add Product*/}
       <div>
-      <Modal isOpen={addModal} toggle={toggleAddModal}>
-        <ModalHeader toggle={toggleAddModal}>Add New Product</ModalHeader>
-        <ModalBody>
-          <Form className="form" name='addProductForm'>
-            <FormGroup className="mb-3">
-              <label>
-                <span className="text-muted">Product Name</span>
-              </label>
-              <InputGroup className="input-group-alternative">
-                <Input
-                  type="text"
-                  name="prodName"
-                  required
-                  onChange={(e) => onNewProdChange(e)}
-                />
-              </InputGroup>
-            </FormGroup>
-            <FormGroup className="mb-3">
-              {prodMatList.map((x, i) => (
-                <div className="box">
-                  <label>
-                    <span className="text-muted" style={{ width: '100%', display: 'inline', float: 'left', marginRight: '20px', paddingRight: '50px'}}>Material {i + 1}</span>
-                  </label>
-                    
-                  <label>
-                    <span className="text-muted" style={{ width : '10%', display: 'inline', float: 'right', marginLeft: '20px' }}>Quantity</span>
-                  </label>
-                  <InputGroup className="input-group-alternative">
-                    <Input
-                      type="select"
-                      name="matName"
-                      value={x.matName}
-                      onChange={e => handleMaterialChange(e, i)}
-                    >
-                      {materials.map((m) => (
-                        <option>{m.name}</option>
-                      ))}
-                    </Input>
-                    <Input style={{ width : '10%', display: 'inline', float: 'right', marginLeft: '20px' }}
-                      type="number"
-                      min="1"
-                      className="ml10"
-                      name="matQuantity"
-                      value={x.matQuantity}
-                      onChange={e => handleMaterialChange(e, i)}
-                    />
-                    {prodMatList.length !== 1 && <Button
-                      color="secondary"
-                      className="mr10"
-                      onClick={() => removeMaterial(i)}>Remove</Button>
-                    }
-                  </InputGroup>
-                </div>
-              ))}
-            </FormGroup>
-          </Form>
-          <Button color="primary" onClick={addMaterial}>Add Another Material</Button>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => {toggleAddModal(); addProduct();}}>Confirm</Button>
-          <Button color="secondary" onClick={toggleAddModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+        <Modal isOpen={addModal} toggle={toggleAddModal}>
+          <ModalHeader toggle={toggleAddModal}>Add New Product</ModalHeader>
+          <ModalBody>
+            <Form className="form" name="addProductForm">
+              <FormGroup className="mb-3">
+                <label>
+                  <span className="text-muted">Product Name</span>
+                </label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    type="text"
+                    name="prodName"
+                    required
+                    onChange={(e) => onNewProdChange(e)}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup className="mb-3">
+                {prodMatList.map((x, i) => (
+                  <div className="box">
+                    <label>
+                      <span
+                        className="text-muted"
+                        style={{
+                          width: "100%",
+                          display: "inline",
+                          float: "left",
+                          marginRight: "20px",
+                          paddingRight: "50px",
+                        }}
+                      >
+                        Material {i + 1}
+                      </span>
+                    </label>
 
+                    <label>
+                      <span
+                        className="text-muted"
+                        style={{
+                          width: "10%",
+                          display: "inline",
+                          float: "right",
+                          marginLeft: "20px",
+                        }}
+                      >
+                        Quantity
+                      </span>
+                    </label>
+                    <InputGroup className="input-group-alternative">
+                      <Input
+                        type="select"
+                        name="matName"
+                        value={x.matName}
+                        onChange={(e) => handleMaterialChange(e, i)}
+                      >
+                        {materials.map((m) => (
+                          <option>{m.name}</option>
+                        ))}
+                      </Input>
+                      <Input
+                        style={{
+                          width: "10%",
+                          display: "inline",
+                          float: "right",
+                          marginLeft: "20px",
+                        }}
+                        type="number"
+                        min="1"
+                        className="ml10"
+                        name="matQuantity"
+                        value={x.matQuantity}
+                        onChange={(e) => handleMaterialChange(e, i)}
+                      />
+                      {prodMatList.length !== 1 && (
+                        <Button
+                          color="secondary"
+                          className="mr10"
+                          onClick={() => removeMaterial(i)}
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </InputGroup>
+                  </div>
+                ))}
+              </FormGroup>
+            </Form>
+            <Button color="primary" onClick={addMaterial}>
+              Add Another Material
+            </Button>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => {
+                toggleAddModal();
+                addProduct();
+              }}
+            >
+              Confirm
+            </Button>
+            <Button color="secondary" onClick={toggleAddModal}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
 
-    {/** Modal For Create Product*/}
-    <div>
-      <Modal isOpen={createModal} toggle={toggleCreateModal}>
-        <ModalHeader toggle={toggleCreateModal}>Create Product</ModalHeader>
-        <ModalBody>
-          <Form className="form">
-            <FormGroup className="mb-3">
-              <label>
-                <span className="text-muted">Product Name</span>
-              </label>
-              <InputGroup className="input-group-alternative">
-                <Input
-                  disabled 
-                  type="text"
-                  name="prodName"
-                  value={prodName}
-                />
-              </InputGroup>
-            </FormGroup>
-            <FormGroup>
-              <label>
-                <span className="text-muted">Location</span>
-              </label>
-              <InputGroup className="input-group-alternative">
-                <Input
-                  disabled
-                  type="text"
-                  name="location"
-                  value={prodLoc}
-                />
-              </InputGroup>
-            </FormGroup>
-            <FormGroup>
-              <label>
-                <span className="text-muted">Quantity</span>
-              </label>
-              <InputGroup className="input-group-alternative">
-                <Input
-                  type="number"
-                  name="quantity"
-                  defaultValue="1"
-                  min="1"
-                />                  
-              </InputGroup>
-            </FormGroup>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => {toggleCreateModal();  createProduct()}}>Confirm</Button>
-          <Button color="secondary" onClick={toggleCreateModal}>Cancel</Button>
-        </ModalFooter>
-      </Modal>
-    </div>
-
+      {/** Modal For Create Product*/}
+      <div>
+        <Modal isOpen={createModal} toggle={toggleCreateModal}>
+          <ModalHeader toggle={toggleCreateModal}>Create Product</ModalHeader>
+          <ModalBody>
+            <Form className="form">
+              <FormGroup className="mb-3">
+                <label>
+                  <span className="text-muted">Product Name</span>
+                </label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    disabled
+                    type="text"
+                    name="prodName"
+                    value={prodName}
+                  />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <label>
+                  <span className="text-muted">Location</span>
+                </label>
+                <InputGroup className="input-group-alternative">
+                  <Input disabled type="text" name="location" value={prodLoc} />
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <label>
+                  <span className="text-muted">Quantity</span>
+                </label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    type="number"
+                    name="quantity"
+                    defaultValue="1"
+                    min="1"
+                  />
+                </InputGroup>
+              </FormGroup>
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="primary"
+              onClick={() => {
+                toggleCreateModal();
+                createProduct();
+              }}
+            >
+              Confirm
+            </Button>
+            <Button color="secondary" onClick={toggleCreateModal}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
     </>
   );
 };
