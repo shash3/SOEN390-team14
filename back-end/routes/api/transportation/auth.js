@@ -7,6 +7,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+//Change Status
+
+
+
 // Retrieve all shipments
 router.get("/", auth, async (req, res) => {
   try {
@@ -21,7 +25,6 @@ router.get("/", auth, async (req, res) => {
 // Retrieve specific shipments by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
- 
     try {
       const transportation = await Transportation.find({ name })
       res.json(transportation);
@@ -33,8 +36,10 @@ router.post("/", auth, async (req, res) => {
 
 // add new shipments
 router.post("/add", auth, async (req, res) => {
-  const { name, quantity, location, destination, status } = req.body;
+
+  const { iid, name, quantity, location, destination, status } = req.body;
   transportation = new Transportation({
+    iid,
     name,
     quantity,
     location,
@@ -42,6 +47,15 @@ router.post("/add", auth, async (req, res) => {
     status,
   });
   await transportation.save();
+});
+
+router.post("/changeStatus", auth, async (req,)=>{
+  const{
+    status,
+    iid
+  } = req.body;
+  console.log(status);
+  console.log(iid);
 });
 
 module.exports = router;

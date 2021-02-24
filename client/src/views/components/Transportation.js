@@ -24,12 +24,12 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip,
+  UncontrolledTooltip, ModalHeader, ModalBody, ModalFooter, Button, Modal,
 } from "reactstrap";
 // core components
-import Header from "components/Headers/Header.js";
+import Header from "components/Headers/CardlessHeader.js";
 
-const Transportation = () => {
+const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [transportation, setTransportation] = useState([]);
   // search input
@@ -79,9 +79,37 @@ const Transportation = () => {
     lookup();
   }, [formData]);
 
+  const {
+    buttonLabel,
+    className
+  } = props;
+
+  const [modal, setModal] = useState(false);
+  function closeModal(){
+    setModal(!modal);
+  }
+
+  const changeStatus= async(status, iid)=>{
+
+    const sstatus = {
+      status,
+      iid
+    };
+
+    const body = JSON.stringify(sstatus);
+    try{
+      await axios.post("/api/transportation/changeStatus", body, { headers: {
+      "x-auth-token": userToken,
+        "Content-Type":"application/json"},});
+    }
+    catch(err){
+      console.log(err.response.data);
+    }
+  }
+
   return (
     <>
-      <Header />
+      <Header/>
       {/* Page content */}
       <Container className="mt--7" fluid>
         {/* Table */}
@@ -113,6 +141,7 @@ const Transportation = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">IID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
@@ -123,23 +152,20 @@ const Transportation = () => {
                 </thead>
                 <tbody>
                   {transportation.map((t) => (
-                    <tr key={t.id} value={t.name}>
+                    <tr key={t.id} value={t.iid}>
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
                             <span className="mb-0 text-sm">
-                              {t.name}
+                                  {t.iid}
                             </span>
                           </Media>
                         </Media>
                       </th>
+                      <td>{t.name}</td>
                       <td>{t.quantity}</td>
                       <td>
-                        
-                        <Badge color="" className="badge-dot mr-4">
-                          <i className="bg-success" />
                           {t.location}
-                        </Badge>
                       </td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
@@ -158,21 +184,25 @@ const Transportation = () => {
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
-                              onClick={(e) => e.preventDefault()}
+                              onClick={() =>changeStatus(t.status, t.iid)}
                             >
-                              Action
+                              Change Status
                             </DropdownItem>
+                            <Modal isOpen={modal} changeStatus={closeModal} className={className}>
+                              <ModalHeader changeStatus={closeModal}>Modal title</ModalHeader>
+                              <ModalBody>
+                                Choose Status of Delivery
+                              </ModalBody>
+                              <ModalFooter>
+                                <Button color="primary" onClick={closeModal}>Change Status</Button>{' '}
+                                <Button color="secondary" onClick={closeModal}>Cancel</Button>
+                              </ModalFooter>
+                            </Modal>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => e.preventDefault()}
                             >
                               Another action
-                            </DropdownItem>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              Something else here
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
