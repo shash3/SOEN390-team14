@@ -125,7 +125,6 @@ const Admin = (props) => {
         }
       }
     }
-    console.log(permission);
     if (permission === "none" || permission === null) {
       routes.splice(1, 4);
     }
