@@ -24,7 +24,7 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip, ModalHeader, ModalBody, ModalFooter, Button, Modal,
+  UncontrolledTooltip, ModalHeader, ModalBody, ModalFooter, Button, Modal, Col,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/CardlessHeader.js";
@@ -90,13 +90,8 @@ const Transportation = (props) => {
     lookup();
   }, [formData]);
 
-  
-  
   const onAdd =  async () => {
-   
-    
-     
-    
+
     const newTransportation = {
       name,
       quantity,
@@ -120,33 +115,31 @@ const Transportation = (props) => {
     }
     
   };
+
+  //Info for Modal
   const {
     buttonLabel,
     className
   } = props;
-
   const [modal, setModal] = useState(false);
+  const [modal1, setModal1] = useState(false);
+
+  //Close Status Modal
   function closeModal(){
     setModal(!modal);
   }
 
-  const changeStatus= async(status, iid)=>{
-
-    const sstatus = {
-      status,
-      iid
-    };
-
-    const body = JSON.stringify(sstatus);
-    try{
-      await axios.post("/api/transportation/changeStatus", body, { headers: {
-      "x-auth-token": userToken,
-        "Content-Type":"application/json"},});
-    }
-    catch(err){
-      console.log(err.response.data);
-    }
+  //Close Add Modal
+  function closeModal1(){
+    setModal1(!modal1);
   }
+
+  //Add Function YOU NEED TO INIT ALL THE "value={variables}" of the inputs
+  function onSubmitADD(e) {
+  }
+
+  //on change of field
+  const onChangeAA = (e) => console;
 
   return (
     <>
@@ -178,6 +171,82 @@ const Transportation = (props) => {
                     </InputGroup>
                   </FormGroup>
                 </Form>
+
+                <Button className="mt-4" color="primary" onClick={closeModal1}>Add Shipment</Button>
+                <Modal isOpen={modal1} changeStatus={closeModal1} className={className}>
+                  <ModalHeader changeStatus={closeModal1}>Fill In The Form Below</ModalHeader>
+                    <ModalBody>
+                      <Form className="form" onSubmit={(e) => onSubmitADD(e)}>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="text"
+                                placeholder="IID"
+                                name="password2"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="text"
+                                placeholder="NAME"
+                                name="name"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="number"
+                                placeholder="QUANTITY  (please use scroller on right)"
+                                name="quantity"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="text"
+                                placeholder="LOCATION"
+                                name="location"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="text"
+                                placeholder="DESTINATION"
+                                name="destination"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <Input
+                                type="text"
+                                placeholder="STATUS"
+                                name="status"
+                                onChange={(e) => onChangeAA(e)}
+                            />
+                          </InputGroup>
+                        </FormGroup>
+                        <div className="text-center">
+                        <Button color="primary" onClick={closeModal1}>Add Shipment</Button>
+                        </div>
+                      </Form>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="secondary" onClick={closeModal1} >Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -225,7 +294,7 @@ const Transportation = (props) => {
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
-                              onClick={() =>changeStatus(t.status, t.iid)}
+                              onClick={closeModal}
                             >
                               Change Status
                             </DropdownItem>
