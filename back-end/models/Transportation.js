@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const TransportationSchema = new mongoose.Schema({
+    iid: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
