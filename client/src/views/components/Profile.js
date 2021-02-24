@@ -27,7 +27,11 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip,
+  Modal, 
+  ModalHeader, 
+  ModalBody, 
+  ModalFooter,
+  ButtonDropdown
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
@@ -36,7 +40,16 @@ import axios from "axios";
 const Profile = () => {
   const [user, setUser] = useState({});
   const [allUser, setAllUser] = useState([]);
+  // search input
+  const [formData, setFormData] = useState("");
   const permission = JSON.parse(localStorage.getItem("permission"));
+  const [modal, setModal] = useState(false);
+  const [dropdownOpen, setOpen] = useState(false);
+
+  const toggle1 = () => setOpen(!dropdownOpen);
+  const toggle = () => setModal(!modal);
+  const onChange = (e) => setFormData(e.target.value);
+
   // get user information
   useEffect(() => {
     const getUserInformation = async () => {
@@ -56,11 +69,12 @@ const Profile = () => {
     getUserInformation();
   }, []);
 
-  // get all user information
-  useEffect(() => {
-    const getUsersInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
-
+ // get user information
+ useEffect(() => {
+  // retrieve all users 
+  const lookup = async () => {
+    const userToken = JSON.parse(localStorage.getItem("user"));
+    if (formData === "") {
       const response = await axios
         .get("/api/auth/all", {
           headers: {
@@ -71,9 +85,27 @@ const Profile = () => {
       if (response && response.data) {
         setAllUser(response.data);
       }
-    };
-    getUsersInformation();
-  }, []);
+    } else {
+      const userToken = JSON.parse(localStorage.getItem("user"));
+      console.log(formData)
+      const body = {
+        name: formData,
+      };
+    const response = await axios
+        .post("/api/auth/name", body, {
+          headers: {
+            "x-auth-token": userToken, 
+          },
+        })
+        .catch((err) => console.log("Error", err));
+      if (response && response.data) {
+           setAllUser(response.data);
+         
+      }
+    }
+  };
+  lookup();
+}, [formData]);
 
   return (
     <>
@@ -98,7 +130,11 @@ const Profile = () => {
                             <i className="fas fa-search" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Search" type="text" />
+                        <Input 
+                         placeholder="Search"
+                         type="text"
+                         onChange={(e) => onChange(e)}
+                        />
                       </InputGroup>
                     </FormGroup>
                   </Form>
@@ -146,21 +182,39 @@ const Profile = () => {
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
                                 href="#pablo"
-                                onClick={(e) => e.preventDefault()}
+                                onClick={toggle}
                               >
-                                Action
+                                Change Permission
                               </DropdownItem>
+                              
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalBody>
+         Select permission &ensp;
+          <ButtonDropdown isOpen={dropdownOpen} toggle={toggle1}>
+      <DropdownToggle caret>
+        Button Dropdown
+      </DropdownToggle>
+      <DropdownMenu style={{boxShadow: "none"}}>
+        <DropdownItem header>Header</DropdownItem>
+        <DropdownItem disabled>Action</DropdownItem>
+        <DropdownItem>Another Action</DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem>Another Action</DropdownItem>
+      </DropdownMenu>
+    </ButtonDropdown>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+          <Button color="secondary" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+
                               <DropdownItem
                                 href="#pablo"
                                 onClick={(e) => e.preventDefault()}
                               >
-                                Another action
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Something else here
+                                Change Location
                               </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>
