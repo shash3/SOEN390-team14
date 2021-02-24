@@ -1,30 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../../middleware/auth");
-const Material = require("../../../models/Material");
+const Inventory = require("../../../models/Inventory");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-// Retrieve all materials
+// Retrieve all inventory
 router.get("/", auth, async (req, res) => {
   try {
-    const materials = await Material.find();
-    res.json(materials);
+    const inventory = await Inventory.find();
+    res.json(inventory);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// Retrieve specific materials by name
+// Retrieve specific inventory by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
  
     try {
-      const materials = await Material.find({ name })
-      res.json(materials);
+      const inventory = await Inventory.find({ name })
+      res.json(inventory);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -32,16 +32,14 @@ router.post("/", auth, async (req, res) => {
   });
 
 // add new material
-router.post("/add", auth, async (req, res) => {
-  const { name, quantity, location, quality, color } = req.body;
-  material = new Material({
+router.post("/add", async (req, res) => {
+  const { name, quantity, location } = req.body;
+  inventory = new Inventory({
     name,
     quantity,
-    location,
-    quality,
-    color,
+    location
   });
-  await material.save();
+  await inventory.save();
 });
 
 module.exports = router;
