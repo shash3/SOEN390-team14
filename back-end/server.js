@@ -19,4 +19,8 @@ app.use('/api/auth', require('./routes/api/users/auth'))
 
 app.use('/api/inventory', require('./routes/api/inventory/auth'))
 
+app.use('/api/product_line', require('./routes/api/product_line/auth'))
+
+app.use('/api/material', require('./routes/api/material/auth'))
+
 app.listen(PORT, () => console.log('Server started'));
