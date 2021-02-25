@@ -15,14 +15,26 @@ describe("Post Endpoints", () => {
   });
 
   it("retrieve user by name ", async () => {
-    const res1 = await request(app).post("/api/auth/name", {
-        headers: {
-          "x-auth-token": token,
-        },
-      }).send({
-        name: "admin"
+    const res1 = await request(app)
+      .post("/api/auth/name")
+      .set("x-auth-token", token)
+      .send({
+        name: "admin",
       });
-      console.log(res1.body)
       expect(res1.body).toBeTruthy();
+  });
+});
+
+describe("Get Endpoints", () => {
+  it("retrieve user by token", async () => {
+    const res2 = await request(app).get("/api/auth").set("x-auth-token", token);
+    expect(res2.body).toBeTruthy();
+  });
+
+  it("retrieve all user information", async () => {
+    const res2 = await request(app)
+      .get("/api/auth/all")
+      .set("x-auth-token", token);
+    expect(res2.body).toBeTruthy();
   });
 });

@@ -19,9 +19,8 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Retrieve user information by name
-router.post("/name", async (req, res) => {
+router.post("/name", auth, async (req, res) => {
   const { name } = req.body;
-  console.log(name);
   try {
     const user = await User.find({ name }).select("-password");
     res.json(user);
