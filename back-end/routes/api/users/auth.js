@@ -19,7 +19,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Retrieve user information by name
-router.post("/name", auth, async (req, res) => {
+router.post("/name", async (req, res) => {
   const { name } = req.body;
   console.log(name);
   try {
@@ -32,7 +32,7 @@ router.post("/name", auth, async (req, res) => {
 });
 
 // Change permission by admin
-router.put("/permission", async (req, res) => {
+router.put("/permission", auth, async (req, res) => {
   const { email, permission } = req.body;
   try {
     const user1 = await User.find({email: email}).updateOne({permission: permission});
