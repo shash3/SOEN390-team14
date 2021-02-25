@@ -10,8 +10,6 @@ describe("Post Endpoints", () => {
       password: "12345678",
     });
     token = res.body.token;
-    expect(res.body.token).toBeTruthy();
-    expect(res.body.permission).toBeTruthy();
   });
 
   it("Retrieve specific inventory by name", async () => {
