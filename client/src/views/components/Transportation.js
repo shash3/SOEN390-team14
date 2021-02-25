@@ -24,32 +24,41 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip, ModalHeader, ModalBody, ModalFooter, Button, Modal, Col,
+  UncontrolledTooltip,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Modal,
+  Col,
 } from "reactstrap";
 // core components
 import Header from "components/Headers/CardlessHeader.js";
 
 const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-  const [transportation,setTransportation] = useState([]);
+  const [transportation, setTransportation] = useState([]);
   const [transportationData, setTransportationData] = useState({
     _id: "",
     name: "",
     quantity: 0,
     location: "",
     destination: "",
-    status: ""
+    status: "",
   });
-  const { name, quantity, location, destination,status } = transportationData;
+  const { name, quantity, location, destination, status } = transportationData;
   const onChangeAdd = (e) => {
-    setTransportationData({ ...transportationData, [e.target.name]: e.target.value });
+    setTransportationData({
+      ...transportationData,
+      [e.target.name]: e.target.value,
+    });
   };
   // search input
   const [formData, setFormData] = useState("");
 
   const onChange = (e) => setFormData(e.target.value);
 
-  const [updated,setUpdated]= useState(false);
+  const [updated, setUpdated] = useState(false);
 
   // get shipmeny information
   useEffect(() => {
@@ -91,91 +100,86 @@ const Transportation = (props) => {
       }
     };
     lookup();
-  }, [formData,updated]);
+  }, [formData, updated]);
 
-  const onAdd =  async (e) => {
-    
-    if(name == ""||quantity==0||location==""||destination==0||status==""){
+  const onAdd = async (e) => {
+    if (
+      name == "" ||
+      quantity == 0 ||
+      location == "" ||
+      destination == 0 ||
+      status == ""
+    ) {
       window.alert("Please Enter Data Into All Fields");
-    }
-    else{
-    closeModal1();
-    
-    const newTransportation = {
-      
-      name,
-      quantity,
-      location,
-      destination,
-      status
-    };
-    
+    } else {
+      closeModal1();
 
-    const body = JSON.stringify(newTransportation);
-     
-     try {
-     await axios.post("/api/transportation/add", body,{
-      headers: {
-        "x-auth-token": userToken,
-        "Content-Type": "application/json",
-      },
-    }).then( () => {setUpdated(!updated)});
-    
-    
-    
-     }
-     catch (err) {
-      console.log(err.response.data);
+      const newTransportation = {
+        name,
+        quantity,
+        location,
+        destination,
+        status,
+      };
+
+      const body = JSON.stringify(newTransportation);
+
+      try {
+        await axios
+          .post("/api/transportation/add", body, {
+            headers: {
+              "x-auth-token": userToken,
+              "Content-Type": "application/json",
+            },
+          })
+          .then(() => {
+            setUpdated(!updated);
+          });
+      } catch (err) {
+        console.log(err.response.data);
+      }
     }
-   
-  
-  }
   };
 
-  const onDelete = async(_id) => {
-    const shipmentId ={
-      _id
+  const onDelete = async (_id) => {
+    const shipmentId = {
+      _id,
     };
-    
+
     console.log(_id);
     const body = JSON.stringify(shipmentId);
     try {
-      await axios.post("/api/transportation/delete", body,{
-       headers: {
-         "x-auth-token": userToken,
-         "Content-Type": "application/json",
-       },
-     }).then(setUpdated(!updated));
-      }
-      catch (err) {
-       console.log(err.response.data);
-     }
-
+      await axios
+        .post("/api/transportation/delete", body, {
+          headers: {
+            "x-auth-token": userToken,
+            "Content-Type": "application/json",
+          },
+        })
+        .then(setUpdated(!updated));
+    } catch (err) {
+      console.log(err.response.data);
+    }
   };
 
   //Info for Modal
-  const {
-    buttonLabel,
-    className
-  } = props;
+  const { buttonLabel, className } = props;
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
 
   //Close Status Modal
-  function closeModal(){
+  function closeModal() {
     setModal(!modal);
   }
 
   //Close Add Modal
-  function closeModal1(){
+  function closeModal1() {
     setModal1(!modal1);
   }
 
- 
-
   return (
     <>
-      <Header/>
+      <Header />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {/* Table */}
@@ -204,81 +208,96 @@ const Transportation = (props) => {
                   </FormGroup>
                 </Form>
 
-                <Button className="mt-4" color="primary" onClick={() => {
-                  closeModal1();
-                  setTransportationData({
-                    _id: "",
-                    name: "",
-                    quantity: 0,
-                    location: "",
-                    destination: "",
-                    status: ""
-                  });
-                }}>Add Shipment</Button>
-                <Modal isOpen={modal1} changeStatus={closeModal1} className={className}>
-                  <ModalHeader changeStatus={closeModal1}>Fill In The Form Below</ModalHeader>
-                    <ModalBody>
-                      <Form className="form" onSubmit={(e) => onAdd(e)}>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="text"
-                                placeholder="NAME"
-                                name="name"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="number"
-                                placeholder="QUANTITY  (please use scroller on right)"
-                                name="quantity"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="text"
-                                placeholder="LOCATION"
-                                name="location"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="text"
-                                placeholder="DESTINATION"
-                                name="destination"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup>
-                            <Input
-                                type="text"
-                                placeholder="STATUS"
-                                name="status"
-                                onChange={(e) => onChangeAdd(e)}
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <div className="text-center">
-                        <Button color="primary" onClick={(e) => onAdd(e)}>Add Shipment</Button>
-                        </div>
-                      </Form>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="secondary" onClick={closeModal1} >Cancel</Button>
-                    </ModalFooter>
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  onClick={() => {
+                    closeModal1();
+                    setTransportationData({
+                      _id: "",
+                      name: "",
+                      quantity: 0,
+                      location: "",
+                      destination: "",
+                      status: "",
+                    });
+                  }}
+                >
+                  Add Shipment
+                </Button>
+                <Modal
+                  isOpen={modal1}
+                  changeStatus={closeModal1}
+                  className={className}
+                >
+                  <ModalHeader changeStatus={closeModal1}>
+                    Fill In The Form Below
+                  </ModalHeader>
+                  <ModalBody>
+                    <Form className="form" onSubmit={(e) => onAdd(e)}>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            placeholder="NAME"
+                            name="name"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="number"
+                            placeholder="QUANTITY  (please use scroller on right)"
+                            name="quantity"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            placeholder="LOCATION"
+                            name="location"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            placeholder="DESTINATION"
+                            name="destination"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            placeholder="STATUS"
+                            name="status"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <div className="text-center">
+                        <Button color="primary" onClick={(e) => onAdd(e)}>
+                          Add Shipment
+                        </Button>
+                      </div>
+                    </Form>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="secondary" onClick={closeModal1}>
+                      Cancel
+                    </Button>
+                  </ModalFooter>
                 </Modal>
-
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -298,17 +317,13 @@ const Transportation = (props) => {
                       <th scope="row">
                         <Media className="align-items-center">
                           <Media>
-                            <span className="mb-0 text-sm">
-                                  {t._id}
-                            </span>
+                            <span className="mb-0 text-sm">{t._id}</span>
                           </Media>
                         </Media>
                       </th>
                       <td>{t.name}</td>
                       <td>{t.quantity}</td>
-                      <td>
-                          {t.location}
-                      </td>
+                      <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
                       <td className="text-right">
@@ -324,25 +339,30 @@ const Transportation = (props) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem
-                              href="#pablo"
-                              onClick={closeModal}
-                            >
+                            <DropdownItem href="#pablo" onClick={closeModal}>
                               Change Status
                             </DropdownItem>
-                            <Modal isOpen={modal} changeStatus={closeModal} className={className}>
-                              <ModalHeader changeStatus={closeModal}>Modal title</ModalHeader>
-                              <ModalBody>
-                                Choose Status of Delivery
-                              </ModalBody>
+                            <Modal
+                              isOpen={modal}
+                              changeStatus={closeModal}
+                              className={className}
+                            >
+                              <ModalHeader changeStatus={closeModal}>
+                                Modal title
+                              </ModalHeader>
+                              <ModalBody>Choose Status of Delivery</ModalBody>
                               <ModalFooter>
-                                <Button color="primary" onClick={closeModal}>Change Status</Button>{' '}
-                                <Button color="secondary" onClick={closeModal}>Cancel</Button>
+                                <Button color="primary" onClick={closeModal}>
+                                  Change Status
+                                </Button>{" "}
+                                <Button color="secondary" onClick={closeModal}>
+                                  Cancel
+                                </Button>
                               </ModalFooter>
                             </Modal>
                             <DropdownItem
                               href="#pablo"
-                              onClick={(e) => onDelete(t._id) }
+                              onClick={(e) => onDelete(t._id)}
                             >
                               Delete Shipment
                             </DropdownItem>
@@ -408,9 +428,7 @@ const Transportation = (props) => {
             </Card>
           </div>
         </Row>
-        
       </Container>
-     
     </>
   );
 };
