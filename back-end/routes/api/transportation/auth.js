@@ -24,7 +24,6 @@ router.get("/", auth, async (req, res) => {
 
 // Retrieve specific shipments by name
 router.post("/", auth, async (req, res) => {
-  console.log(1);
     const { name } = req.body;
     try {
       const transportation = await Transportation.find({ name })
