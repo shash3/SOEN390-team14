@@ -42,7 +42,10 @@ The project is a simplified ERP website for our client who is the owner of a Bik
   - Email: soen390shop@gmail.com
   - Password: Soen390project
 
-## Contributor
+### Name Convention
+* As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide.
+
+### Contributor
 * Adam Richard (Project Manager)
 * Sacha Elkaim (Programming Manager)
 * Shashank Patel
