@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11830a39-31c7-44e3-80ba-2ec15b5411e7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/client/test/InventoryTest/authTest.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/test/MaterialTest/authTest.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/test/ProductLineTest/authTest.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/test/TransportationTest/authTest.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/test/UsersTest/authTest.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/test/UsersTest/usersTest.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/sum.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back-end/test/TransportationTest/authTest.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/back-end/test/TransportationTest/authTest.test.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,5 +75,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
