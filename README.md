@@ -41,6 +41,9 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 - MongoDB:
   - Email: soen390shop@gmail.com
   - Password: Soen390project
+- Bikerr
+  - Email: admin@gmail.com
+  - Password: 12345678
 
 ### Name Convention
 * As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide.
