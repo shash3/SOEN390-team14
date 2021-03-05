@@ -37,6 +37,7 @@ import {
 // core components
 import Header from "components/Headers/Header.js";
 import { inArray } from "jquery";
+import { invalid } from "moment";
 
 const Production = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
@@ -49,85 +50,157 @@ const Production = (props) => {
   // search input
   const [formData, setFormData] = useState("");
   const [formProdData, setFormProdData] = useState("");
-
   const onInvSearchChange = (e) => setFormData(e.target.value);
   const onProdSearchChange = (e) => setFormProdData(e.target.value);
 
-  // create product line modals
+  // Toggle product line modal
+  const toggleAddModal = () => {setAddModal(!addModal);}
+  const toggleCreateModal = () => setCreateModal(!createModal);
+  
+  // add new product line modal
   const [addModal, setAddModal] = useState(false);
+  const [newProdName, setNewProdName] = useState("");
+  const [prodMatList, setProdMatList] = useState([{ matName: "Leather", matQuantity: 1 }]);
+  const [unstableInputsValidation, setUnstableInputValidation] = useState({prodName: false, quantities:[true]})
+  const [errorMessages, setErrorMessages] = useState({prodName: "Cannot have an empty product name", quantities:[""]})
+  const [disabledAddNewProd, setDisableAddNewProd] = useState(true);
+  const onNewProdChange = (e) => setNewProdName(e.target.value);
+
+  // create product modals
   const [createModal, setCreateModal] = useState(false);
   const [prodName, setProdName] = useState("");
   const [prodLoc, setProdLoc] = useState("");
-  
-  //const newProdNameRef = React.useRef();
-  const [newProdName, setNewProdName] = useState("");
-  const [disabledNewProd, setDisableNewProd] = useState(true);
-  const onNewProdChange = (e) => setNewProdName(e.target.value);
 
-  // Toggle product line modal
-  const toggleAddModal = () => setAddModal(!addModal);
-  const toggleCreateModal = () => setCreateModal(!createModal);
 
-  // Retrieve product line location from user
-  const getProdLoc = async () => {
-    const response = await axios
-      .get("/api/auth", {
-        headers: {
-          "x-auth-token": userToken,
-        },
-      })
-      .catch((err) => console.log("Error", err));
-    if (response && response.data) {
-      var user = response.data;
-      setProdLoc(user.location);
-    }
-  };
-  getProdLoc();
 
-  // Material options for new product modal
-  const [prodMatList, setProdMatList] = useState([
-    { matName: "Leather", matQuantity: 1 },
-  ]);
+  /* -------------------------
+   * Functions dealing with the adding a new product line.
+   * --------------------------
+  */
 
+  /**
+   * Updates the modal's material value based on the events target.
+   * 
+   * @param {Event} e the triggered event
+   * @param {Number} index the material element's index in the modal
+   */
   const handleMaterialChange = (e, index) => {
     const { name, value } = e.target;
-    if (name == 'matQuantity'){
-      if (value <= 0){
-        return;
-      }
+    let title = name
+    if (name.includes('matQuantity')){
+      let splt = name.split("_");
+      title = splt[0]
     }
     const list = [...prodMatList];
-    list[index][name] = value;
+    list[index][title] = value;
     setProdMatList(list);
   };
+  /**
+   * Removes a material element from the modal.
+   * 
+   * @param {Number} index the material element's index in the modal
+   */
   const removeMaterial = (index) => {
     const list = [...prodMatList];
     list.splice(index, 1);
     setProdMatList(list);
-    validateMaterials();
+    
+    let inputs = unstableInputsValidation;
+    const matInputs = [...inputs['quantities']];
+    matInputs.splice(index, 1);
+    inputs['quantities'] = matInputs;
+    setUnstableInputValidation(inputs)
+
+    let messages = errorMessages;
+    const matMess = [...messages['quantities']];
+    matMess.splice(index, 1);
+    messages['quantities'] = matMess;
+    setErrorMessages(messages);
   };
+  /**
+   * Adds a new material element to the modal in the last position with default values.
+   */
   const addMaterial = () => {
     setProdMatList([...prodMatList, { matName: "Leather", matQuantity: 1 }]);
-    validateMaterials();
+
+    let inputs = unstableInputsValidation;
+    inputs['quantities'] = [...inputs['quantities'], true];
+    setUnstableInputValidation(inputs);
+
+    let messages = errorMessages;
+    messages['quantities'] = [...messages['quantities'], ""];
+    setErrorMessages(messages);
   };
 
+  /**
+   * Validates all the inputs that could be invalid and display an error message. If any of the inputs are invalid, then the submit button is disabled.
+   * 
+   * @param {Event} e the triggered event
+   */
+  const validateUnstableInputs = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    const inputs = unstableInputsValidation;
+    const messages = errorMessages;
 
-  const validateMaterials = () => {
-    let disabled = false;
-    //validate entries
-    for (let index = 0; index < prodMatList.length; index++) {
-      if (prodMatList[index].matQuantity < 1){
-        disabled = true;
+    let valid = true;
+    let message = "";
+
+    // Target is a product name input
+    if (name == "prodName"){
+      if (value.trim() == ""){
+        valid = false;
+        message = 'Cannot have an empty product name';
       }
-    }
-    if (newProdName.trim() == ""){
-      disabled = true;
-    }
-    setDisableNewProd(disabled);
-  }
+      product.forEach(prod => {
+        if (value.trim().toLowerCase()  == prod.name.trim().toLowerCase()){
+          valid = false;
+          message = 'Cannot have two products with the same name';
+          return;
+        }
+      });
+      inputs[name] = valid;
+      messages[name] = message;
 
+      // Target is a quantity input
+    }else{
+      if (isNaN(value)){
+        valid = false;
+        message = "Must be a number";
+      }else if (value < 1){
+        valid = false;
+        message = "Must be greater or equal to 1";
+      }
+
+      let idx = Number(name.split("_")[1]);
+      inputs['quantities'][idx] = valid;
+      messages['quantities'][idx] = message;
+    }
+    
+    // Disable add new product line if all inputs are not valid.
+    let isDisabled = !inputs['prodName'];
+    inputs["quantities"].forEach(validQuant => {
+      if (!validQuant){
+        isDisabled = true;
+      }
+    });
+    
+    setDisableAddNewProd(isDisabled);
+    setUnstableInputValidation(inputs);
+    setErrorMessages(messages);
+  }
+  
+  /**
+   * Adds the new product defined in the modal to the database.
+   * 
+   * @param {Event} e the triggered event.
+   */
   // Adding new Product Line
-  const addProduct = async () => {
+  const addProduct = async (e) => {
+    if (!disabledAddNewProd){
+      e.preventDefault();
+      return;
+    }
     let list = []
     let names = []
     for (let index = 0; index < prodMatList.length; index++) {
@@ -156,8 +229,21 @@ const Production = (props) => {
       .catch((err) => console.log("Error", err));
   };
 
-  // Creating product from product line
+  /* -------------------------
+   * Functions dealing with the creating a product from the product line.
+   * --------------------------
+   */
+
+  /**
+   * Creating product from product line
+  */ 
   const createProduct = async () => {};
+
+
+  /* -------------------------
+   * Functions that retrieve information from databases.
+   * -------------------------
+   */
 
   // get inventory information
   useEffect(() => {
@@ -258,6 +344,27 @@ const Production = (props) => {
       });
   };
   getMaterialList();
+
+  // Retrieve product line location from user
+  const getProdLoc = async () => {
+    const response = await axios
+      .get("/api/auth", {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      })
+      .catch((err) => console.log("Error", err));
+    if (response && response.data) {
+      var user = response.data;
+      setProdLoc(user.location);
+    }
+  };
+  getProdLoc();
+
+  /* -------------------------
+   * Returns the HTML code for the productino tab.
+   * -------------------------
+   */
 
   return (
     <>
@@ -554,11 +661,14 @@ const Production = (props) => {
                 </label>
                 <InputGroup className="input-group-alternative">
                   <Input
+                    invalid={!unstableInputsValidation['prodName']}
+                    //className={isValidProdName ? '' : 'btn-danger'}
                     type="text"
                     name="prodName"
                     required
-                    onChange={(e) => {onNewProdChange(e);validateMaterials();}}
+                    onChange={(e) => {onNewProdChange(e);validateUnstableInputs(e);}}
                   />
+                  <FormFeedback className="invalid-feedback invalid-tooltip" type="invalid">Error: {errorMessages['prodName']}</FormFeedback>
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
@@ -613,10 +723,12 @@ const Production = (props) => {
                         type="number"
                         min="1"
                         className="ml10"
-                        name={"matQuantity"}
+                        name={"matQuantity_" + i}
                         value={x.matQuantity}
-                        onChange={(e) => handleMaterialChange(e, i)}
+                        invalid={!unstableInputsValidation['quantities'][i]}
+                        onChange={(e) => {handleMaterialChange(e, i); validateUnstableInputs(e);}}
                       />
+                      <FormFeedback className="invalid-feedback invalid-tooltip" type="invalid">Error: {errorMessages['quantities'][i]}</FormFeedback>
                       {prodMatList.length !== 1 && (
                         <Button
                           color="secondary"
@@ -637,11 +749,11 @@ const Production = (props) => {
           </ModalBody>
           <ModalFooter>
             <Button
-              disabled={disabledNewProd}
+              disabled={disabledAddNewProd}
               color="primary"
-              onClick={() => {
+              onClick={(e) => {
+                addProduct(e);
                 toggleAddModal();
-                addProduct();
               }}
             >
               Confirm
