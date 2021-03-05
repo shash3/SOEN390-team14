@@ -20,15 +20,27 @@ router.get("/", auth, async (req, res) => {
 
 // Retrieve specific inventory by name
 router.post("/", auth, async (req, res) => {
-    const { name } = req.body;
-    try {
-      const inventory = await Inventory.find({ name })
-      res.json(inventory);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  });
+  const { name } = req.body;
+  try {
+    const inventory = await Inventory.find({ name })
+    res.json(inventory);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Retrieve specific inventory by name and location
+router.post("/location", auth, async (req, res) => {
+  const { name, location } = req.body;
+  try {
+    const inventory = await Inventory.find({ name, location })
+    res.json(inventory);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // add new inventory
 router.post("/add", async (req, res) => {
