@@ -41,6 +41,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "@agney/react-loading": "^0.1.2",
     "@fortawesome/fontawesome-free": "5.15.2",
     "axios": "^0.21.1",
     "bootstrap": "4.6.0",
