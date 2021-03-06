@@ -23,4 +23,8 @@ app.use('/api/product_line', require('./routes/api/product_line/auth'))
 
 app.use('/api/material', require('./routes/api/material/auth'))
 
+app.use('/api/transportation', require('./routes/api/transportation/auth'))
+
 app.listen(PORT, () => console.log('Server started'));
+
+module.exports = app

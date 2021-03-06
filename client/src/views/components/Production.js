@@ -50,6 +50,7 @@ const Production = (props) => {
   // search input
   const [formData, setFormData] = useState("");
   const [formProdData, setFormProdData] = useState("");
+
   const onInvSearchChange = (e) => setFormData(e.target.value);
   const onProdSearchChange = (e) => setFormProdData(e.target.value);
   const [updateProdSearch, setUpdateProdSearch] = useState(false);
@@ -127,6 +128,7 @@ const Production = (props) => {
     list[index][title] = value;
     setProdMatList(list);
   };
+  
   /**
    * Removes a material element from the adding product line modal.
    * 
@@ -545,7 +547,6 @@ const Production = (props) => {
    * Returns the HTML code for the productino tab.
    * -------------------------
    */
-
   return (
     <>
       <Header />
@@ -882,6 +883,7 @@ const Production = (props) => {
                     <InputGroup className="input-group-alternative">
                       <Input
                         type="select"
+
                         name={"matName"}
                         value={x.matName}
                         onChange={(e) => handleMaterialChange(e, i)}
@@ -920,7 +922,7 @@ const Production = (props) => {
                 ))}
               </FormGroup>
             </Form>
-            <Button  color="primary" onClick={addMaterial}>
+            <Button color="primary" onClick={addMaterial}>
               Add Another Material
             </Button>
           </ModalBody>
@@ -1015,7 +1017,6 @@ const Production = (props) => {
               >
                 Cancel
               </Button>
-            
           </ModalFooter>
         </Modal>
       </div>

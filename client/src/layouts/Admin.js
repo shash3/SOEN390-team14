@@ -135,6 +135,13 @@ const Admin = (props) => {
       routes.splice(1, 1);
       routes.splice(2, 2);
     }
+    if (permission === "finance") {
+      routes.splice(1, 2);
+      routes.splice(2, 1);
+    }
+    if (permission === "assurance") {
+      routes.splice(1, 3);
+    }
     return routes;
   };
 

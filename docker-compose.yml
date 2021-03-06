@@ -9,6 +9,7 @@ services:
     networks:
       - erp-app
   api-server:
+    container_name: api-server
     build: ./back-end
     image: soen390team14/backend:latest
     ports:
