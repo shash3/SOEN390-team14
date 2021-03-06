@@ -39,6 +39,7 @@ router.post("/add", async (req, res) => {
     material
   });
   await product.save();
+  res.json();
 });
 
 module.exports = router;
