@@ -374,12 +374,13 @@ const Production = (props) => {
       })
       .then((response) => {
         if (response.data) {
-          let material = response.data;
-          if (material.length == 0 || material[0]['quantity'] < num * prodQuant){
-            invalids = [...invalids, [name, num * prodQuant, (material.length == 0 ? 0 : material[0]['quantity'])]];
+          const material = response.data;
+          const inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
+          if (inInventory < num * prodQuant){
+            invalids = [...invalids, [name, num * prodQuant, inInventory]];
           }
 
-          // Change the create product output
+          // For the last material only, update the html output
           if (materials[materials.length-1][0] == name){
             updateOutputHTML(invalids);
           }
@@ -402,17 +403,59 @@ const Production = (props) => {
           make {prodQuant} {prodName} at your location ({prodLoc}).<br/>Requires {need}, but only {have} in inventory.</Button></FormGroup>];
         });
       }else{
-        removeFromInventory(materials)
-        html = [<FormGroup><Button className='btn-success' disabled>Successfully created {prodQuant} {prodName} in {prodLoc}.</Button></FormGroup>];
+        // Uncomment when inventory and quality is complete
+        /*removeFromInventory(materials);
+        for (let index = 0; index < prodQuant; index++) {
+          addToQuality([prodName, prodLoc, prodQuant]);
+        }*/
+        html = [<FormGroup><Button className='btn-success' disabled>Successfully created {prodQuant} <label className='text-indigo strong'>{prodName}</label> in {prodLoc}.</Button></FormGroup>];
       }
       setHiddenLoading(true);
       setCreateProdOutputHTML(html);
     }
   
-    const removeFromInventory = (materials) => {
-      
+    const removeFromInventory = async (materials) => {
+      await materials.forEach(element => {
+    
+        const name = element[0];
+        const num = element[1] * prodQuant;
+
+        axios.post("/api/inventory/remove", 
+        { 
+          name: name,
+          quantity: num,
+        },
+        {
+          headers: {
+          "x-auth-token": userToken,
+          },
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      });
     }
 
+    const addToQuality = async (product) => {
+      await axios.post("/api/quality/add", 
+      { 
+        name: prodName,
+        location: prodLoc,
+      },
+      {
+        headers: {
+        "x-auth-token": userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          materials = response.data[0]['material'];
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
   };
 
   
