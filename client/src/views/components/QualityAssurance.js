@@ -47,17 +47,48 @@ const QualityAssurance = () => {
   // Quality database data
   const [dirtyQualityData, setDirtyQualityData] = useState([]);
   const [searchQualityData, setSearchQualityData] = useState([]);
-  const [updatedQualityData, setUpdatedQuality] = useState([]);
+  const [updatedQualityIndicies, setUpdatedQualityIndicies] = useState([]);
 
   // Search input
   const [qualityFormSearch, setQualityFormSearch] = useState("");
+  const [updateSearch, setUpdateSearch] = useState(false);
 
-  const changeProductQuality = (id, value) => {
-    console.log();
+  const changeProductQuality = (product, value) => {
+    for (let index = 0; index < dirtyQualityData.length; index++) {
+      const element = dirtyQualityData[index];
+      if (element['_id'] == product['_id']){
+        product['quality'] = value;
+        dirtyQualityData.splice(index, 1, product);
+        updatedQualityIndicies.splice(index, 1, true);
+        setUpdateSearch(!updateSearch);
+        break;
+      }
+    }
   }
 
-  const updateQualityTable = () => {
-
+  const updateQualityTable = async () => {
+    for (let index = 0; index < dirtyQualityData.length; index++) {
+      const product = dirtyQualityData[index];
+      if (updatedQualityIndicies[index] && product['quality'] != 'None'){
+        await axios.get("/api/quality/remove", 
+        product,
+        {
+          headers: {
+            "x-auth-token": userToken,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setDirtyQualityData(response.data);
+            setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+    }
+    setUpdateSearch(!updateSearch);
   }
 
 
@@ -66,61 +97,42 @@ const QualityAssurance = () => {
     // retrieve quality information
     const qualityLookUp = async () => {
       if (qualityFormSearch === "") {
-        await axios
-          .get("/api/quality", {
-            headers: {
-              "x-auth-token": userToken,
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              setSearchQualityData(response.data);
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        setSearchQualityData(dirtyQualityData);
       } else {
-        const body = {
-          name: qualityFormSearch,
-        };
-        await axios
-          .post("/api/quality", body, {
-            headers: {
-              "x-auth-token": userToken,
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              setSearchQualityData(response.data);
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        let searchResults = [];
+        dirtyQualityData.forEach(element => {
+          const name = element['name'];
+          if (name.search(new RegExp('^' + qualityFormSearch,'i')) >= 0){
+            searchResults = [...searchResults, element]
+          }
+        });
+        setSearchQualityData(searchResults);
       }
     };
     qualityLookUp();
-  }, [qualityFormSearch]);
+  }, [qualityFormSearch, dirtyQualityData, updateSearch]);
 
-  useEffect(async () => {
-      await axios
-        .get("/api/quality", {
-          headers: {
-            "x-auth-token": userToken,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setDirtyQualityData(response.data);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      
-  });
-
+  useEffect(() => {
+    const loadQuality = async () => {
+      await axios.get("/api/quality", 
+      {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setDirtyQualityData(response.data);
+          setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    loadQuality();
+  }, []);
+  
 
 
   return (
@@ -194,17 +206,17 @@ const QualityAssurance = () => {
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
-                              onClick={(e) => changeProductQuality(m.id,"None")}
+                              onClick={(e) => changeProductQuality(m,"None")}
                             >
                               None
                             </DropdownItem>
                             <DropdownItem
-                              onClick={(e) => changeProductQuality(m.id,"Good")}
+                              onClick={(e) => changeProductQuality(m,"Good")}
                             >
                               Good
                             </DropdownItem>
                             <DropdownItem
-                              onClick={(e) => changeProductQuality(m.id,"Faulty")}
+                              onClick={(e) => changeProductQuality(m,"Faulty")}
                             >
                               Faulty
                             </DropdownItem>
@@ -222,7 +234,7 @@ const QualityAssurance = () => {
                       updateQualityTable();
                     }}
                   >
-                    Apply Update
+                    Apply Changes
                   </Button>
                 </ButtonGroup>
                 <nav aria-label="...">
