@@ -486,7 +486,7 @@ const Production = (props) => {
           });
       } else {
         const body = {
-          name: formData,
+          name: { $regex: "^" + formData, $options: 'i' },
         };
         await axios
           .post("/api/inventory", body, {
@@ -525,7 +525,7 @@ const Production = (props) => {
           });
       } else {
         const body = {
-          name: formProdData,
+          name: { $regex: "^" + formProdData, $options: 'i' },
         };
         await axios
           .post("/api/product_line", body, {
@@ -535,6 +535,7 @@ const Production = (props) => {
           })
           .then((response) => {
             if (response.data) {
+
               setProductLines(response.data);
             }
           })
