@@ -404,10 +404,10 @@ const Production = (props) => {
         });
       }else{
         // Uncomment when inventory and quality is complete
-        /*removeFromInventory(materials);
+        /*removeFromInventory(materials);*/
         for (let index = 0; index < prodQuant; index++) {
-          addToQuality([prodName, prodLoc, prodQuant]);
-        }*/
+          addToQuality([prodName, prodLoc]);
+        }
         html = [<FormGroup><Button className='btn-success' disabled>Successfully created {prodQuant} <label className='text-indigo strong'>{prodName}</label> in {prodLoc}.</Button></FormGroup>];
       }
       setHiddenLoading(true);
@@ -437,10 +437,12 @@ const Production = (props) => {
     }
 
     const addToQuality = async (product) => {
+      const name = product[0];
+      const location = product[1];
       await axios.post("/api/quality/add", 
       { 
-        name: prodName,
-        location: prodLoc,
+        name: name,
+        location: location,
       },
       {
         headers: {
@@ -583,7 +585,7 @@ const Production = (props) => {
       });
   };
     getMaterialList();
-  });
+  }, []);
 
   
 
