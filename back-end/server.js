@@ -25,6 +25,8 @@ app.use('/api/material', require('./routes/api/material/auth'))
 
 app.use('/api/transportation', require('./routes/api/transportation/auth'))
 
+app.use('/api/quality', require('./routes/api/quality/auth'))
+
 app.listen(PORT, () => console.log('Server started'));
 
 module.exports = app
