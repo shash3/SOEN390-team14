@@ -33,11 +33,13 @@ router.post("/", auth, async (req, res) => {
 
 // add new product line
 router.post("/add", async (req, res) => {
-  const { name } = req.body;
+  const { name, material } = req.body;
   product = new Product_line({
-    name
+    name,
+    material
   });
   await product.save();
+  res.json();
 });
 
 module.exports = router;

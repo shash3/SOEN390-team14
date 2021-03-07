@@ -4,6 +4,10 @@ const ProductLineSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    material: {
+        type: Array,
+        required: true
     }
 });
 
