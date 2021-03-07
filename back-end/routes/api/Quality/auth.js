@@ -1,56 +1,58 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../../../middleware/auth");
-const Inventory = require("../../../models/Inventory");
+const Quality = require("../../../models/Quality");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-// Retrieve all inventory
+// Retrieve all quality data
 router.get("/", auth, async (req, res) => {
   try {
-    const inventory = await Inventory.find();
-    res.json(inventory);
+    const quality = await Quality.find();
+    res.json(quality);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// Retrieve specific inventory by name
+// Retrieve specific quality data by name
 router.post("/", auth, async (req, res) => {
-  const { name } = req.body;
-  try {
-    const inventory = await Inventory.find({ name })
-    res.json(inventory);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-});
+    const { name } = req.body;
+ 
+    try {
+      const quality = await Quality.find({ name })
+      res.json(quality);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  });
 
-// Retrieve specific inventory by name and location
+// Retrieve specific quality data by name and location
 router.post("/location", auth, async (req, res) => {
   const { name, location } = req.body;
   try {
-    const inventory = await Inventory.find({ name, location })
-    res.json(inventory);
+    const quality = await Quality.find({ name, location })
+    res.json(quality);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// add new inventory
+// add quality data
 router.post("/add", async (req, res) => {
-  const { name, quantity, location } = req.body;
-  inventory = new Inventory({
-    name,
-    quantity,
-    location
+  const { name, location } = req.body;
+  quality = new Quality({
+    name:name,
+    location:location,
+    quality:"None",
   });
-  await inventory.save();
+  await quality.save();
+  res.json();
 });
 
 module.exports = router;

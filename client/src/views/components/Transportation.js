@@ -81,7 +81,7 @@ const Transportation = (props) => {
           });
       } else {
         const body = {
-          name: formData,
+          name: { $regex: "^" + formData, $options: 'i' },
         };
         await axios
           .post("/api/transportation", body, {

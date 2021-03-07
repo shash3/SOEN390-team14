@@ -87,7 +87,7 @@ const Profile = () => {
       } else {
         console.log(formData);
         const body = {
-          name: formData,
+          name: { $regex: "^" + formData, $options: 'i' },
         };
         const response = await axios
           .post("/api/auth/name", body, {
