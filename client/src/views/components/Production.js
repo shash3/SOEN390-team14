@@ -423,11 +423,14 @@ const Production = (props) => {
         const name = element[0];
         const numNeeded = element[1] * prodQuant;
         const inInventory = element[2];
-
-        axios.post("/api/inventory/remove", 
+        const loc = prodLoc;
+        const newQuantity = inInventory - numNeeded;
+        console.log(newQuantity);
+        axios.put("http://localhost:5000/api/inventory/remove", 
         { 
           name: name,
-          quantity: inInventory - numNeeded,
+          quantity: newQuantity,
+          location: loc
         },
         {
           headers: {
