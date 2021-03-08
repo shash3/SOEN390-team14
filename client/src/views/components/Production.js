@@ -336,7 +336,7 @@ const Production = (props) => {
     setHiddenLoading(false);
 
     // Get materials for product.
-    let materials;
+    let productLineMat;
     await axios.post("/api/product_line", 
     { 
       name: prodName
@@ -348,7 +348,7 @@ const Production = (props) => {
     })
     .then((response) => {
       if (response.data) {
-        materials = response.data[0]['material'];
+        productLineMat = response.data[0]['material'];
       }
     })
     .catch(function (error) {
@@ -357,7 +357,8 @@ const Production = (props) => {
 
     // Get each material from inventory
     let invalids = [];
-    materials.forEach(element => {
+    let allMaterials = [];
+    productLineMat.forEach(element => {
       
       const name = element[0];
       const num = element[1];
@@ -376,13 +377,14 @@ const Production = (props) => {
         if (response.data) {
           const material = response.data;
           const inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
+          allMaterials = [...allMaterials, [name, num, inInventory]];
           if (inInventory < num * prodQuant){
             invalids = [...invalids, [name, num * prodQuant, inInventory]];
           }
 
           // For the last material only, update the html output
-          if (materials[materials.length-1][0] == name){
-            updateOutputHTML(invalids);
+          if (productLineMat[productLineMat.length-1][0] == name){
+            updateOutputHTML(invalids, allMaterials);
           }
         }
       })
@@ -392,7 +394,7 @@ const Production = (props) => {
 
     });
 
-    const updateOutputHTML = (invalids) => {
+    const updateOutputHTML = (invalids, allMaterials) => {
       let html = [];
       if (invalids.length != 0){
         invalids.forEach(element => {
@@ -404,7 +406,7 @@ const Production = (props) => {
         });
       }else{
         // Uncomment when inventory and quality is complete
-        /*removeFromInventory(materials);*/
+        removeFromInventory(allMaterials);
         for (let index = 0; index < prodQuant; index++) {
           addToQuality([prodName, prodLoc]);
         }
@@ -415,15 +417,20 @@ const Production = (props) => {
     }
   
     const removeFromInventory = async (materials) => {
-      await materials.forEach(element => {
-    
-        const name = element[0];
-        const num = element[1] * prodQuant;
 
-        axios.post("/api/inventory/remove", 
+
+      await materials.forEach(element => {
+        const name = element[0];
+        const numNeeded = element[1] * prodQuant;
+        const inInventory = element[2];
+        const loc = prodLoc;
+        const newQuantity = inInventory - numNeeded;
+        console.log(newQuantity);
+        axios.put("http://localhost:5000/api/inventory/remove", 
         { 
           name: name,
-          quantity: num,
+          quantity: newQuantity,
+          location: loc
         },
         {
           headers: {

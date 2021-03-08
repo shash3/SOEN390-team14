@@ -53,4 +53,16 @@ router.post("/add", async (req, res) => {
   await inventory.save();
 });
 
+//remove a certain quantity from inventory 
+router.put("/remove", async (req,res) => {
+  const {name, quantity, location} = req.body;
+  try{
+    const inventory = await Inventory.find({name: name , location: location}).updateOne({quantity,quantity});
+    res.json("changed");
+  } catch(err){
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
