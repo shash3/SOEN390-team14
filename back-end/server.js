@@ -27,6 +27,8 @@ app.use('/api/transportation', require('./routes/api/transportation/auth'))
 
 app.use('/api/quality', require('./routes/api/quality/auth'))
 
-app.listen(PORT, () => console.log('Server started'));
+if(process.env.NODE_ENV !== 'test'){
+    app.listen(PORT, () => console.log('Server started'));
+}
 
 module.exports = app
