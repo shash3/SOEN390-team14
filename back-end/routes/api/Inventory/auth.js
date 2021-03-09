@@ -44,11 +44,12 @@ router.post("/location", auth, async (req, res) => {
 
 // add new inventory
 router.post("/add", async (req, res) => {
-  const { name, quantity, location } = req.body;
+  const { name, quantity, location, type } = req.body;
   inventory = new Inventory({
     name,
     quantity,
-    location
+    location, 
+    type
   });
   await inventory.save();
 });
