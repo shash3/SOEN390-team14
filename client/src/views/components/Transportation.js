@@ -123,13 +123,14 @@ const Transportation = (props) => {
   }, [formData, updated]);
 
   const onSetReady = async(_id) => {
+    
     const id = {
       _id
     }
     const body = JSON.stringify(id);
     try {
       await axios
-        .post("/api/transportation/add", body, {
+        .post("/api/transportation/sendShipment", body, {
           headers: {
             "x-auth-token": userToken,
             "Content-Type": "application/json",
@@ -245,9 +246,7 @@ const Transportation = (props) => {
     setModal1(!modal1);
   }
 
-  function onSetReady(_id) {
-    
-  }
+
 
   return (
     <>
