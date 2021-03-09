@@ -151,8 +151,7 @@ const Transportation = (props) => {
       name == "" ||
       quantity == 0 ||
       location == "" ||
-      destination == 0 ||
-      status == ""
+      destination == 0
     ) {
       window.alert("Please Enter Data Into All Fields");
     } else {
@@ -163,7 +162,7 @@ const Transportation = (props) => {
         quantity,
         location,
         destination,
-        status,
+        status:"Awaiting Pickup",
       };
 
       const body = JSON.stringify(newTransportation);
@@ -342,16 +341,6 @@ const Transportation = (props) => {
                             type="text"
                             placeholder="DESTINATION"
                             name="destination"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="STATUS"
-                            name="status"
                             onChange={(e) => onChangeAdd(e)}
                           />
                         </InputGroup>

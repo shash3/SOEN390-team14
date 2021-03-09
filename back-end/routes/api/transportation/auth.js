@@ -15,7 +15,6 @@ const config = require("config");
 router.get("/", auth, async (req, res) => {
   try {
     const transportation = await Transportation.find({packagingStatus:true});
-    console.log(transportation);
     res.json(transportation);
   } catch (err) {
     console.error(err.message);
@@ -25,7 +24,6 @@ router.get("/", auth, async (req, res) => {
 router.get("/packaging", auth, async (req, res) => {
   try {
     const transportation = await Transportation.find({packagingStatus:false});
-    console.log(transportation);
     res.json(transportation);
   } catch (err) {
     console.error(err.message);
@@ -90,7 +88,6 @@ router.post("/sendShipment", auth, async (req,res)=>{
   
  
  await Transportation.updateOne({_id:_id},{$set:{packagingStatus:true}});
- await Transportation.updateOne({_id:_id},{$set: {status:"Awaiting Pickup"}});
  res.send(true);
 
 });
