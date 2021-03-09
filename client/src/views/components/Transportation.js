@@ -122,6 +122,29 @@ const Transportation = (props) => {
     lookup();
   }, [formData, updated]);
 
+  const onSetReady = async(_id) => {
+    const id = {
+      _id
+    }
+    const body = JSON.stringify(id);
+    try {
+      await axios
+        .post("/api/transportation/add", body, {
+          headers: {
+            "x-auth-token": userToken,
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          setUpdated(!updated);
+        });
+    } catch (err) {
+      console.log(err.response.data);
+    }
+
+
+  }
+
   const onAdd = async (e) => {
     if (
       name == "" ||
