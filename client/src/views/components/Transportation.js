@@ -38,6 +38,7 @@ import Header from "components/Headers/CardlessHeader.js";
 const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [transportation, setTransportation] = useState([]);
+  const [packaging, setPackaging] = useState([]);
   const [transportationData, setTransportationData] = useState({
     _id: "",
     name: "",
@@ -46,6 +47,11 @@ const Transportation = (props) => {
     destination: "",
     status: "",
   });
+  const [selectStatus,setSelectStatus]=useState("");
+
+  const onSelectStatus = (e) => {
+    setSelectStatus(e.target.value);
+  }
   const { name, quantity, location, destination, status } = transportationData;
   const onChangeAdd = (e) => {
     setTransportationData({
@@ -64,6 +70,20 @@ const Transportation = (props) => {
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
+      await axios
+          .get("/api/transportation/packaging", {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setPackaging(response.data);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       if (formData === "") {
         await axios
           .get("/api/transportation", {
@@ -102,13 +122,36 @@ const Transportation = (props) => {
     lookup();
   }, [formData, updated]);
 
+  const onSetReady = async(_id) => {
+    
+    const id = {
+      _id
+    }
+    const body = JSON.stringify(id);
+    try {
+      await axios
+        .post("/api/transportation/sendShipment", body, {
+          headers: {
+            "x-auth-token": userToken,
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          setUpdated(!updated);
+        });
+    } catch (err) {
+      console.log(err.response.data);
+    }
+
+
+  }
+
   const onAdd = async (e) => {
     if (
       name == "" ||
       quantity == 0 ||
       location == "" ||
-      destination == 0 ||
-      status == ""
+      destination == 0
     ) {
       window.alert("Please Enter Data Into All Fields");
     } else {
@@ -119,7 +162,7 @@ const Transportation = (props) => {
         quantity,
         location,
         destination,
-        status,
+        status:"Awaiting Pickup",
       };
 
       const body = JSON.stringify(newTransportation);
@@ -141,9 +184,35 @@ const Transportation = (props) => {
     }
   };
 
+  const onChangeStatus = async(_id,status) => {
+   
+   
+    const data = {
+      _id,
+      status
+    };
+    const body = JSON.stringify(data);
+
+     
+    try {
+      await axios
+      .post("/api/transportation/changeStatus", body, {
+        headers: {
+          "x-auth-token": userToken,
+          "Content-Type": "application/json",
+        },
+      }).then(closeModal).then(setUpdated(!updated));
+
+  }
+  catch (err) {
+    console.log(err.response.data);
+  }
+}
+
   const onDelete = async (_id) => {
     const shipmentId = {
       _id,
+
     };
 
     console.log(_id);
@@ -176,6 +245,8 @@ const Transportation = (props) => {
   function closeModal1() {
     setModal1(!modal1);
   }
+
+
 
   return (
     <>
@@ -275,16 +346,6 @@ const Transportation = (props) => {
                           />
                         </InputGroup>
                       </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="STATUS"
-                            name="status"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
-                        </InputGroup>
-                      </FormGroup>
                       <div className="text-center">
                         <Button color="primary" onClick={(e) => onAdd(e)}>
                           Add Shipment
@@ -339,27 +400,21 @@ const Transportation = (props) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem href="#pablo" onClick={closeModal}>
-                              Change Status
+                            <DropdownItem
+                             href="#pablo" 
+                            onClick={(e)=> onChangeStatus(t._id,"Awaiting Pickup")}>
+                              Awaiting Pickup
                             </DropdownItem>
-                            <Modal
-                              isOpen={modal}
-                              changeStatus={closeModal}
-                              className={className}
-                            >
-                              <ModalHeader changeStatus={closeModal}>
-                                Modal title
-                              </ModalHeader>
-                              <ModalBody>Choose Status of Delivery</ModalBody>
-                              <ModalFooter>
-                                <Button color="primary" onClick={closeModal}>
-                                  Change Status
-                                </Button>{" "}
-                                <Button color="secondary" onClick={closeModal}>
-                                  Cancel
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
+                            <DropdownItem 
+                            href="#pablo" 
+                            onClick={(e)=> onChangeStatus(t._id,"In Transit")}>
+                              In Transit
+                            </DropdownItem>
+                            <DropdownItem 
+                            href="#pablo"
+                            onClick={(e)=> onChangeStatus(t._id,"Completed")}>
+                              Completed
+                            </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => onDelete(t._id)}
@@ -373,61 +428,78 @@ const Transportation = (props) => {
                   ))}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter>
             </Card>
           </div>
         </Row>
+        <br />
+        <br />
+
+        {/* Packaging Table*/}
+
+        <Row>
+          <div className="col">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <h2 className="mb-0">Packaging</h2>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Destination</th>
+                  <th scope="col" />
+                </tr>
+                </thead>
+                <tbody>
+                {packaging.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                      <td>{t.name}</td>
+                      <td>{t.quantity}</td>
+                      <td>{t.location}</td>
+                      <td>{t.destination}</td>
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem href="#pablo" onClick={(e) => onSetReady(t._id)}>
+                              Ready
+                            </DropdownItem>
+                            <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => onDelete(t._id)}
+                            >
+                              Delete Shipment
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                ))}
+                </tbody>
+              </Table>
+            </Card>
+          </div>
+        </Row>
+
       </Container>
     </>
   );

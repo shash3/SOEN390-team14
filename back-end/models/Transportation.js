@@ -20,6 +20,10 @@ const TransportationSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
+    },
+    packagingStatus: {
+        type: Boolean,
+        required: true
     }
     
 });
