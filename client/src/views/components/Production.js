@@ -100,7 +100,6 @@ const Production = (props) => {
    * Initialize the add product line modal with initial values.
    */
   const initAddModal = () => {
-    console.log(newProdType);
     toggleAddModal();
     setNewProdName("");
     setNewProdType("final");

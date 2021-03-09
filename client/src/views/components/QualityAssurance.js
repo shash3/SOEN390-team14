@@ -98,9 +98,6 @@ const QualityAssurance = () => {
    * If an item is good then it is added to the inventory database.
    */
   const updateQualityTable = async () => {
-    let a = Array.from(Array(Math.ceil(20 / 20)).keys())
-    console.log(dirtyQualityData.length);
-    console.log(a);
     for (let index = 0; index < dirtyQualityData.length; index++) {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product['Quality'] != 'None'){
