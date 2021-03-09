@@ -85,12 +85,12 @@ router.post("/changeStatus", auth, async (req,res)=>{
 router.post("/sendShipment", auth, async (req,res)=>{
   const{
     _id,
-    status
   } = req.body;
   console.log(_id);
-  console.log(status);
+  
  
- await Transportation.updateOne({_id:_id},{$set:{status:status}});
+ await Transportation.updateOne({_id:_id},{$set:{packagingStatus:true}});
+ await Transportation.updateOne({_id:_id},{$set: {status:"Awaiting Pickup"}});
  res.send(true);
 
 });
