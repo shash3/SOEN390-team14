@@ -45,14 +45,28 @@ router.post("/location", auth, async (req, res) => {
 
 // add quality data
 router.post("/add", async (req, res) => {
-  const { name, location } = req.body;
+  const { name, type, location } = req.body;
   quality = new Quality({
     name:name,
+    type: type,
     location:location,
     quality:"None",
   });
   await quality.save();
   res.json();
+});
+
+// delete 
+router.post("/delete", auth, async (req, res) => {
+  const { _id } = req.body;
+  try {
+    await Quality.deleteOne({ _id });
+    const quality = await Quality.find();
+    res.json(quality);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;
