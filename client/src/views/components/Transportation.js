@@ -191,6 +191,7 @@ const Transportation = (props) => {
   const { buttonLabel, className } = props;
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
+  const [modal2, setModal2] = useState(false);
 
   //Close Status Modal
   function closeModal() {
@@ -200,6 +201,11 @@ const Transportation = (props) => {
   //Close Add Modal
   function closeModal1() {
     setModal1(!modal1);
+  }
+
+  //Close Packaging Status Modal
+  function closeModal2() {
+    setModal2(!modal2);
   }
 
   return (
@@ -417,7 +423,7 @@ const Transportation = (props) => {
                               <ModalFooter>
                                 <Button color="primary" onClick={(e)=> onChangeStatus(t._id,t.status)}>
                                   Change Status
-                                </Button>{" "}
+                                </Button>
                                 <Button color="secondary" onClick={closeModal}>
                                   Cancel
                                 </Button>
@@ -439,6 +445,95 @@ const Transportation = (props) => {
             </Card>
           </div>
         </Row>
+        <br />
+        <br />
+
+        {/* Packaging Table*/}
+
+        <Row>
+          <div className="col">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <h2 className="mb-0">Packaging</h2>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Destination</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" />
+                </tr>
+                </thead>
+                <tbody>
+                {transportation.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                      <td>{t.name}</td>
+                      <td>{t.quantity}</td>
+                      <td>{t.location}</td>
+                      <td>{t.destination}</td>
+                      <td>{t.status}</td>
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem href="#pablo" onClick={closeModal2}>
+                              Change Status
+                            </DropdownItem>
+                            <Modal
+                                isOpen={modal2}
+                                changePackagingStatus={closeModal2}
+                                className={className}
+                            >
+                              <ModalHeader changePackagingStatus={closeModal2}>
+                              </ModalHeader>
+                              <ModalBody>Choose Status of Delivery
+                              </ModalBody>
+                              <ModalFooter>
+                                <Button color="primary">
+                                  Change Packaging Status
+                                </Button>
+                                <Button color="secondary" onClick={closeModal2}>
+                                  Cancel
+                                </Button>
+                              </ModalFooter>
+                            </Modal>
+                            <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => onDelete(t._id)}
+                            >
+                              Delete Shipment
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                ))}
+                </tbody>
+              </Table>
+            </Card>
+          </div>
+        </Row>
+
       </Container>
     </>
   );
