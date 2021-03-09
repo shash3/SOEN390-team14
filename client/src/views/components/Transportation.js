@@ -46,6 +46,11 @@ const Transportation = (props) => {
     destination: "",
     status: "",
   });
+  const [selectStatus,setSelectStatus]=useState("");
+
+  const onSelectStatus = (e) => {
+    setSelectStatus(e.target.name);
+  }
   const { name, quantity, location, destination, status } = transportationData;
   const onChangeAdd = (e) => {
     setTransportationData({
@@ -142,7 +147,7 @@ const Transportation = (props) => {
   };
 
   const onChangeStatus = async(_id,status) => {
-    console.log(status);
+   
     const data = {
       _id,
       status
@@ -376,14 +381,15 @@ const Transportation = (props) => {
                                 Change Status
                               </ModalHeader>
                               <ModalBody>Choose Status of Delivery
-                                <Form className="changeStatusForm">
+                                <Form className="changeStatusForm" action={(e)=>onChange(e)}>
                                   <FormGroup>
                                     <div className="custom-control custom-control-alternative custom-radio mb-3">
                                       <input
                                           className="custom-control-input"
                                           id="customRadio1"
-                                          name="custom-radio-1"
+                                          name="In Transit"
                                           type="radio"
+                                          onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio1">
                                         In Transit
@@ -393,8 +399,9 @@ const Transportation = (props) => {
                                       <input
                                           className="custom-control-input"
                                           id="customRadio2"
-                                          name="custom-radio-1"
+                                          name="Reached Destination"
                                           type="radio"
+                                          onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio2">
                                         Reached Destination
@@ -404,20 +411,22 @@ const Transportation = (props) => {
                                       <input
                                           className="custom-control-input"
                                           id="customRadio3"
-                                          name="custom-radio-1"
+                                          name="Awaiting Pickup"
                                           type="radio"
+                                          onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio3">
                                         Awaiting Pickup
                                       </label>
                                     </div>
                                   </FormGroup>
+                                  <Button color="primary" onClick={(e)=> onChangeStatus(t._id,selectStatus)}>
+                                  Change Status
+                                </Button>
                                 </Form>
                               </ModalBody>
                               <ModalFooter>
-                                <Button color="primary" onClick={(e)=> onChangeStatus(t._id,t.status)}>
-                                  Change Status
-                                </Button>{" "}
+                                
                                 <Button color="secondary" onClick={closeModal}>
                                   Cancel
                                 </Button>
