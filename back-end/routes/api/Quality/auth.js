@@ -45,9 +45,10 @@ router.post("/location", auth, async (req, res) => {
 
 // add quality data
 router.post("/add", async (req, res) => {
-  const { name, location } = req.body;
+  const { name, type, location } = req.body;
   quality = new Quality({
     name:name,
+    type: type,
     location:location,
     quality:"None",
   });

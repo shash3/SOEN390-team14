@@ -62,6 +62,7 @@ const Production = (props) => {
   // add new product line modal
   const [addModal, setAddModal] = useState(false);
   const [newProdName, setNewProdName] = useState("");
+  const [newProdType, setNewProdType] = useState("final");
   const [prodMatList, setProdMatList] = useState([{ matName: "Leather", matQuantity: 1 }]);
   const [unstableAddInputsValidation, setUnstableAddInputValidation] = useState({prodName: false, quantities:[true]});
   const [addErrorMessages, setAddErrorMessages] = useState({prodName: "Cannot have an empty product name", quantities:[""]});
@@ -70,6 +71,7 @@ const Production = (props) => {
   // create product modals
   const [createModal, setCreateModal] = useState(false);
   const [prodName, setProdName] = useState("");
+  const [prodType, setProdType] = useState("");
   const [prodLoc, setProdLoc] = useState("");
   const [prodQuant, setProdQuant] = useState(1);
   const [unstableCreateInputsValidation, setUnstableCreateInputValidation] = useState({quantity:true});
@@ -94,8 +96,10 @@ const Production = (props) => {
    * Initialize the add product line modal with initial values.
    */
   const initAddModal = () => {
+    console.log(newProdType);
     toggleAddModal();
     setNewProdName("");
+    setNewProdType("final");
     setProdMatList([{ matName: "Leather", matQuantity: 1 }]);
     setUnstableAddInputValidation({prodName: false, quantities:[true]});
     setAddErrorMessages({prodName: "Cannot have an empty product name", quantities:[""]});
@@ -248,6 +252,7 @@ const Production = (props) => {
       .post(
         "/api/product_line/add",
         { name: newProdName,
+          type: newProdType,
           material: list
          },
         {
@@ -271,9 +276,10 @@ const Production = (props) => {
    * 
    * @param {String} name the name of the product to create
    */
-  const initCreateModal = (name) => {
+  const initCreateModal = (name, type) => {
     toggleCreateModal();
     setProdName(name);
+    setProdType(type);
     setProdQuant(1);
     setUnstableCreateInputValidation({quantity:true});
     setCreateErrorMessages({quantity:""});
@@ -408,7 +414,7 @@ const Production = (props) => {
         // Uncomment when inventory and quality is complete
         removeFromInventory(allMaterials);
         for (let index = 0; index < prodQuant; index++) {
-          addToQuality([prodName, prodLoc]);
+          addToQuality([prodName, prodType, prodLoc]);
         }
         html = [<FormGroup><Button className='btn-success' disabled>Successfully created {prodQuant} <label className='text-indigo strong'>{prodName}</label> in {prodLoc}.</Button></FormGroup>];
       }
@@ -425,8 +431,7 @@ const Production = (props) => {
         const inInventory = element[2];
         const loc = prodLoc;
         const newQuantity = inInventory - numNeeded;
-        console.log(newQuantity);
-        axios.put("http://localhost:5000/api/inventory/remove", 
+        axios.put("/api/inventory/remove", 
         { 
           name: name,
           quantity: newQuantity,
@@ -445,10 +450,12 @@ const Production = (props) => {
 
     const addToQuality = async (product) => {
       const name = product[0];
-      const location = product[1];
+      const type = product[1];
+      const location = product[2];
       await axios.post("/api/quality/add", 
       { 
         name: name,
+        type: type,
         location: location,
       },
       {
@@ -814,7 +821,7 @@ const Production = (props) => {
                       <td className="text-right">
                         <Button
                           onClick={() => {
-                            initCreateModal(m.name);
+                            initCreateModal(m.name, m.type);
                           }}
                         >
                           Create
@@ -900,6 +907,22 @@ const Production = (props) => {
                     onChange={(e) => {onNewProdChange(e);validateUnstableAddInputs(e);}}
                   />
                   <FormFeedback className="invalid-tooltip" type="invalid">Error: {addErrorMessages['prodName']}</FormFeedback>
+                </InputGroup>
+              </FormGroup>
+              <FormGroup className="mb-3">
+                <label>
+                  <span className="text-muted">Product Type</span>
+                </label>
+                <InputGroup className="input-group-alternative">
+                  <Input
+                    type="select"
+                    name="prodType"
+                    required
+                    onChange={(e) => {setNewProdType(e.target.value);}}
+                  >
+                    <option>final</option>
+                    <option>part</option>
+                  </Input>
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
