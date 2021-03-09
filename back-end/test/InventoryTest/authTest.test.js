@@ -15,8 +15,8 @@ describe("Post Endpoints", () => {
   it("Retrieve specific inventory by name", async () => {
     const res1 = await request(app).post("/api/inventory/", {
         headers: {
-          "x-auth-token": token,
-        },
+          "x-auth-token": token
+        }
       }).send({
         name: "Saddle"
       });
