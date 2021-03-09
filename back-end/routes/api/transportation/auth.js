@@ -73,8 +73,7 @@ router.post("/changeStatus", auth, async (req,res)=>{
     _id,
     status
   } = req.body;
-  console.log(_id);
-  console.log(status);
+ 
  
  await Transportation.updateOne({_id:_id},{$set:{status:status}});
  res.send(true);
@@ -84,7 +83,7 @@ router.post("/sendShipment", auth, async (req,res)=>{
   const{
     _id,
   } = req.body;
-  console.log(_id);
+ 
   
  
  await Transportation.updateOne({_id:_id},{$set:{packagingStatus:true}});

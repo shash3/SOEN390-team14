@@ -412,8 +412,8 @@ const Transportation = (props) => {
                             </DropdownItem>
                             <DropdownItem 
                             href="#pablo"
-                            onClick={(e)=> onChangeStatus(t._id,"Reached Destination")}>
-                              Reached Destination
+                            onClick={(e)=> onChangeStatus(t._id,"Completed")}>
+                              Completed
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
