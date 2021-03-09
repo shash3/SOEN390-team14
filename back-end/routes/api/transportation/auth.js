@@ -57,13 +57,16 @@ await Transportation.deleteOne({_id:_id});
 res.send(true);
 });
 
-router.post("/changeStatus", auth, async (req)=>{
+router.post("/changeStatus", auth, async (req,res)=>{
   const{
-    status,
-    _id
+    _id,
+    status
   } = req.body;
+  console.log(_id);
+  console.log(status);
  
- await Transportation.updateOne({iid:iid},{$set:{status:"uuu"}});
+ await Transportation.updateOne({_id:_id},{$set:{status:status}});
+ res.send(true);
 
 });
 
