@@ -15,6 +15,7 @@ const config = require("config");
 router.get("/", auth, async (req, res) => {
   try {
     const transportation = await Transportation.find();
+    console.log(transportation);
     res.json(transportation);
   } catch (err) {
     console.error(err.message);
@@ -37,12 +38,14 @@ router.post("/", auth, async (req, res) => {
 // add new shipments
 router.post("/add", auth, async (req, res) => {
   const {name, quantity, location, destination, status } = req.body;
+  
   transportation = new Transportation({
     name,
     quantity,
     location,
     destination,
     status,
+    packagingStatus: false
   });
   
   await transportation.save();
