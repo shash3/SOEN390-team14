@@ -38,11 +38,8 @@ import {
 import Header from "components/Headers/Header.js";
 
 
-
-
 const QualityAssurance = () => {
   const userToken = JSON.parse(localStorage.getItem("user"));
-
 
   // Quality database data
   const [dirtyQualityData, setDirtyQualityData] = useState([]);
@@ -53,6 +50,20 @@ const QualityAssurance = () => {
   const [qualityFormSearch, setQualityFormSearch] = useState("");
   const [updateSearch, setUpdateSearch] = useState(false);
 
+
+  /* ------------------------
+   * Functions for interacting with the HTML elements.
+   * ------------------------
+   */
+  
+
+  /**
+   * Updates the quality value of a product in the quality data.
+   * This function does not update the database directly, only a local variable.
+   * 
+   * @param {Array} product the quality product to alter quality
+   * @param {String} value the new quality value
+   */
   const changeProductQuality = (product, value) => {
     for (let index = 0; index < dirtyQualityData.length; index++) {
       const element = dirtyQualityData[index];
@@ -65,128 +76,51 @@ const QualityAssurance = () => {
       }
     }
   }
+  
+  /**
+   * Adds or updates the product to the database.
+   * 
+   * @param {Array} product the product to add to inventory
+   */
+  const addProductToInventory = async (product) => {
+    const {name, type, location} = product;
 
+    const material = await getInventoryItems(name, location);
+    const inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
 
-  const removeQualityProduct = async (key) => {
-    console.log(key);
-    await axios.post("/api/quality/delete", 
-    {
-      _id: key,
-    },
-    {
-      headers: {
-        "x-auth-token": userToken,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        setDirtyQualityData(response.data);
-        setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    await putInventoryItem(name, type, location, inInventory + 1);
   }
 
   /**
-   * Adds or updates the product to the database.
-   * @param {Array} product 
+   * Updates the quality table to remove any items with quality good or faulty.
+   * If an item is good then it is added to the inventory database.
    */
-  const addProductToInventory = async (product) => {
-    const {name, location} = product;
-
-    let inInventory;
-    await axios.post("/api/inventory/location", 
-    { 
-      name: name,
-      location: location
-    },
-    {
-      headers: {
-      "x-auth-token": userToken,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        const material = response.data;
-        inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    /*
-    console.log(inInventory === 'None');
-    if (inInventory === 'None'){
-      await axios.post("/api/inventory/add", 
-      {
-        name: name,
-        location: location,
-        quantity: 1,
-      },
-      {
-        headers: {
-          "x-auth-token": userToken,
-        },
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }else{*/
-      await axios.put("/api/inventory/superUpdate", 
-      {
-        name: name,
-        location: location,
-        quantity: inInventory + 1,
-      },
-      {
-        headers: {
-          "x-auth-token": userToken,
-        },
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    //}
-    
-  }
   const updateQualityTable = async () => {
+    
     for (let index = 0; index < dirtyQualityData.length; index++) {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product['Quality'] != 'None'){
         switch (product['quality']) {
           case 'Good':
-            addProductToInventory(product);
+            await addProductToInventory(product);
             removeQualityProduct(product['_id']);
             break;
           case 'Faulty':
             removeQualityProduct(product['_id']);
             break;
         }
-        
       }
+    // End of for loop
     }
     
-    // Update the view from database
-    await axios.get("/api/quality", 
-    {
-      headers: {
-        "x-auth-token": userToken,
-      },
-    }).then((response) => {
-      console.log(response.data);
-      setDirtyQualityData(response.data);
-      setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    // Update the quality table view
+    getQualityData();
     setUpdateSearch(!updateSearch);
   }
 
-
-  // get quality information when searches are updated.
+  /**
+   * Get quality information when searches are updated.
+   */
   useEffect(() => {
     // retrieve quality information
     const qualityLookUp = async () => {
@@ -206,28 +140,128 @@ const QualityAssurance = () => {
     qualityLookUp();
   }, [qualityFormSearch, dirtyQualityData, updateSearch]);
 
+  /**
+   * Initialize the quality information from the database.
+   */
   useEffect(() => {
-    const loadQuality = async () => {
-      await axios.get("/api/quality", 
-      {
-        headers: {
-          "x-auth-token": userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setDirtyQualityData(response.data);
-          setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    loadQuality();
+    getQualityData();
   }, []);
   
 
+  /* ------------------------
+   * Function that interact with database backend
+   * ------------------------
+   */
+
+
+  /**
+   * Retrieve all items in inventory with the specified name and location. 
+   * It should return an array containing only 1 element based on the database conditions.
+   * 
+   * @param {String} name the name of the item
+   * @param {String} location the location of the item
+   * @returns 
+   */
+  const getInventoryItems = async (name, location) => {
+    let material = [];
+    await axios.post("/api/inventory/location", 
+    { 
+      name: name,
+      location: location
+    },
+    {
+      headers: {
+      "x-auth-token": userToken,
+      },
+    })
+    .then((response) => {
+      if (response.data) {
+        material = response.data;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    return material;
+  }
+
+  /**
+   * Puts an item into inventory based on its name and location. 
+   * If the item did not exist, then it is added as a new element. 
+   * If the item already eisted, then the item is found in the database and only its quantity is updated.
+   * 
+   * @param {String} name the name of the item
+   * @param {String} type the type of the item (raw, part, final)
+   * @param {String} location the location of the item
+   * @param {BigInteger} quantity the quantity of the item
+   */
+  const putInventoryItem = async (name, type, location, quantity) => {
+    await axios.put("/api/inventory/superUpdate", 
+    {
+      name: name,
+      type: type,
+      location: location,
+      quantity: quantity,
+    },
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  /**
+   * Gets all the quality data from the database.
+   */
+  const getQualityData = async () => {
+    // Update the view from database
+    await axios.get("/api/quality", 
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    }).then((response) => {
+      setDirtyQualityData(response.data);
+      setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  /**
+   * Remove a quality product from the quality database by its key.
+   * 
+   * @param {String} key the unique key that identifies a quality product
+   */
+  const removeQualityProduct = async (key) => {
+    await axios.post("/api/quality/delete", 
+    {
+      _id: key,
+    },
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    })/*
+    .then((response) => {
+      if (response.data) {
+        setDirtyQualityData(response.data);
+        setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+      }
+    })*/
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  /* ------------------------
+   * HTML display
+   * ------------------------
+   */
 
   return (
     <>
