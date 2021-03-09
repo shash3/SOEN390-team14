@@ -50,7 +50,7 @@ const Transportation = (props) => {
   const [selectStatus,setSelectStatus]=useState("");
 
   const onSelectStatus = (e) => {
-    setSelectStatus(e.target.name);
+    setSelectStatus(e.target.value);
   }
   const { name, quantity, location, destination, status } = transportationData;
   const onChangeAdd = (e) => {
@@ -185,6 +185,8 @@ const Transportation = (props) => {
   };
 
   const onChangeStatus = async(_id,status) => {
+    console.log(status);
+    console.log(_id);
    
     const data = {
       _id,
@@ -411,14 +413,15 @@ const Transportation = (props) => {
                                 Change Status
                               </ModalHeader>
                               <ModalBody>Choose Status of Delivery
-                                <Form className="changeStatusForm" action={(e)=>onChange(e)}>
-                                  <FormGroup>
+                                
+                               
                                     <div className="custom-control custom-control-alternative custom-radio mb-3">
                                       <input
                                           className="custom-control-input"
                                           id="customRadio1"
-                                          name="In Transit"
+                                          name="selectStatus"
                                           type="radio"
+                                          value="In Transit"
                                           onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio1">
@@ -429,8 +432,9 @@ const Transportation = (props) => {
                                       <input
                                           className="custom-control-input"
                                           id="customRadio2"
-                                          name="Reached Destination"
+                                          name="selectStatus"
                                           type="radio"
+                                          value="Reached Destination"
                                           onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio2">
@@ -441,21 +445,23 @@ const Transportation = (props) => {
                                       <input
                                           className="custom-control-input"
                                           id="customRadio3"
-                                          name="Awaiting Pickup"
+                                          name="selectStatus"
                                           type="radio"
+                                          value="Awaiting Pickup"
                                           onChange = {(e) => onSelectStatus(e)}
                                       />
                                       <label className="custom-control-label" htmlFor="customRadio3">
                                         Awaiting Pickup
                                       </label>
                                     </div>
-                                  </FormGroup>
-                                  <Button color="primary" onClick={(e)=> onChangeStatus(t._id,selectStatus)}>
-                                  Change Status
-                                </Button>
-                                </Form>
+                              
+                                  
+                           
                               </ModalBody>
                               <ModalFooter>
+                              <Button color="primary" onClick={(e)=> onChangeStatus(t._id,selectStatus)}>
+                                  Change Status
+                                </Button>
                                 
                                 <Button color="secondary" onClick={closeModal}>
                                   Cancel
