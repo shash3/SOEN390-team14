@@ -68,7 +68,8 @@ const QualityAssurance = () => {
 
 
   const removeQualityProduct = async (key) => {
-    await axios.get("/api/quality/delete", 
+    console.log(key);
+    await axios.post("/api/quality/delete", 
     {
       _id: key,
     },
@@ -94,7 +95,7 @@ const QualityAssurance = () => {
    */
   const addProductToInventory = async (product) => {
     const {name, location} = product;
-    console.log(name + ':' + location);
+
     let inInventory;
     await axios.post("/api/inventory/location", 
     { 
@@ -109,17 +110,16 @@ const QualityAssurance = () => {
     .then((response) => {
       if (response.data) {
         const material = response.data;
-        inInventory = (material.length == 0 ? 'None' : material[0]['quantity']);
+        inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
       }
     })
     .catch(function (error) {
       console.log(error);
     });
-
-    console.log(inInventory);
+    /*
     console.log(inInventory === 'None');
     if (inInventory === 'None'){
-      await axios.get("/api/inventory/add", 
+      await axios.post("/api/inventory/add", 
       {
         name: name,
         location: location,
@@ -133,8 +133,8 @@ const QualityAssurance = () => {
       .catch(function (error) {
         console.log(error);
       });
-    }else{
-      await axios.get("/api/inventory/update", 
+    }else{*/
+      await axios.put("/api/inventory/superUpdate", 
       {
         name: name,
         location: location,
@@ -145,26 +145,19 @@ const QualityAssurance = () => {
           "x-auth-token": userToken,
         },
       })
-      .then((response) => {
-        if (response.data) {
-          setDirtyQualityData(response.data);
-          setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-        }
-      })
       .catch(function (error) {
         console.log(error);
       });
-    }
+    //}
     
   }
-
   const updateQualityTable = async () => {
     for (let index = 0; index < dirtyQualityData.length; index++) {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product['Quality'] != 'None'){
         switch (product['quality']) {
           case 'Good':
-            addProductToInventory(product)
+            addProductToInventory(product);
             removeQualityProduct(product['_id']);
             break;
           case 'Faulty':
@@ -174,6 +167,21 @@ const QualityAssurance = () => {
         
       }
     }
+    
+    // Update the view from database
+    await axios.get("/api/quality", 
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    }).then((response) => {
+      console.log(response.data);
+      setDirtyQualityData(response.data);
+      setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     setUpdateSearch(!updateSearch);
   }
 
