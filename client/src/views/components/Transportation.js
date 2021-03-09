@@ -141,9 +141,42 @@ const Transportation = (props) => {
     }
   };
 
+  const onChangeStatus = async(_id,status) => {
+    console.log(status);
+    
+    if(status == "On route"){
+      console.log("yes");
+    status = "Reached Destination";
+    }
+    else{
+      status = "On route";
+    }
+    const data = {
+      _id,
+      status
+    };
+    const body = JSON.stringify(data);
+
+     
+    try {
+      await axios
+      .post("/api/transportation/changeStatus", body, {
+        headers: {
+          "x-auth-token": userToken,
+          "Content-Type": "application/json",
+        },
+      }).then(closeModal).then(setUpdated(!updated));
+
+  }
+  catch (err) {
+    console.log(err.response.data);
+  }
+}
+
   const onDelete = async (_id) => {
     const shipmentId = {
       _id,
+
     };
 
     console.log(_id);
@@ -348,11 +381,11 @@ const Transportation = (props) => {
                               className={className}
                             >
                               <ModalHeader changeStatus={closeModal}>
-                                Modal title
+                                Change Status
                               </ModalHeader>
                               <ModalBody>Choose Status of Delivery</ModalBody>
                               <ModalFooter>
-                                <Button color="primary" onClick={closeModal}>
+                                <Button color="primary" onClick={(e)=> onChangeStatus(t._id,t.status)}>
                                   Change Status
                                 </Button>{" "}
                                 <Button color="secondary" onClick={closeModal}>
