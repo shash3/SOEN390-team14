@@ -46,10 +46,10 @@ router.post("/location", auth, async (req, res) => {
 router.post("/add", async (req, res) => {
   const { name, quantity, location, type } = req.body;
   inventory = new Inventory({
-    name,
-    quantity,
-    location, 
-    type
+    name:name,
+    type:type,
+    quantity:quantity,
+    location:location
   });
   await inventory.save();
 });
@@ -67,15 +67,16 @@ router.put("/remove", async (req,res) => {
 });
 
 router.put("/superUpdate", async (req, res) => {
-  const {name, quantity, location} = req.body;
-  
+  const {name, type, quantity, location} = req.body;
+
   try{
     const inv = await Inventory.find({name: name , location: location});
     if (inv.length == 0){
       inventory = new Inventory({
-        name,
-        quantity,
-        location
+        name:name,
+        type:type,
+        quantity:quantity,
+        location:location
       });
       await inventory.save();
     }else{
