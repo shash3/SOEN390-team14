@@ -44,11 +44,12 @@ router.post("/location", auth, async (req, res) => {
 
 // add new inventory
 router.post("/add", async (req, res) => {
-  const { name, quantity, location } = req.body;
+  const { name, quantity, location, type } = req.body;
   inventory = new Inventory({
     name,
     quantity,
-    location
+    location, 
+    type
   });
   await inventory.save();
 });
@@ -59,6 +60,28 @@ router.put("/remove", async (req,res) => {
   try{
     const inventory = await Inventory.find({name: name , location: location}).updateOne({quantity,quantity});
     res.json("changed");
+  } catch(err){
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.put("/superUpdate", async (req, res) => {
+  const {name, quantity, location} = req.body;
+  
+  try{
+    const inv = await Inventory.find({name: name , location: location});
+    if (inv.length == 0){
+      inventory = new Inventory({
+        name,
+        quantity,
+        location
+      });
+      await inventory.save();
+    }else{
+      await Inventory.find({name: name , location: location}).updateOne({quantity,quantity});
+    }
+      res.json("changed");
   } catch(err){
     console.log(err.message);
     res.status(500).send("Server Error");

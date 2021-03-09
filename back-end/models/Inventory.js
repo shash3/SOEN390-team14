@@ -5,6 +5,10 @@ const InventorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    type:{
+        type: String,
+        required: true
+    },
     quantity: {
         type: Number,
         required: true
