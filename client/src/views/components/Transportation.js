@@ -143,14 +143,6 @@ const Transportation = (props) => {
 
   const onChangeStatus = async(_id,status) => {
     console.log(status);
-    
-    if(status == "On route"){
-      console.log("yes");
-    status = "Reached Destination";
-    }
-    else{
-      status = "On route";
-    }
     const data = {
       _id,
       status
@@ -383,7 +375,45 @@ const Transportation = (props) => {
                               <ModalHeader changeStatus={closeModal}>
                                 Change Status
                               </ModalHeader>
-                              <ModalBody>Choose Status of Delivery</ModalBody>
+                              <ModalBody>Choose Status of Delivery
+                                <Form className="changeStatusForm">
+                                  <FormGroup>
+                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
+                                      <input
+                                          className="custom-control-input"
+                                          id="customRadio1"
+                                          name="custom-radio-1"
+                                          type="radio"
+                                      />
+                                      <label className="custom-control-label" htmlFor="customRadio1">
+                                        In Transit
+                                      </label>
+                                    </div>
+                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
+                                      <input
+                                          className="custom-control-input"
+                                          id="customRadio2"
+                                          name="custom-radio-1"
+                                          type="radio"
+                                      />
+                                      <label className="custom-control-label" htmlFor="customRadio2">
+                                        Reached Destination
+                                      </label>
+                                    </div>
+                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
+                                      <input
+                                          className="custom-control-input"
+                                          id="customRadio3"
+                                          name="custom-radio-1"
+                                          type="radio"
+                                      />
+                                      <label className="custom-control-label" htmlFor="customRadio3">
+                                        Awaiting Pickup
+                                      </label>
+                                    </div>
+                                  </FormGroup>
+                                </Form>
+                              </ModalBody>
                               <ModalFooter>
                                 <Button color="primary" onClick={(e)=> onChangeStatus(t._id,t.status)}>
                                   Change Status
@@ -406,58 +436,6 @@ const Transportation = (props) => {
                   ))}
                 </tbody>
               </Table>
-              <CardFooter className="py-4">
-                <nav aria-label="...">
-                  <Pagination
-                    className="pagination justify-content-end mb-0"
-                    listClassName="justify-content-end mb-0"
-                  >
-                    <PaginationItem className="disabled">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                        tabIndex="-1"
-                      >
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem className="active">
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                  </Pagination>
-                </nav>
-              </CardFooter>
             </Card>
           </div>
         </Row>
