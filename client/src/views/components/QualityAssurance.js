@@ -49,13 +49,15 @@ const QualityAssurance = () => {
   // Search input
   const [qualityFormSearch, setQualityFormSearch] = useState("");
   const [updateSearch, setUpdateSearch] = useState(false);
+  const [qualPage, setQualPage] = useState(0);
 
+  const NUM_OF_ITEMS_IN_A_PAGE = 15;
 
   /* ------------------------
    * Functions for interacting with the HTML elements.
    * ------------------------
    */
-  
+
 
   /**
    * Updates the quality value of a product in the quality data.
@@ -96,7 +98,9 @@ const QualityAssurance = () => {
    * If an item is good then it is added to the inventory database.
    */
   const updateQualityTable = async () => {
-    
+    let a = Array.from(Array(Math.ceil(20 / 20)).keys())
+    console.log(dirtyQualityData.length);
+    console.log(a);
     for (let index = 0; index < dirtyQualityData.length; index++) {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product['Quality'] != 'None'){
@@ -288,7 +292,7 @@ const QualityAssurance = () => {
                       <Input
                         placeholder="Search"
                         type="text"
-                        onChange={(e) => setQualityFormSearch(e.target.value)}
+                        onChange={(e) => {setQualityFormSearch(e.target.value); setQualPage(0);}}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -304,7 +308,7 @@ const QualityAssurance = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {searchQualityData.map((m) => (
+                  {searchQualityData.slice(qualPage * NUM_OF_ITEMS_IN_A_PAGE, (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
                     <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -370,44 +374,34 @@ const QualityAssurance = () => {
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
-                    <PaginationItem className="disabled">
+                    <PaginationItem  className={qualPage - 1 < 0 ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setQualPage(qualPage - 1)}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+
+                    {Array.from(Array(Math.ceil(searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                    .slice(qualPage - 1 < 0 ? qualPage : qualPage - 2 < 0 ? qualPage-1: qualPage-2 , qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE ? qualPage+2 : qualPage+3 )
+                    .map((idx) => (
+                      <PaginationItem className={idx == qualPage ? "active" : "" }>
+                        <PaginationLink
+                          href=""
+                          onClick={() => setQualPage(idx)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className={qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setQualPage(qualPage + 1)}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>
