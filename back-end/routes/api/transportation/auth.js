@@ -14,7 +14,17 @@ const config = require("config");
 // Retrieve all shipments
 router.get("/", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find();
+    const transportation = await Transportation.find({packagingStatus:true});
+    console.log(transportation);
+    res.json(transportation);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+router.get("/packaging", auth, async (req, res) => {
+  try {
+    const transportation = await Transportation.find({packagingStatus:false});
     console.log(transportation);
     res.json(transportation);
   } catch (err) {

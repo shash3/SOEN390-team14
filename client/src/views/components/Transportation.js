@@ -38,6 +38,7 @@ import Header from "components/Headers/CardlessHeader.js";
 const Transportation = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
   const [transportation, setTransportation] = useState([]);
+  const [packaging, setPackaging] = useState([]);
   const [transportationData, setTransportationData] = useState({
     _id: "",
     name: "",
@@ -69,6 +70,20 @@ const Transportation = (props) => {
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
+      await axios
+          .get("/api/transportation/packaging", {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setPackaging(response.data);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       if (formData === "") {
         await axios
           .get("/api/transportation", {
@@ -478,7 +493,7 @@ const Transportation = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {transportation.map((t) => (
+                {packaging.map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
