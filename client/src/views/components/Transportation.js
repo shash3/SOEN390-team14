@@ -185,8 +185,7 @@ const Transportation = (props) => {
   };
 
   const onChangeStatus = async(_id,status) => {
-    console.log(status);
-    console.log(_id);
+   
    
     const data = {
       _id,
@@ -401,73 +400,21 @@ const Transportation = (props) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem href="#pablo" onClick={closeModal}>
-                              Change Status
+                            <DropdownItem
+                             href="#pablo" 
+                            onClick={(e)=> onChangeStatus(t._id,"Awaiting Pickup")}>
+                              Awaiting Pickup
                             </DropdownItem>
-                            <Modal
-                              isOpen={modal}
-                              changeStatus={closeModal}
-                              className={className}
-                            >
-                              <ModalHeader changeStatus={closeModal}>
-                                Change Status
-                              </ModalHeader>
-                              <ModalBody>Choose Status of Delivery
-                                
-                               
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio1"
-                                          name="selectStatus"
-                                          type="radio"
-                                          value="In Transit"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio1">
-                                        In Transit
-                                      </label>
-                                    </div>
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio2"
-                                          name="selectStatus"
-                                          type="radio"
-                                          value="Reached Destination"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio2">
-                                        Reached Destination
-                                      </label>
-                                    </div>
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio3"
-                                          name="selectStatus"
-                                          type="radio"
-                                          value="Awaiting Pickup"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio3">
-                                        Awaiting Pickup
-                                      </label>
-                                    </div>
-                              
-                                  
-                           
-                              </ModalBody>
-                              <ModalFooter>
-                              <Button color="primary" onClick={(e)=> onChangeStatus(t._id,selectStatus)}>
-                                  Change Status
-                                </Button>
-                                
-                                <Button color="secondary" onClick={closeModal}>
-                                  Cancel
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
+                            <DropdownItem 
+                            href="#pablo" 
+                            onClick={(e)=> onChangeStatus(t._id,"In Transit")}>
+                              In Transit
+                            </DropdownItem>
+                            <DropdownItem 
+                            href="#pablo"
+                            onClick={(e)=> onChangeStatus(t._id,"Reached Destination")}>
+                              Reached Destination
+                            </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => onDelete(t._id)}
