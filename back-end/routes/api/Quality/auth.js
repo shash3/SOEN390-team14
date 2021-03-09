@@ -56,4 +56,17 @@ router.post("/add", async (req, res) => {
   res.json();
 });
 
+// delete 
+router.post("/delete", auth, async (req, res) => {
+  const { _id } = req.body;
+  try {
+    await Quality.deleteOne({ _id });
+    const quality = await Quality.find();
+    res.json(quality);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
