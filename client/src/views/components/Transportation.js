@@ -399,69 +399,15 @@ const Transportation = (props) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem href="#pablo" onClick={closeModal}>
-                              Change Status
+                            <DropdownItem href="#pablo">
+                              Awaiting Pickup
                             </DropdownItem>
-                            <Modal
-                              isOpen={modal}
-                              changeStatus={closeModal}
-                              className={className}
-                            >
-                              <ModalHeader changeStatus={closeModal}>
-                                Change Status
-                              </ModalHeader>
-                              <ModalBody>Choose Status of Delivery
-                                <Form className="changeStatusForm" action={(e)=>onChange(e)}>
-                                  <FormGroup>
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio1"
-                                          name="In Transit"
-                                          type="radio"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio1">
-                                        In Transit
-                                      </label>
-                                    </div>
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio2"
-                                          name="Reached Destination"
-                                          type="radio"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio2">
-                                        Reached Destination
-                                      </label>
-                                    </div>
-                                    <div className="custom-control custom-control-alternative custom-radio mb-3">
-                                      <input
-                                          className="custom-control-input"
-                                          id="customRadio3"
-                                          name="Awaiting Pickup"
-                                          type="radio"
-                                          onChange = {(e) => onSelectStatus(e)}
-                                      />
-                                      <label className="custom-control-label" htmlFor="customRadio3">
-                                        Awaiting Pickup
-                                      </label>
-                                    </div>
-                                  </FormGroup>
-                                  <Button color="primary" onClick={(e)=> onChangeStatus(t._id,selectStatus)}>
-                                  Change Status
-                                </Button>
-                                </Form>
-                              </ModalBody>
-                              <ModalFooter>
-                                
-                                <Button color="secondary" onClick={closeModal}>
-                                  Cancel
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
+                            <DropdownItem href="#pablo">
+                              In Transit
+                            </DropdownItem>
+                            <DropdownItem href="#pablo">
+                              Reached Destination
+                            </DropdownItem>
                             <DropdownItem
                               href="#pablo"
                               onClick={(e) => onDelete(t._id)}
