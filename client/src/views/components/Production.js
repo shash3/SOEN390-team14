@@ -431,7 +431,7 @@ const Production = (props) => {
         const inInventory = element[2];
         const loc = prodLoc;
         const newQuantity = inInventory - numNeeded;
-        axios.put("/api/inventory/remove", 
+        axios.put("/api/inventory/superUpdate", 
         { 
           name: name,
           quantity: newQuantity,
