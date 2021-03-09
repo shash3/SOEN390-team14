@@ -211,7 +211,6 @@ const Transportation = (props) => {
   const { buttonLabel, className } = props;
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
-  const [modal2, setModal2] = useState(false);
 
   //Close Status Modal
   function closeModal() {
@@ -223,9 +222,8 @@ const Transportation = (props) => {
     setModal1(!modal1);
   }
 
-  //Close Packaging Status Modal
-  function closeModal2() {
-    setModal2(!modal2);
+  function onSetReady(_id) {
+    
   }
 
   return (
@@ -488,7 +486,6 @@ const Transportation = (props) => {
                   <th scope="col">Quantity</th>
                   <th scope="col">Location</th>
                   <th scope="col">Destination</th>
-                  <th scope="col">Status</th>
                   <th scope="col" />
                 </tr>
                 </thead>
@@ -506,7 +503,6 @@ const Transportation = (props) => {
                       <td>{t.quantity}</td>
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
-                      <td>{t.status}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
@@ -520,27 +516,9 @@ const Transportation = (props) => {
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem href="#pablo" onClick={closeModal2}>
-                              Change Status
+                            <DropdownItem href="#pablo" onClick={(e) => onSetReady(t._id)}>
+                              Ready
                             </DropdownItem>
-                            <Modal
-                                isOpen={modal2}
-                                changePackagingStatus={closeModal2}
-                                className={className}
-                            >
-                              <ModalHeader changePackagingStatus={closeModal2}>
-                              </ModalHeader>
-                              <ModalBody>Choose Status of Delivery
-                              </ModalBody>
-                              <ModalFooter>
-                                <Button color="primary">
-                                  Change Packaging Status
-                                </Button>
-                                <Button color="secondary" onClick={closeModal2}>
-                                  Cancel
-                                </Button>
-                              </ModalFooter>
-                            </Modal>
                             <DropdownItem
                                 href="#pablo"
                                 onClick={(e) => onDelete(t._id)}
