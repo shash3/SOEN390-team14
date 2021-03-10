@@ -19,7 +19,7 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Retrieve all machines in a location
-router.get("/location", auth, async (req, res) => {
+router.post("/location", auth, async (req, res) => {
   const { location } = req.body;
   try {
     const machine = await Machine.find({location});
@@ -58,7 +58,7 @@ router.post("/add", async (req, res) => {
 router.delete("/", async (req,res) => {
   const {_id} = req.body;
   try{
-    await Inventory.deleteOne({_id})
+    await Machine.deleteOne({_id})
     res.json("deleted");
   } catch(err){
     console.log(err.message);
@@ -68,9 +68,9 @@ router.delete("/", async (req,res) => {
 
 // add item to machine
 router.put("/add", async (req, res) => {
-  const { _id, item, date } = req.body;
+  const { _id, item, finish_time } = req.body;
   try{
-    const inventory = await Inventory.find({_id: _id}).updateOne({item, date});
+    const machine = await Machine.find({_id: _id}).updateOne({item:item, finish_time:finish_time});
     res.json('updated');
   } catch(err){
     console.log(err.message);
@@ -82,7 +82,7 @@ router.put("/add", async (req, res) => {
 router.put("/remove", async (req, res) => {
   const { _id } = req.body;
   try{
-    const inventory = await Inventory.find({_id: _id}).updateOne({item:""});
+    const machine = await Machine.find({_id: _id}).updateOne({item:""});
     res.json('updated');
   } catch(err){
     console.log(err.message);
