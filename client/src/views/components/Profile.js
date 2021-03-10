@@ -48,6 +48,9 @@ const Profile = () => {
   const [formData, setFormData] = useState("");
   const permission = JSON.parse(localStorage.getItem("permission"));
   const [modal, setModal] = useState(false);
+  const [userPage, setUserPage] = useState(0);
+
+  const NUM_OF_ITEMS_IN_A_PAGE = 15;
   //toggle for modal
   const toggle = () => setModal(!modal);
   const onChange = (e) => setFormData(e.target.value);
@@ -159,7 +162,7 @@ const Profile = () => {
                         <Input
                           placeholder="Search"
                           type="text"
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => {onChange(e); setUserPage(0);}}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -176,7 +179,7 @@ const Profile = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {allUser.map((t) => (
+                    {allUser.slice(userPage * NUM_OF_ITEMS_IN_A_PAGE, (userPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                       <tr key={t.id} value={t.id}>
                         <th scope="row">
                           <Media className="align-items-center">
@@ -345,44 +348,34 @@ const Profile = () => {
                       className="pagination justify-content-end mb-0"
                       listClassName="justify-content-end mb-0"
                     >
-                      <PaginationItem className="disabled">
+                      <PaginationItem  className={userPage - 1 < 0 ? "disabled" : "active" }>
                         <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
+                          href=""
+                          onClick={() => setUserPage(userPage - 1)}
                           tabIndex="-1"
                         >
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
                         </PaginationLink>
                       </PaginationItem>
-                      <PaginationItem className="active">
+
+                      {Array.from(Array(Math.ceil(allUser.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                      .slice(userPage - 1 < 0 ? userPage : userPage - 2 < 0 ? userPage-1: userPage-2 , userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE ? userPage+2 : userPage+3 )
+                      .map((idx) => (
+                        <PaginationItem className={idx == userPage ? "active" : "" }>
+                          <PaginationLink
+                            href=""
+                            onClick={() => setUserPage(idx)}
+                          >
+                            {idx + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+
+                      <PaginationItem className={userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
                         <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          2 <span className="sr-only">(current)</span>
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          3
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
+                          href=""
+                          onClick={() => setUserPage(userPage + 1)}
                         >
                           <i className="fas fa-angle-right" />
                           <span className="sr-only">Next</span>

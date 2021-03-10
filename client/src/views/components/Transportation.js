@@ -49,6 +49,11 @@ const Transportation = (props) => {
   });
   const [selectStatus,setSelectStatus]=useState("");
 
+  const [tranPage, setTranPage] = useState(0);
+  const [packPage, setPackPage] = useState(0);
+
+  const NUM_OF_ITEMS_IN_A_PAGE = 15;
+
   const onSelectStatus = (e) => {
     setSelectStatus(e.target.value);
   }
@@ -273,7 +278,7 @@ const Transportation = (props) => {
                       <Input
                         placeholder="Search"
                         type="text"
-                        onChange={(e) => onChange(e)}
+                        onChange={(e) => {onChange(e); setTranPage(0);}}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -373,7 +378,7 @@ const Transportation = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {transportation.map((t) => (
+                  {transportation.slice(tranPage * NUM_OF_ITEMS_IN_A_PAGE, (tranPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -428,6 +433,48 @@ const Transportation = (props) => {
                   ))}
                 </tbody>
               </Table>
+              <CardFooter className="py-4">
+                <nav aria-label="...">
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem className={tranPage - 1 < 0 ? "disabled" : "active" }>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setTranPage(tranPage - 1)}
+                        tabIndex="-1"
+                      >
+                        <i className="fas fa-angle-left" />
+                        <span className="sr-only">Previous</span>
+                      </PaginationLink>
+                    </PaginationItem>
+
+                    {Array.from(Array(Math.ceil(transportation.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                    .slice(tranPage - 1 < 0 ? tranPage : tranPage - 2 < 0 ? tranPage-1: tranPage-2 , tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE ? tranPage+2 : tranPage+3 )
+                    .map((idx) => (
+                      <PaginationItem className={idx == tranPage ? "active" : "" }>
+                        <PaginationLink
+                          href=""
+                          onClick={() => setTranPage(idx)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className={tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setTranPage(tranPage + 1)}
+                      >
+                        <i className="fas fa-angle-right" />
+                        <span className="sr-only">Next</span>
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </nav>
+              </CardFooter>
             </Card>
           </div>
         </Row>
@@ -454,7 +501,7 @@ const Transportation = (props) => {
                 </tr>
                 </thead>
                 <tbody>
-                {packaging.map((t) => (
+                {packaging.slice(packPage * NUM_OF_ITEMS_IN_A_PAGE, (packPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -496,6 +543,48 @@ const Transportation = (props) => {
                 ))}
                 </tbody>
               </Table>
+              <CardFooter className="py-4">
+                <nav aria-label="...">
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem className={packPage - 1 < 0 ? "disabled" : "active" }>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setPackPage(packPage - 1)}
+                        tabIndex="-1"
+                      >
+                        <i className="fas fa-angle-left" />
+                        <span className="sr-only">Previous</span>
+                      </PaginationLink>
+                    </PaginationItem>
+
+                    {Array.from(Array(Math.ceil(packaging.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                    .slice(packPage - 1 < 0 ? packPage : packPage - 2 < 0 ? packPage-1: packPage-2 , packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? packPage+2 : packPage+3 )
+                    .map((idx) => (
+                      <PaginationItem className={idx == packPage ? "active" : "" }>
+                        <PaginationLink
+                          href=""
+                          onClick={() => setPackPage(idx)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className={packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setPackPage(packPage + 1)}
+                      >
+                        <i className="fas fa-angle-right" />
+                        <span className="sr-only">Next</span>
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </nav>
+              </CardFooter>
             </Card>
           </div>
         </Row>

@@ -50,6 +50,10 @@ const Production = (props) => {
   // search input
   const [formData, setFormData] = useState("");
   const [formProdData, setFormProdData] = useState("");
+  const [invPage, setInvPage] = useState(0);
+  const [prodPage, setProdPage] = useState(0);
+
+  const NUM_OF_ITEMS_IN_A_PAGE = 15;
 
   const onInvSearchChange = (e) => setFormData(e.target.value);
   const onProdSearchChange = (e) => setFormProdData(e.target.value);
@@ -96,7 +100,6 @@ const Production = (props) => {
    * Initialize the add product line modal with initial values.
    */
   const initAddModal = () => {
-    console.log(newProdType);
     toggleAddModal();
     setNewProdName("");
     setNewProdType("final");
@@ -632,7 +635,7 @@ const Production = (props) => {
                       <Input
                         placeholder="Search"
                         type="text"
-                        onChange={(e) => onInvSearchChange(e)}
+                        onChange={(e) => {onInvSearchChange(e); setInvPage(0);}}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -648,7 +651,7 @@ const Production = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {inventory.map((m) => (
+                  {inventory.slice(invPage * NUM_OF_ITEMS_IN_A_PAGE, (invPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
                     <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -708,44 +711,34 @@ const Production = (props) => {
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
-                    <PaginationItem className="disabled">
+                    <PaginationItem className={invPage - 1 < 0 ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setInvPage(invPage - 1)}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+
+                    {Array.from(Array(Math.ceil(inventory.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                    .slice(invPage - 1 < 0 ? invPage : invPage - 2 < 0 ? invPage-1: invPage-2 , invPage + 1 >= inventory.length / NUM_OF_ITEMS_IN_A_PAGE ? invPage+2 : invPage+3 )
+                    .map((idx) => (
+                      <PaginationItem className={idx == invPage ? "active" : "" }>
+                        <PaginationLink
+                          href=""
+                          onClick={() => setInvPage(idx)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className={invPage + 1 >= inventory.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setInvPage(invPage + 1)}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>
@@ -781,7 +774,7 @@ const Production = (props) => {
                       <Input
                         placeholder="Search"
                         type="text"
-                        onChange={(e) => onProdSearchChange(e)}
+                        onChange={(e) => {onProdSearchChange(e); setProdPage(0);}}
                       />
                     </InputGroup>
                     <ButtonGroup
@@ -809,7 +802,7 @@ const Production = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {product.map((m) => (
+                  {product.slice(prodPage * NUM_OF_ITEMS_IN_A_PAGE, (prodPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
                     <tr key={m.id} value={m.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -837,44 +830,34 @@ const Production = (props) => {
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
-                    <PaginationItem className="disabled">
+                    <PaginationItem className={prodPage - 1 < 0 ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setProdPage(prodPage-1)}
                         tabIndex="-1"
                       >
                         <i className="fas fa-angle-left" />
                         <span className="sr-only">Previous</span>
                       </PaginationLink>
                     </PaginationItem>
-                    <PaginationItem className="active">
+
+                    {Array.from(Array(Math.ceil(product.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                    .slice(prodPage - 1 < 0 ? prodPage : prodPage - 2 < 0 ? prodPage-1: prodPage-2 , prodPage + 1 >= product.length / NUM_OF_ITEMS_IN_A_PAGE ? prodPage+2 : prodPage+3 )
+                    .map((idx) => (
+                      <PaginationItem className={idx == prodPage ? "active" : "" }>
+                        <PaginationLink
+                          href=""
+                          onClick={() => setProdPage(idx)}
+                        >
+                          {idx + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem className={prodPage + 1 >= product.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
                       <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        2 <span className="sr-only">(current)</span>
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        3
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
+                        href=""
+                        onClick={() => setProdPage(prodPage+1)}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>
