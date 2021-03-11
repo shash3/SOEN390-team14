@@ -14,10 +14,18 @@ import Login from "views/components/Login.js";
 import Finance from "views/components/Finance.js";
 import Production from "views/components/Production.js";
 import QualityAssurance from "views/components/QualityAssurance.js";
+import Production_Scheduling from "views/components/Production_Scheduling.js";
 
 const Admin = (props) => {
   // IN ROUTES.JS AS WELL IF MODIFYING
   var routes = [
+    {
+      path: "/production-scheduling",
+      name: "Scheduling",
+      icon: "ni ni-planet text-blue",
+      component: Production_Scheduling,
+      layout: "/admin",
+    },
     {
       path: "/index",
       name: "Dashboard",
@@ -116,6 +124,7 @@ const Admin = (props) => {
 
   // logic to remove nav items depending on permission
   const permissionRoutes = () => {
+    routes.splice(0, 1);
     if (permission === "admin") {
       var i;
       for (i = 0; i < routes.length; i++) {
@@ -125,21 +134,28 @@ const Admin = (props) => {
         }
       }
     }
+   
+
     if (permission === "none" || permission === null) {
+      routes.splice(0, 1);
       routes.splice(1, 4);
     }
     if (permission === "production") {
+      routes.splice(0, 1);
       routes.splice(2, 3);
     }
     if (permission === "transportation") {
+      routes.splice(0, 1);
       routes.splice(1, 1);
       routes.splice(2, 2);
     }
     if (permission === "finance") {
+      routes.splice(0, 1);
       routes.splice(1, 2);
       routes.splice(2, 1);
     }
     if (permission === "assurance") {
+      routes.splice(0, 1);
       routes.splice(1, 3);
     }
     return routes;
@@ -162,6 +178,10 @@ const Admin = (props) => {
           brandText={getBrandText(props.location.pathname)}
         />
         <Switch>
+        <Route
+            path="/admin/production-scheduling"
+            component={Production_Scheduling}
+          />
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/index" />
         </Switch>

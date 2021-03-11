@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link } from "react-router-dom";
 import axios from "axios";
 // reactstrap components
 import {
@@ -35,7 +35,7 @@ import {
 } from "reactstrap";
 
 // core components
-import Header from "components/Headers/Header.js";
+import ProductionHeader from "components/Headers/productionHeader.js";
 import { inArray } from "jquery";
 import { useLoading, Oval } from '@agney/react-loading';
 
@@ -612,8 +612,7 @@ const Production = (props) => {
    */
   return (
     <>
-      <Header />
-      {/* Page content */}
+      <ProductionHeader />
       <Container className="mt--7" fluid>
         {/* Table */}
         <Row>

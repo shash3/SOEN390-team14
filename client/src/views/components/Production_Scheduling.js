@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 
 // core components
-import Header from "components/Headers/Header.js";
+import ProductionHeader from "components/Headers/productionHeader.js";
 
 const Production_Scheduling = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
@@ -124,7 +124,7 @@ const Production_Scheduling = (props) => {
    */
   return (
     <>
-      <Header />
+      <ProductionHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {machines.map((m, i) => (
