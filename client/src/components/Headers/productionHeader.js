@@ -17,17 +17,10 @@ const Header = () => {
                   <CardBody>
                     <Row>
                       <div className="col">
-                       
                         <span className="h2 font-weight-bold mb-0">
-                        <Link
-            to="/admin/production"
-       
-    
-            activeClassName="active"
-          >
-          
-            MAIN
-          </Link>
+                          <Link to="/admin/production" activeClassName="active">
+                            MAIN
+                          </Link>
                         </span>
                       </div>
                       <Col className="col-auto">
@@ -36,26 +29,23 @@ const Header = () => {
                         </div>
                       </Col>
                     </Row>
-                  
                   </CardBody>
                 </Card>
               </Col>
               <Col lg="6" xl="3">
                 <Card className="card-stats mb-4 mb-xl-0">
-          
                   <CardBody>
                     <Row>
                       <div className="col">
-                     
-                        <span className="h2 font-weight-bold mb-0">      <Link
-            to="/admin/production-scheduling"
-       
-    
-            activeClassName="active"
-          >
-          
-            SCHEDULING
-          </Link></span>
+                        <span className="h2 font-weight-bold mb-0">
+                          {" "}
+                          <Link
+                            to="/admin/production-scheduling"
+                            activeClassName="active"
+                          >
+                            SCHEDULING
+                          </Link>
+                        </span>
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -63,7 +53,6 @@ const Header = () => {
                         </div>
                       </Col>
                     </Row>
-                  
                   </CardBody>
                 </Card>
               </Col>

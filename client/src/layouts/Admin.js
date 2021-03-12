@@ -20,13 +20,6 @@ const Admin = (props) => {
   // IN ROUTES.JS AS WELL IF MODIFYING
   var routes = [
     {
-      path: "/production-scheduling",
-      name: "Scheduling",
-      icon: "ni ni-planet text-blue",
-      component: Production_Scheduling,
-      layout: "/admin",
-    },
-    {
       path: "/index",
       name: "Dashboard",
       icon: "ni ni-tv-2 text-primary",
@@ -124,7 +117,6 @@ const Admin = (props) => {
 
   // logic to remove nav items depending on permission
   const permissionRoutes = () => {
-    routes.splice(0, 1);
     if (permission === "admin") {
       var i;
       for (i = 0; i < routes.length; i++) {
@@ -134,28 +126,22 @@ const Admin = (props) => {
         }
       }
     }
-   
 
     if (permission === "none" || permission === null) {
-      routes.splice(0, 1);
       routes.splice(1, 4);
     }
     if (permission === "production") {
-      routes.splice(0, 1);
       routes.splice(2, 3);
     }
     if (permission === "transportation") {
-      routes.splice(0, 1);
       routes.splice(1, 1);
       routes.splice(2, 2);
     }
     if (permission === "finance") {
-      routes.splice(0, 1);
       routes.splice(1, 2);
       routes.splice(2, 1);
     }
     if (permission === "assurance") {
-      routes.splice(0, 1);
       routes.splice(1, 3);
     }
     return routes;
@@ -178,10 +164,18 @@ const Admin = (props) => {
           brandText={getBrandText(props.location.pathname)}
         />
         <Switch>
-        <Route
-            path="/admin/production-scheduling"
-            component={Production_Scheduling}
-          />
+          {permission === "production" && (
+            <Route
+              path="/admin/production-scheduling"
+              component={Production_Scheduling}
+            />
+          )}
+          {permission === "admin" && (
+            <Route
+              path="/admin/production-scheduling"
+              component={Production_Scheduling}
+            />
+          )}
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/index" />
         </Switch>
