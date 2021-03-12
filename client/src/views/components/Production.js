@@ -647,35 +647,16 @@ const Production = (props) => {
     getProdLoc();
 
     // Retrieve all possible plant location
-    const getAllLoc = async () => {
+    const getAllLoc = async (prodLoc) => {
       const response = await axios
         .get("/api/locations")
         .catch((err) => console.log("Error", err));
       if (response.data) {
         setAllLoc(response.data);
-        console.log(response.data);
-        console.log(allLoc);
       }
     };
     getAllLoc();
-    console.log(allLoc);
 
-    // All Locations that are not the users
-    const getNotCurLoc = async () => {
-      allLoc.forEach((loc) => {
-        console.log(loc.location);
-        console.log(prodLoc);
-        if (loc.location === prodLoc) {
-          //allLoc.splice(allLoc.findIndex({location: prodLoc}),1);
-          console.log("here");
-        } else {
-          notCurLoc.push(loc.location);
-        }
-      });
-      //console.log(notCurLoc);
-    };
-    getNotCurLoc();
-    console.log(notCurLoc);
 
     // Get all materials
     const getMaterialList = () => {
@@ -696,6 +677,34 @@ const Production = (props) => {
     };
     getMaterialList();
   }, []);
+
+  useEffect(() => {
+    // All Locations that are not the users
+    const getNotCurLoc = async () => {
+      if (prodLoc !== "")
+        allLoc.forEach((loc) => {
+          if (loc.location !== prodLoc) {
+            if(notCurLoc.length === 0){
+              notCurLoc.push(loc.location);
+            }
+            else{
+              var boolIn = false;
+              notCurLoc.forEach((alreadyIn) => {
+                if(alreadyIn === loc.location)
+                {
+                  boolIn = true;
+                }
+              })
+              if(boolIn === false){
+                notCurLoc.push(loc.location);
+              }
+            }           
+          }
+        });
+    };
+    getNotCurLoc();
+    //console.log(notCurLoc);
+  }, [allLoc, prodLoc]);
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -1289,7 +1298,7 @@ const Production = (props) => {
                 <InputGroup className="input-group-alternative">
                   <Input
                     type="select"
-                    name="prodType"
+                    name="location"
                     required
                     onChange={(e) => {
                       setNewProdType(e.target.value);
