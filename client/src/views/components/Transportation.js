@@ -43,6 +43,7 @@ const Transportation = (props) => {
     _id: "",
     name: "",
     quantity: 0,
+    type:"",
     location: "",
     destination: "",
     status: "",
@@ -57,7 +58,7 @@ const Transportation = (props) => {
   const onSelectStatus = (e) => {
     setSelectStatus(e.target.value);
   }
-  const { name, quantity, location, destination, status } = transportationData;
+  const { name, quantity,type, location, destination, status } = transportationData;
   const onChangeAdd = (e) => {
     setTransportationData({
       ...transportationData,
@@ -156,7 +157,9 @@ const Transportation = (props) => {
       name == "" ||
       quantity == 0 ||
       location == "" ||
-      destination == 0
+      destination == 0 ||
+      type == ""
+
     ) {
       window.alert("Please Enter Data Into All Fields");
     } else {
@@ -165,6 +168,7 @@ const Transportation = (props) => {
       const newTransportation = {
         name,
         quantity,
+        type,
         location,
         destination,
         status:"Awaiting Pickup",
@@ -293,6 +297,7 @@ const Transportation = (props) => {
                       _id: "",
                       name: "",
                       quantity: 0,
+                      type:"",
                       location: "",
                       destination: "",
                       status: "",
@@ -327,6 +332,16 @@ const Transportation = (props) => {
                             type="number"
                             placeholder="QUANTITY  (please use scroller on right)"
                             name="quantity"
+                            onChange={(e) => onChangeAdd(e)}
+                          />
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            placeholder="TYPE"
+                            name="type"
                             onChange={(e) => onChangeAdd(e)}
                           />
                         </InputGroup>
@@ -371,6 +386,7 @@ const Transportation = (props) => {
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
@@ -389,6 +405,7 @@ const Transportation = (props) => {
                       </th>
                       <td>{t.name}</td>
                       <td>{t.quantity}</td>
+                      <td>{t.type}</td>
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
@@ -495,6 +512,7 @@ const Transportation = (props) => {
                   <th scope="col">ID</th>
                   <th scope="col">Name</th>
                   <th scope="col">Quantity</th>
+                  <th scope="col">Type</th>
                   <th scope="col">Location</th>
                   <th scope="col">Destination</th>
                   <th scope="col" />
@@ -512,6 +530,7 @@ const Transportation = (props) => {
                       </th>
                       <td>{t.name}</td>
                       <td>{t.quantity}</td>
+                      <td>{t.type}</td>
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td className="text-right">

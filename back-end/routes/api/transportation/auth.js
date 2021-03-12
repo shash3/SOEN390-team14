@@ -45,11 +45,12 @@ router.post("/", auth, async (req, res) => {
 
 // add new shipments
 router.post("/add", auth, async (req, res) => {
-  const {name, quantity, location, destination, status } = req.body;
+  const {name, quantity, type, location, destination, status } = req.body;
   
   transportation = new Transportation({
     name,
     quantity,
+    type,
     location,
     destination,
     status,

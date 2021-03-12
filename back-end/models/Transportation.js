@@ -24,7 +24,12 @@ const TransportationSchema = new mongoose.Schema({
     packagingStatus: {
         type: Boolean,
         required: true
+    },
+    type: {
+        type: String,
+        required: true
     }
+    
     
 });
 
