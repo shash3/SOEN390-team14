@@ -48,6 +48,11 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 ### Name Convention
 * As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide.
 
+### Enforcing Convention
+* Eslint has been installed.
+* npm -g i eslint-cli
+* cmd (front-end): eslint src
+
 ### Contributor
 * Adam Richard (Project Manager)
 * Sacha Elkaim (Programming Manager)
