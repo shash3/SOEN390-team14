@@ -14,6 +14,7 @@ import Login from "views/components/Login.js";
 import Finance from "views/components/Finance.js";
 import Production from "views/components/Production.js";
 import QualityAssurance from "views/components/QualityAssurance.js";
+import Production_Scheduling from "views/components/Production_Scheduling.js";
 
 const Admin = (props) => {
   // IN ROUTES.JS AS WELL IF MODIFYING
@@ -125,6 +126,7 @@ const Admin = (props) => {
         }
       }
     }
+
     if (permission === "none" || permission === null) {
       routes.splice(1, 4);
     }
@@ -162,6 +164,18 @@ const Admin = (props) => {
           brandText={getBrandText(props.location.pathname)}
         />
         <Switch>
+          {permission === "production" && (
+            <Route
+              path="/admin/production-scheduling"
+              component={Production_Scheduling}
+            />
+          )}
+          {permission === "admin" && (
+            <Route
+              path="/admin/production-scheduling"
+              component={Production_Scheduling}
+            />
+          )}
           {getRoutes(routes)}
           <Redirect from="*" to="/admin/index" />
         </Switch>

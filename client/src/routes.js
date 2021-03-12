@@ -6,6 +6,7 @@ import Login from "views/components/Login.js";
 import Finance from "views/components/Finance.js";
 import Production from "views/components/Production.js";
 import QualityAssurance from "views/components/QualityAssurance.js";
+
 // IN ADMIN.JS AS WELL IF MODIFYING
 var routes = [
   {
