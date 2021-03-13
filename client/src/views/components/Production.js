@@ -457,7 +457,7 @@ const Production = (props) => {
         const material = allMaterials[index];
         const name = material[0];
         const num = material[1];
-        const inInventory = await returnQuantityInInventory(name);
+        const inInventory = await returnQuantityInInventory(name, userLoc);
         
         if (inInventory < num * prodQuant){
           invalids = [...invalids, {name:name, quantNeed:num * prodQuant, quantHave:inInventory}];
@@ -753,11 +753,11 @@ const Production = (props) => {
     return respoonse;
   }
 
-  const returnQuantityInInventory = (name) => {
+  const returnQuantityInInventory = (name, location) => {
     const inInventory = axios.post("/api/inventory/location", 
     { 
       name: name,
-      location: userLoc
+      location: location
     },
     {
       headers: {
