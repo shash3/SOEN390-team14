@@ -43,6 +43,18 @@ router.post("/location", auth, async (req, res) => {
   }
 });
 
+// Retrieve in use machines in a location
+router.post("/unavailable", auth, async (req, res) => {
+  const { location} = req.body;
+  try {
+    const machine = await Machine.find({location:location, item:{$regex:"."}});
+    res.json(machine);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 // Retrieve available machines in a location
 router.post("/available", auth, async (req, res) => {
   const { location } = req.body;
