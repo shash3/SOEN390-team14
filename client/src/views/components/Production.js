@@ -681,30 +681,17 @@ const Production = (props) => {
   useEffect(() => {
     // All Locations that are not the users
     const getNotCurLoc = async () => {
-      if (prodLoc !== "")
-        allLoc.forEach((loc) => {
-          if (loc.location !== prodLoc) {
-            if(notCurLoc.length === 0){
-              notCurLoc.push(loc.location);
-            }
-            else{
-              var boolIn = false;
-              notCurLoc.forEach((alreadyIn) => {
-                if(alreadyIn === loc.location)
-                {
-                  boolIn = true;
-                }
-              })
-              if(boolIn === false){
-                notCurLoc.push(loc.location);
-              }
-            }           
-          }
-        });
-    };
-    getNotCurLoc();
-    //console.log(notCurLoc);
-  }, [allLoc, prodLoc]);
+     setNotCurLoc([]);
+      if( prodLoc !== "")
+     allLoc.forEach((loc) => {
+       if (loc.location !== prodLoc) {
+         setNotCurLoc(notCurLoc => [...notCurLoc, loc.location])
+       } 
+     });
+   };
+   getNotCurLoc();
+     }, [allLoc, prodLoc]);  
+     
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -1396,8 +1383,8 @@ const Production = (props) => {
               disabled={disabledTransferModal}
               color="primary"
               onClick={(e) => {
-                addProduct(e);
-                toggleAddModal();
+                //addProduct(e);
+                // TODO send info to Transpo tab 
               }}
             >
               Confirm

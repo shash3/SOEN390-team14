@@ -66,6 +66,18 @@ router.put("/remove", async (req,res) => {
   }
 });
 
+//retrieve inventory by location 
+router.get("/", auth, async (req, res) => {
+  const {location} = req.body;
+  try{
+    const inventory = await Inventory.find({location})
+    res.json(inventory);
+  }catch(err){
+    console.log(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 router.put("/superUpdate", async (req, res) => {
   const {name, type, quantity, location} = req.body;
 
