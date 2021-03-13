@@ -13,18 +13,22 @@ import {
   Row,
   ButtonGroup,
   Button,
+  Form,
 } from "reactstrap";
 
 // core components
 import ProductionHeader from "components/Headers/productionHeader.js";
+import { type } from "jquery";
 
 const Production_Scheduling = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
 
   const [userLocation, setUserLocation] = useState("");
   const [machines, setMachines] = useState([]);
+  const [machineView, updateMachineView] = useState(false);
 
   const NUM_OF_COLS = 2;
+  const MINUTES_TO_FINISH = 5;
 
   // Retrieve product line location from user
   const getMachines = async () => {
@@ -44,15 +48,41 @@ const Production_Scheduling = (props) => {
     }
   };
 
+  const addNewMachine = async () => {
+    await axios.post("/api/machine/add",
+    {
+      location: userLocation
+    },
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    }).catch((err) => console.log("Error", err));
+    updateMachineView(!machineView);
+  }
 
-  const addItemToMachine = async (key, item) => {
+  const deleteMachine = async (id) => {
+    await axios.post("/api/machine/delete",
+    {
+      _id: id
+    },
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    }).catch((err) => console.log("Error", err));
+    updateMachineView(!machineView);
+  }
+
+  const addItemToMachine = async (key, item, type) => {
     const final = new Date();
-    final.setMinutes(new Date().getMinutes() + 5);
+    final.setMinutes(new Date().getMinutes() + MINUTES_TO_FINISH);
 
     await axios.put("/api/machine/add",
     {
       _id:key,
       item:item,
+      type:type,
       finish_time:final.toISOString(),
     },
     {
@@ -116,7 +146,7 @@ const Production_Scheduling = (props) => {
     useEffect( () => {
       
       getMachines();
-    }, [userLocation]);
+    }, [userLocation, machineView]);
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -127,6 +157,18 @@ const Production_Scheduling = (props) => {
       <ProductionHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
+        <Form>
+          
+        <ButtonGroup className='my-3'>
+          <Button
+            color='secondary'
+            onClick={() => addNewMachine()}
+          >
+            Create New Machine
+          </Button>
+        </ButtonGroup>
+        </Form>
+        
         {machines.map((m, i) => (
           <div>
             <Row>
@@ -138,6 +180,14 @@ const Production_Scheduling = (props) => {
                       <i className={m.item == "" ? "bg-success" : "bg-danger"} />
                       {m.item == "" ? "Available" : "Unavailable"}
                     </Badge>
+                    <Button
+                      className='ml-6'
+                      color='danger'
+                      onClick={() => deleteMachine(m._id)}
+                      hidden={m.item != ""}
+                    >
+                      Destroy Machine
+                    </Button>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
@@ -177,7 +227,7 @@ const Production_Scheduling = (props) => {
                       <Button 
                         className="mt-4"
                         color="primary"
-                        onClick={(e) => addItemToMachine(m._id, "Saddle")}
+                        onClick={(e) => addItemToMachine(m._id, "Saddle", "part")}
                       >
                         Add Saddle (testing)
                       </Button>
