@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 // reactstrap components
 import {
@@ -757,7 +756,6 @@ const Production = (props) => {
    * ------------------------
    */
 
-  // Interact with the machines
   const [refreshMachines, updateRefreshMachines] = useState(false);
   useEffect(() => {
     /**
@@ -826,8 +824,10 @@ const Production = (props) => {
 
     checkProductionFinished();
   }, [refreshMachines]);
-  setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
   
+  useEffect(() => {
+    setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
+  }, []);
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -1006,7 +1006,7 @@ const Production = (props) => {
                       <Button
                         outline
                         color="primary"
-                        onClick={() => {initAddModal(); updateRefreshMachines(!refreshMachines);}}
+                        onClick={() => {initAddModal();}}
                       >
                         Add New Product Line
                       </Button>
