@@ -18,6 +18,19 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// Retrieve specific machine by key
+router.post("/", auth, async (req, res) => {
+  const { _id } = req.body;
+
+  try {
+    const product = await Machine.find({ _id });
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 // Retrieve all machines in a location
 router.post("/location", auth, async (req, res) => {
   const { location } = req.body;
@@ -30,47 +43,47 @@ router.post("/location", auth, async (req, res) => {
   }
 });
 
-// Retrieve specific machine by key
-router.post("/", auth, async (req, res) => {
-  const { _id } = req.body;
-
+// Retrieve available machines in a location
+router.post("/available", auth, async (req, res) => {
+  const { location } = req.body;
   try {
-    const product = await Machine.find({ _id })
-    res.json(product);
+    const machine = await Machine.find({location:location, item:""});
+    res.json(machine);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// add new machine
+// Add a new machine
 router.post("/add", async (req, res) => {
   const { location } = req.body;
   machine = new Machine({
     location: location,
-    item:""
+    item:"",
+    type:""
   });
   await machine.save();
-  res.json();
+  res.json('saved');
 });
 
-//remove a machine
-router.delete("/", async (req,res) => {
+// Delete a machine
+router.post("/delete", async (req,res) => {
   const {_id} = req.body;
   try{
-    await Machine.deleteOne({_id})
-    res.json("deleted");
+    await Machine.deleteOne({_id:_id});
+    res.json('deleted');
   } catch(err){
     console.log(err.message);
     res.status(500).send("Server Error");
   }
 });
 
-// add item to machine
+// Add item to machine
 router.put("/add", async (req, res) => {
-  const { _id, item, finish_time } = req.body;
+  const { _id, item, type, finish_time } = req.body;
   try{
-    const machine = await Machine.find({_id: _id}).updateOne({item:item, finish_time:finish_time});
+    const machine = await Machine.find({_id: _id}).updateOne({item:item, type:type, finish_time:finish_time});
     res.json('updated');
   } catch(err){
     console.log(err.message);
@@ -78,15 +91,16 @@ router.put("/add", async (req, res) => {
   }
 });
 
-// remove item from machine
+// Remove item from machine
 router.put("/remove", async (req, res) => {
   const { _id } = req.body;
   try{
-    const machine = await Machine.find({_id: _id}).updateOne({item:""});
+    const machine = await Machine.find({_id: _id}).updateOne({item:"",type:""});
     res.json('updated');
   } catch(err){
     console.log(err.message);
     res.status(500).send("Server Error");
   }
 });
+
 module.exports = router;
