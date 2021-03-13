@@ -87,8 +87,6 @@ const Production = (props) => {
   const [hideCreateBtns, setHiddenCreateBtns] = useState(false);
   const [hideLoading, setHiddenLoading] = useState(true);
 
-  // Interact with the machines
-  const MINUTES_TO_FINISH = 5;
 
   // Loading Circle
   const { containerProps, indicatorEl } = useLoading({
@@ -357,7 +355,6 @@ const Production = (props) => {
       try {
         // Get all available machine at the user's location.
         const availMachines = await returnAvailableMachines();
-        console.log(availMachines);
   
         // Check if there are enough machines to make the products.
         if (prodQuant > availMachines.length) {
@@ -370,7 +367,6 @@ const Production = (props) => {
         // Get the materials to create the product.
         const materialList = await returnProductLine();
         const invalids = await returnInvalidMaterials(materialList);
-        console.log(invalids);
   
         // Check if there is are materials with not enough quantity to make the products.
         if (invalids.length > 0){
@@ -672,6 +668,8 @@ const Production = (props) => {
     return response;
   }
 
+  
+
 
   const returnProductLine = () => {
     // Get materials for product.
@@ -735,6 +733,7 @@ const Production = (props) => {
   }
 
   const addItemToMachine = async (machine_key, item, type) => {
+    const MINUTES_TO_FINISH = 5;
     const final = new Date();
     final.setMinutes(new Date().getMinutes() + MINUTES_TO_FINISH);
 
@@ -753,63 +752,81 @@ const Production = (props) => {
   }
 
 
-
-
-  /**
-   * Checks if the machines are finished producing the part. Removes it from the 
+  /* ------------------------
+   * Package for updating the production machine
+   * ------------------------
    */
-  const checkProductionFinished = () => {
-    const main = () => {
-      /*
-      For each machine:
-        if machine.hasItem AND machine.finish_time.valueOf() < new Date().valueOF():
-          addToQuality();
-          removeItemFromMachine();
-      */
-      addToQuality();
-      removeItemFromMachine();
+
+  // Interact with the machines
+  const [refreshMachines, updateRefreshMachines] = useState(false);
+  useEffect(() => {
+    /**
+     * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+     */
+    const checkProductionFinished = () => {
+      const main = async () => {
+        const machines = await returnUnavailableMachines();
+        for (let index = 0; index < machines.length; index++) {
+          const machine = machines[index];
+          if ((new Date(machine['finish_time'])).valueOf() < (new Date()).valueOf()) {
+            
+            await addToQuality(machine['item'], machine['type'], userLoc);
+            await removeItemFromMachine(machine['_id']);
+          }
+        }
+      }
+
+      const returnUnavailableMachines = () => {
+        const response = axios.post("/api/machine/unavailable",
+          {
+            location: userLoc
+          },
+          {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          }
+        ).then((response) => {
+            return response.data;
+          }
+        ).catch((err) => console.log("Error", err));
+        return response;
+      }
+
+      const addToQuality = async (name, type, location) => {
+        await axios.post("/api/quality/add", 
+        { 
+          name: name,
+          type: type,
+          location: location,
+        },
+        {
+          headers: {
+          "x-auth-token": userToken,
+          },
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+      
+      const removeItemFromMachine = async (key) => {
+        await axios.put("/api/machine/remove",
+        {
+          _id:key,
+        },
+        {
+          headers: {
+            "x-auth-token": userToken,
+          },
+        }).catch((err) => console.log("Error", err));
+      }
+
+      main();
     }
 
-    const addToQuality = async (product) => {
-      const name = product[0];
-      const type = product[1];
-      const location = product[2];
-      await axios.post("/api/quality/add", 
-      { 
-        name: name,
-        type: type,
-        location: location,
-      },
-      {
-        headers: {
-        "x-auth-token": userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          materials = response.data[0]['material'];
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    
-    const removeItemFromMachine = async (key) => {
-      const final = new Date();
-      final.setMinutes(new Date().getMinutes() + 5);
-  
-      await axios.put("/api/machine/remove",
-      {
-        _id:key,
-      },
-      {
-        headers: {
-          "x-auth-token": userToken,
-        },
-      }).catch((err) => console.log("Error", err));
-    }
-  }
+    checkProductionFinished();
+  }, [refreshMachines]);
+  setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
   
 
   /* -------------------------
@@ -989,9 +1006,7 @@ const Production = (props) => {
                       <Button
                         outline
                         color="primary"
-                        onClick={() => {
-                          initAddModal();
-                        }}
+                        onClick={() => {initAddModal(); updateRefreshMachines(!refreshMachines);}}
                       >
                         Add New Product Line
                       </Button>
