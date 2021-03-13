@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 // reactstrap components
 import {
@@ -41,6 +40,7 @@ import { useLoading, Oval } from "@agney/react-loading";
 
 const Production = (props) => {
   const userToken = JSON.parse(localStorage.getItem("user"));
+  const [userLoc, setUserLoc] = useState("");
 
   // database references
   const [inventory, setInventory] = useState([]);
@@ -57,7 +57,9 @@ const Production = (props) => {
 
   const onInvSearchChange = (e) => setFormData(e.target.value);
   const onProdSearchChange = (e) => setFormProdData(e.target.value);
-  const [updateProdSearch, setUpdateProdSearch] = useState(false);
+  const [inventoryView, updateInventoryView] = useState(false);
+  const [productlineView, updateProductlineView] = useState(false);
+
 
   // Toggle product line modal
   const toggleAddModal = () => {
@@ -97,7 +99,6 @@ const Production = (props) => {
   const [createModal, setCreateModal] = useState(false);
   const [prodName, setProdName] = useState("");
   const [prodType, setProdType] = useState("");
-  const [prodLoc, setProdLoc] = useState("");
   const [prodQuant, setProdQuant] = useState(1);
   const [
     unstableCreateInputsValidation,
@@ -110,6 +111,7 @@ const Production = (props) => {
   const [createProdOutputHTML, setCreateProdOutputHTML] = useState([]);
   const [hideCreateBtns, setHiddenCreateBtns] = useState(false);
   const [hideLoading, setHiddenLoading] = useState(true);
+
 
   // Loading Circle
   const { containerProps, indicatorEl } = useLoading({
@@ -301,9 +303,8 @@ const Production = (props) => {
             "x-auth-token": userToken,
           },
         }
-      )
-      .then(() => {
-        setUpdateProdSearch(!updateProdSearch);
+      ).then(() => {
+        updateProductlineView(!productlineView);
       })
       .catch((err) => console.log("Error", err));
   };
@@ -379,167 +380,166 @@ const Production = (props) => {
    * Creating product from product line.
    */
   const createProduct = async () => {
-    setHiddenCreateBtns(true);
-    setHiddenLoading(false);
 
-    // Get materials for product.
-    let productLineMat;
-    await axios
-      .post(
-        "/api/product_line",
-        {
-          name: prodName,
-        },
-        {
-          headers: {
-            "x-auth-token": userToken,
-          },
+    /**
+     * The main function to create the product.
+     */
+    const main = async () => {
+      setHiddenCreateBtns(true);
+      setHiddenLoading(false);
+
+      try {
+        // Get all available machine at the user's location.
+        const availMachines = await returnAvailableMachines();
+  
+        // Check if there are enough machines to make the products.
+        if (prodQuant > availMachines.length) {
+          const allMachines = await returnAllMachines();
+          const nextAvailable = await returnNextAvailable(allMachines);
+          setCreateProdOutputHTML(createNoMachineHTML(availMachines.length, nextAvailable));
+          return;
         }
-      )
-      .then((response) => {
-        if (response.data) {
-          productLineMat = response.data[0]["material"];
+  
+        // Get the materials to create the product.
+        const materialList = await returnProductLine();
+        const invalids = await returnInvalidMaterials(materialList);
+  
+        // Check if there is are materials with not enough quantity to make the products.
+        if (invalids.length > 0){
+          setCreateProdOutputHTML(createInvalidHTML(invalids));
+          return;
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        
+        // Start the process to create the product by removing from inventory and adding it to production machines. Indicate that it was successful.
+        removeFromInventory(materialList);
+        addToMachines(availMachines, prodName, prodType, prodQuant, userLoc);
+        setCreateProdOutputHTML(createSuccessHTML());
 
-    // Get each material from inventory
-    let invalids = [];
-    let allMaterials = [];
-    productLineMat.forEach((element) => {
-      const name = element[0];
-      const num = element[1];
-
-      axios
-        .post(
-          "/api/inventory/location",
-          {
-            name: name,
-            location: prodLoc,
-          },
-          {
-            headers: {
-              "x-auth-token": userToken,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.data) {
-            const material = response.data;
-            const inInventory =
-              material.length == 0 ? 0 : material[0]["quantity"];
-            allMaterials = [...allMaterials, [name, num, inInventory]];
-            if (inInventory < num * prodQuant) {
-              invalids = [...invalids, [name, num * prodQuant, inInventory]];
-            }
-
-            // For the last material only, update the html output
-            if (productLineMat[productLineMat.length - 1][0] == name) {
-              updateOutputHTML(invalids, allMaterials);
-            }
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    });
-
-    const updateOutputHTML = (invalids, allMaterials) => {
-      let html = [];
-      if (invalids.length != 0) {
-        invalids.forEach((element) => {
-          const material = element[0];
-          const need = element[1];
-          const have = element[2];
-          html = [
-            ...html,
-            <FormGroup>
-              <Button className="btn-danger" disabled>
-                Don't have enough of{" "}
-                <label className="text-indigo strong">{material}</label> to make{" "}
-                {prodQuant} {prodName} at your location ({prodLoc}).
-                <br />
-                Requires {need}, but only {have} in inventory.
-              </Button>
-            </FormGroup>,
-          ];
-        });
-      } else {
-        // Uncomment when inventory and quality is complete
-        removeFromInventory(allMaterials);
-        for (let index = 0; index < prodQuant; index++) {
-          addToQuality([prodName, prodType, prodLoc]);
-        }
-        html = [
-          <FormGroup>
-            <Button className="btn-success" disabled>
-              Successfully created {prodQuant}{" "}
-              <label className="text-indigo strong">{prodName}</label> in{" "}
-              {prodLoc}.
-            </Button>
-          </FormGroup>,
-        ];
+      } finally {
+        setHiddenLoading(true);
+        updateInventoryView(!inventoryView);
       }
-      setHiddenLoading(true);
-      setCreateProdOutputHTML(html);
-    };
+    }
 
-    const removeFromInventory = async (materials) => {
-      await materials.forEach((element) => {
-        const name = element[0];
-        const numNeeded = element[1] * prodQuant;
-        const inInventory = element[2];
-        const loc = prodLoc;
-        const newQuantity = inInventory - numNeeded;
-        axios
-          .put(
-            "/api/inventory/superUpdate",
-            {
-              name: name,
-              quantity: newQuantity,
-              location: loc,
-            },
-            {
-              headers: {
-                "x-auth-token": userToken,
-              },
-            }
-          )
-          .catch(function (error) {
-            console.log(error);
-          });
+    /**
+     * Returns the finish_time of the machine that has an item and the smallest finish_time.
+     * 
+     * @param {Array} allMachines an array of all the production machines
+     * @returns the smallest finish_time
+     */
+    const returnNextAvailable = (allMachines) => {
+      let nextAvailable = null;
+      allMachines.forEach(machine => {
+        if (machine['item'] != '') {
+          if (nextAvailable == null){
+            nextAvailable = new Date(machine['finish_time']);
+          } 
+          const machineDate = new Date(machine['finish_time']);
+          if (machineDate.valueOf() < nextAvailable.valueOf()) {
+            nextAvailable = machineDate;
+          }
+        }
+      });
+      return nextAvailable;
+    }
+
+    /**
+     * Loops through each material, which is an array composed of name and quantity, and determines if there is enough 
+     * of that material in inventory to create the desired number of products. Returns an array containing the materials 
+     * that did not have enough and the amount in inventory.
+     * 
+     * @param {Array} allMaterials an array of all materials needed to construct a product
+     * @returns an array of materials that do not have enough quantity in inventory
+     */
+    const returnInvalidMaterials = async (allMaterials) => {
+      let invalids = [];
+      for (let index = 0; index < allMaterials.length; index++) {
+        const material = allMaterials[index];
+        const name = material[0];
+        const num = material[1];
+        const inInventory = await returnQuantityInInventory(name);
+        
+        if (inInventory < num * prodQuant){
+          invalids = [...invalids, {name:name, quantNeed:num * prodQuant, quantHave:inInventory}];
+        }
+      }
+      return invalids;
+    }
+
+    /**
+     * Removes all the materials from inventory. Each material is composed of its name and the quantity to be removed.
+     * 
+     * @param {Array} materialList the materials to be removes from inventory 
+     */
+    const removeFromInventory = (materialList) => {
+      materialList.forEach(material => {
+        const name = material[0];
+        const num = material[1];
+        const quantity = num * prodQuant;
+        decrementInventory(name, userLoc, quantity);
       });
     };
 
-    const addToQuality = async (product) => {
-      const name = product[0];
-      const type = product[1];
-      const location = product[2];
-      await axios
-        .post(
-          "/api/quality/add",
-          {
-            name: name,
-            type: type,
-            location: location,
-          },
-          {
-            headers: {
-              "x-auth-token": userToken,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.data) {
-            materials = response.data[0]["material"];
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    };
+    /**
+     * Adds the items to the production machines.
+     * 
+     * @param {Array} availableMachines the list of available production machines at the user's location
+     * @param {String} name the name of the item to be produced
+     * @param {String} type the type of the item
+     * @param {BigInteger} quantity the number of items
+     */
+    const addToMachines = (availableMachines, name, type, quantity) => {
+      for (let index = 0; index < quantity; index++) {
+        const machine = availableMachines[index];
+        addItemToMachine(machine['_id'], name, type)
+      }
+      
+    }
+
+    /**
+     * Creates an array of HTML elements to indicate that there are not enough machines available.
+     * 
+     * @param {BigInteger} available the number of available machines
+     * @param {Date} nextAvailTime the date of the next available machine
+     * @returns An array of HTML elements
+     */
+    const createNoMachineHTML = (available, nextAvailTime) => {
+      const html = [<FormGroup><Button className='btn-danger' disabled>There are not enough machines available at your location ({userLoc}). There are {available} available,
+      the next available machine is at {nextAvailTime.toString()}.</Button></FormGroup>];
+      return html;
+    }
+
+    /**
+     * Creates an array of HTML elements to indicate that there are not enough of some materials available.
+     * 
+     * @param {Array} invalids list of materials with not enough quantity in inventory
+     * @returns An array of HTML elements
+     */
+    const createInvalidHTML = (invalids) => {
+      let html = [];
+      invalids.forEach(element => {
+        const {name, quantNeed, quantHave} = element;
+        //const material = element['name'];
+        //const need = element[''];
+        //const have = element[2];
+        html = [...html, <FormGroup><Button className='btn-danger' disabled>Don't have enough of <label className='text-indigo strong'>{name}</label> to 
+        make {prodQuant} {prodName} at your location ({userLoc}).<br/>Requires {quantNeed}, but only {quantHave} in inventory.</Button></FormGroup>];
+      });
+      return html
+    }
+
+    /**
+     * Creates an array of HTML elements to indicate that the creation of the material was successful.
+     * 
+     * @returns An array of HTML elements
+     */
+    const createSuccessHTML = () => {
+      const html = [<FormGroup><Button className='btn-success' disabled>Successfully creating {prodQuant} <label className='text-indigo strong'>{prodName}</label> in 
+      production machines at {userLoc}.</Button></FormGroup>];
+      return html;
+    }
+
+    main();
   };
 
   /* -------------------------
@@ -626,7 +626,7 @@ const Production = (props) => {
       }
     };
     prodLookup();
-  }, [formData, formProdData, updateProdSearch]);
+  }, [formData, formProdData, productlineView, inventoryView]);
 
   // Retrieve values only once.
   useEffect(() => {
@@ -641,7 +641,7 @@ const Production = (props) => {
         .catch((err) => console.log("Error", err));
       if (response && response.data) {
         var user = response.data;
-        setProdLoc(user.location);
+        setUserLoc(user.location);
       }
     };
     getProdLoc();
@@ -692,6 +692,202 @@ const Production = (props) => {
    getNotCurLoc();
      }, [allLoc, prodLoc]);  
      
+  const returnAllMachines = () => {
+    const response = axios.post("/api/machine/location",
+      {
+        location: userLoc
+      },
+      {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      }
+    ).then((response) => {
+        return response.data;
+      }
+    ).catch((err) => console.log("Error", err));
+
+    return response;
+  }
+
+  const returnAvailableMachines = () => {
+    const response = axios.post("/api/machine/available",
+      {
+        location: userLoc
+      },
+      {
+        headers: {
+          "x-auth-token": userToken,
+        },
+      }
+    ).then((response) => {
+        return response.data;
+      }
+    ).catch((err) => console.log("Error", err));
+    return response;
+  }
+
+  
+
+
+  const returnProductLine = () => {
+    // Get materials for product.
+    const respoonse = axios.post("/api/product_line", 
+    { 
+      name: prodName
+    },
+    {
+      headers: {
+      "x-auth-token": userToken,
+      },
+    })
+    .then((response) => {
+      if (response.data) {
+        const productLineMat = response.data[0]['material'];
+        return productLineMat;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    return respoonse;
+  }
+
+  const returnQuantityInInventory = (name) => {
+    const inInventory = axios.post("/api/inventory/location", 
+    { 
+      name: name,
+      location: userLoc
+    },
+    {
+      headers: {
+      "x-auth-token": userToken,
+      },
+    }).then((response) => {
+      if (response.data) {
+        const material = response.data;
+        const inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
+        return inInventory;
+      }
+    }).catch(function (error) {
+      console.log(error);
+    });
+    return inInventory;
+  }
+
+  const decrementInventory = async (name, location, quantity) => {
+    await axios.put("/api/inventory/decrement", 
+    { 
+      name: name,
+      quantity: quantity,
+      location: location
+    },
+    {
+      headers: {
+      "x-auth-token": userToken,
+      },
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  const addItemToMachine = async (machine_key, item, type) => {
+    const MINUTES_TO_FINISH = 5;
+    const final = new Date();
+    final.setMinutes(new Date().getMinutes() + MINUTES_TO_FINISH);
+
+    await axios.put("/api/machine/add",
+    {
+      _id:machine_key,
+      item:item,
+      type:type,
+      finish_time:final.toISOString(),
+    },
+    {
+      headers: {
+        "x-auth-token": userToken,
+      },
+    }).catch((err) => console.log("Error", err)); 
+  }
+
+
+  /* ------------------------
+   * Package for updating the production machine
+   * ------------------------
+   */
+
+  const [refreshMachines, updateRefreshMachines] = useState(false);
+  useEffect(() => {
+    /**
+     * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+     */
+    const checkProductionFinished = () => {
+      const main = async () => {
+        const machines = await returnUnavailableMachines();
+        for (let index = 0; index < machines.length; index++) {
+          const machine = machines[index];
+          if ((new Date(machine['finish_time'])).valueOf() < (new Date()).valueOf()) {
+            
+            await addToQuality(machine['item'], machine['type'], userLoc);
+            await removeItemFromMachine(machine['_id']);
+          }
+        }
+      }
+
+      const returnUnavailableMachines = () => {
+        const response = axios.post("/api/machine/unavailable",
+          {
+            location: userLoc
+          },
+          {
+            headers: {
+              "x-auth-token": userToken,
+            },
+          }
+        ).then((response) => {
+            return response.data;
+          }
+        ).catch((err) => console.log("Error", err));
+        return response;
+      }
+
+      const addToQuality = async (name, type, location) => {
+        await axios.post("/api/quality/add", 
+        { 
+          name: name,
+          type: type,
+          location: location,
+        },
+        {
+          headers: {
+          "x-auth-token": userToken,
+          },
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+      
+      const removeItemFromMachine = async (key) => {
+        await axios.put("/api/machine/remove",
+        {
+          _id:key,
+        },
+        {
+          headers: {
+            "x-auth-token": userToken,
+          },
+        }).catch((err) => console.log("Error", err));
+      }
+
+      main();
+    }
+
+    checkProductionFinished();
+  }, [refreshMachines]);
+  
+  useEffect(() => {
+    setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
+  }, []);
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -927,9 +1123,7 @@ const Production = (props) => {
                       <Button
                         outline
                         color="primary"
-                        onClick={() => {
-                          initAddModal();
-                        }}
+                        onClick={() => {initAddModal();}}
                       >
                         Add New Product Line
                       </Button>
@@ -1209,7 +1403,7 @@ const Production = (props) => {
                   <span className="text-muted">Location</span>
                 </label>
                 <InputGroup className="input-group-alternative">
-                  <Input disabled type="text" name="location" value={prodLoc} />
+                  <Input disabled type="text" name="location" value={userLoc} />
                 </InputGroup>
               </FormGroup>
               <FormGroup>
