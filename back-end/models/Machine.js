@@ -9,6 +9,10 @@ const MachineSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    type: {
+        type: String,
+        require: true
+    },
     finish_time: {
         type: Date
     }
