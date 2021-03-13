@@ -247,14 +247,7 @@ const QualityAssurance = () => {
       headers: {
         "x-auth-token": userToken,
       },
-    })/*
-    .then((response) => {
-      if (response.data) {
-        setDirtyQualityData(response.data);
-        setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-      }
-    })*/
-    .catch(function (error) {
+    }).catch(function (error) {
       console.log(error);
     });
   }
