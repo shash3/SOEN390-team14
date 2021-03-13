@@ -631,7 +631,7 @@ const Production = (props) => {
   // Retrieve values only once.
   useEffect(() => {
     // Retrieve product line location from user
-    const getProdLoc = async () => {
+    const getUserLoc = async () => {
       const response = await axios
         .get("/api/auth", {
           headers: {
@@ -644,10 +644,10 @@ const Production = (props) => {
         setUserLoc(user.location);
       }
     };
-    getProdLoc();
+    getUserLoc();
 
     // Retrieve all possible plant location
-    const getAllLoc = async (prodLoc) => {
+    const getAllLoc = async (userLoc) => {
       const response = await axios
         .get("/api/locations")
         .catch((err) => console.log("Error", err));
@@ -682,15 +682,15 @@ const Production = (props) => {
     // All Locations that are not the users
     const getNotCurLoc = async () => {
      setNotCurLoc([]);
-      if( prodLoc !== "")
+      if( userLoc !== "")
      allLoc.forEach((loc) => {
-       if (loc.location !== prodLoc) {
+       if (loc.location !== userLoc) {
          setNotCurLoc(notCurLoc => [...notCurLoc, loc.location])
        } 
      });
    };
    getNotCurLoc();
-     }, [allLoc, prodLoc]);  
+     }, [allLoc, userLoc]);  
      
   const returnAllMachines = () => {
     const response = axios.post("/api/machine/location",
@@ -1468,7 +1468,7 @@ const Production = (props) => {
                   <span className="text-muted">Your Location</span>
                 </label>
                 <InputGroup className="input-group-alternative">
-                  <Input disabled type="text" name="location" value={prodLoc} />
+                  <Input disabled type="text" name="location" value={userLoc} />
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
