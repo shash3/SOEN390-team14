@@ -1,19 +1,23 @@
-import React from "react";
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-undef */
+import React from 'react';
 
 // reactstrap components
-import { Button, Container, Row, Col } from "reactstrap";
-import UserWallpaper from "../../assets/img/brand/user-wallpaper.jpg";
+import {
+  Container, Row, Col,
+} from 'reactstrap';
 
 const UserHeader = (props) => {
-  const permission = JSON.parse(localStorage.getItem("permission"));
+  const permission = JSON.parse(localStorage.getItem('permission'));
   return (
     <>
       <div
         className="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
         style={{
-          minHeight: "600px",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
+          minHeight: '600px',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top',
         }}
       >
         {/* Mask */}
@@ -22,17 +26,23 @@ const UserHeader = (props) => {
         <Container className="d-flex align-items-center" fluid>
           <Row>
             <Col lg="7" md="10">
-              <h1 className="display-2 text-white" style={{ width: "500px" }}>
-                {permission === "admin" && <>ADMIN CONTROLS</>}
-                {permission !== "admin" && <> Welcome {props.user.name}</>}
+              <h1 className="display-2 text-white" style={{ width: '500px' }}>
+                {permission === 'admin' && <>ADMIN CONTROLS</>}
+                {permission !== 'admin' && (
+                <>
+                  {' '}
+                  Welcome
+                  {props.user.name}
+                </>
+                )}
               </h1>
-              <p className="text-white mt-0 mb-5" style={{ width: "500px" }}>
-                {permission === "admin" && (
+              <p className="text-white mt-0 mb-5" style={{ width: '500px' }}>
+                {permission === 'admin' && (
                   <>The admin panel lets you view and edit users permissions.</>
                 )}
-                {permission !== "admin" && (
+                {permission !== 'admin' && (
                   <>
-                    {" "}
+                    {' '}
                     This is your profile page. You can view and edit your
                     personal information
                   </>

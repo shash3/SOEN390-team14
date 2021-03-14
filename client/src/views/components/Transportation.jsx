@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // reactstrap components
@@ -169,6 +169,7 @@ const Transportation = (props) => {
       || type === ''
 
     ) {
+      // eslint-disable-next-line no-alert
       alert('Please Enter Data Into All Fields');
     } else {
       closeModal1();
