@@ -1,5 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
+
 /* eslint-disable no-undef */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
@@ -374,14 +375,28 @@ const QualityAssurance = () => {
                       </PaginationLink>
                     </PaginationItem>
 
-                    {Array.from(Array(Math.ceil(searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
-                      .slice(qualPage - 1 < 0 ? qualPage : (qualPage - 2 < 0 ? qualPage - 1 : qualPage - 2),
-                        (qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE ? qualPage + 2 : qualPage + 3))
+                    {Array.from(
+                      Array(
+                        Math.ceil(searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE),
+                      ).keys(),
+                    )
+                      .slice(
+                        qualPage - 1 < 0
+                          ? qualPage
+                          : qualPage - 2 < 0
+                            ? qualPage - 1
+                            : qualPage - 2,
+                        qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
+                          ? qualPage + 2
+                          : qualPage + 3,
+                      )
                       .map((idx) => (
-                        <PaginationItem className={idx === qualPage ? 'active' : ''}>
+                        <PaginationItem
+                          className={idx === invPage ? 'active' : ''}
+                        >
                           <PaginationLink
                             href=""
-                            onClick={() => setQualPage(idx)}
+                            onClick={() => setInvPage(idx)}
                           >
                             {idx + 1}
                           </PaginationLink>

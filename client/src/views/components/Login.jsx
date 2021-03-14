@@ -1,12 +1,16 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Link, Redirect } from "react-router-dom";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-undef */
+/* eslint-disable no-underscore-dangle */
+/* eslint no-console: ["error", { allow: ["error"] }] */
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 // reactstrap components
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -16,18 +20,17 @@ import {
   InputGroup,
   Row,
   Col,
-} from "reactstrap";
+} from 'reactstrap';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const [isAuthenticated, setAuthenticated] = useState(false);
   const { email, password } = formData;
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -36,19 +39,19 @@ const Login = () => {
       password: formData.password,
     };
     await axios
-      .post("/api/auth/login", body)
+      .post('/api/auth/login', body)
       .then((response) => {
         if (response.data.token) {
-          localStorage.setItem("user", JSON.stringify(response.data.token));
+          localStorage.setItem('user', JSON.stringify(response.data.token));
           localStorage.setItem(
-            "permission",
-            JSON.stringify(response.data.permission)
+            'permission',
+            JSON.stringify(response.data.permission),
           );
           setAuthenticated(true);
         }
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -121,7 +124,7 @@ const Login = () => {
           </CardBody>
         </Card>
         <Row className="mt-3">
-          <Col xs="6"></Col>
+          <Col xs="6" />
           <Col className="text-right" xs="6">
             <a className="text-light" href="/auth/register">
               <small>Create new account</small>
