@@ -1,27 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable consistent-return */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/jsx-closing-tag-location */
-/* eslint-disable radix */
-/* eslint-disable no-restricted-globals */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable import/extensions */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable import/no-unresolved */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-use-before-define */
-/* eslint-disable max-len */
-/* eslint-disable camelcase */
-/* eslint-disable eqeqeq */
-/* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // reactstrap components
@@ -83,6 +59,7 @@ const Production = (props) => {
   const [inventoryView, updateInventoryView] = useState(false);
   const [productlineView, updateProductlineView] = useState(false);
 
+
   // Toggle product line modal
   const toggleAddModal = () => {
     setAddModal(!addModal);
@@ -94,45 +71,38 @@ const Production = (props) => {
     setTransferModal(!transferModal);
   };
 
-  // add new product line modal
+  // Add new product line modal
   const [addModal, setAddModal] = useState(false);
   const [newProdName, setNewProdName] = useState('');
   const [newProdType, setNewProdType] = useState('final');
-  const [prodMatList, setProdMatList] = useState([
-    { matName: 'Leather', matQuantity: 1 },
-  ]);
-  const [
-    unstableAddInputsValidation,
-    setUnstableAddInputValidation,
-  ] = useState({ prodName: false, quantities: [true] });
-  const [addErrorMessages, setAddErrorMessages] = useState({
-    prodName: 'Cannot have an empty product name',
-    quantities: [''],
-  });
   const [disabledAddNewProd, setDisableAddNewProd] = useState(true);
+
+  // Shared between new product line & transfer product
+  const [materialList, setMaterialList] = useState([{ matName: 'Leather', matQuantity: 1 }]);
+  const [unstableInputValidation,setUnstableInputValidation,] = useState({ prodName: false, quantities: [true] });
+  const [errorMessages, setErrorMessages] = useState({prodName: 'Cannot have an empty product name', quantities: ['']});
 
   // Transfer product
   const [transferModal, setTransferModal] = useState(false);
-  const [disabledTransferModal, setDisableTransferModal] = useState(false);
   const [allLoc, setAllLoc] = useState([]);
   const [notCurLoc, setNotCurLoc] = useState([]);
+  const [locRetrieval, setLocRetrieval] = useState('');
+  const [disabledTransferButton, setDisableTransferButton] = useState(false);
+  const [createTransferOutputHTML, setCreateTransferOutputHTML] = useState([]);
+  
+  // Shared between create product & transfer product
+  const [hideConfirmBtns, setHiddenConfirmBtns] = useState(false);
+  const [hideLoading, setHiddenLoading] = useState(true);
 
   // create product modals
   const [createModal, setCreateModal] = useState(false);
   const [prodName, setProdName] = useState('');
   const [prodType, setProdType] = useState('');
   const [prodQuant, setProdQuant] = useState(1);
-  const [
-    unstableCreateInputsValidation,
-    setUnstableCreateInputValidation,
-  ] = useState({ quantity: true });
-  const [createErrorMessages, setCreateErrorMessages] = useState({
-    quantity: '',
-  });
+  const [unstableCreateInputsValidation,setUnstableCreateInputValidation,] = useState({ quantity: true });
+  const [createErrorMessages, setCreateErrorMessages] = useState({quantity: '',});
   const [disabledCreateNewProd, setDisableCreateNewProd] = useState(false);
   const [createProdOutputHTML, setCreateProdOutputHTML] = useState([]);
-  const [hideCreateBtns, setHiddenCreateBtns] = useState(false);
-  const [hideLoading, setHiddenLoading] = useState(true);
 
   // Loading Circle
   const { containerProps, indicatorEl } = useLoading({
@@ -140,61 +110,27 @@ const Production = (props) => {
     indicator: <Oval color="#11cdef" width="50px" />,
   });
 
-  /* -------------------------
-   * Functions dealing with the adding a new product line.
-   * --------------------------
+  /* ---------------------------
+   * Functions for both new product line and transfer product.
+   * ---------------------------
    */
 
   /**
-   * Initialize the add product line modal with initial values.
-   */
-  const initAddModal = () => {
-    toggleAddModal();
-    setNewProdName('');
-    setNewProdType('final');
-    setProdMatList([{ matName: 'Leather', matQuantity: 1 }]);
-    setUnstableAddInputValidation({ prodName: false, quantities: [true] });
-    setAddErrorMessages({
-      prodName: 'Cannot have an empty product name',
-      quantities: [''],
-    });
-    setDisableAddNewProd(true);
-  };
-
-  /**
-   *
-   * Initialize the transfer modal
-   */
-  const initTranferModal = () => {
-    toggleTransferModal();
-    setDisableTransferModal(true);
-  };
-
-  /**
-   * Update the new product line name.
-   *
-   * @param {Event} e the triggered event
-   */
-  const onNewProdChange = (e) => {
-    setNewProdName(e.target.value);
-  };
-
-  /**
-   * Updates the adding product line modal's material value based on the events target.
-   *
-   * @param {Event} e the triggered event
-   * @param {Number} index the material element's index in the modal
-   */
+     * Updates the adding product line modal's material value based on the events target.
+     *
+     * @param {Event} e the triggered event
+     * @param {Number} index the material element's index in the modal
+     */
   const handleMaterialChange = (e, index) => {
     const { name, value } = e.target;
     let title = name;
     if (name.includes('matQuantity')) {
-      const splt = name.split('_');
+      let splt = name.split('_');
       title = splt[0];
     }
-    const list = [...prodMatList];
+    const list = [...materialList];
     list[index][title] = value;
-    setProdMatList(list);
+    setMaterialList(list);
   };
 
   /**
@@ -203,48 +139,47 @@ const Production = (props) => {
    * @param {Number} index the material element's index in the modal
    */
   const removeMaterial = (index) => {
-    const list = [...prodMatList];
+    const list = [...materialList];
     list.splice(index, 1);
-    setProdMatList(list);
+    setMaterialList(list);
 
-    const inputs = unstableAddInputsValidation;
-    const matInputs = [...inputs.quantities];
+    let inputs = unstableInputValidation;
+    const matInputs = [...inputs['quantities']];
     matInputs.splice(index, 1);
-    inputs.quantities = matInputs;
-    setUnstableAddInputValidation(inputs);
+    inputs['quantities'] = matInputs;
+    setUnstableInputValidation(inputs);
 
-    const messages = addErrorMessages;
-    const matMess = [...messages.quantities];
+    let messages = errorMessages;
+    const matMess = [...messages['quantities']];
     matMess.splice(index, 1);
-    messages.quantities = matMess;
-    setAddErrorMessages(messages);
+    messages['quantities'] = matMess;
+    setErrorMessages(messages);
   };
+
   /**
    * Adds a new material element to the adding product line modal in the last position with default values.
    */
   const addMaterial = () => {
-    setProdMatList([...prodMatList, { matName: 'Leather', matQuantity: 1 }]);
+    setMaterialList([...materialList, { matName: 'Leather', matQuantity: 1 }]);
 
-    const inputs = unstableAddInputsValidation;
-    inputs.quantities = [...inputs.quantities, true];
-    setUnstableAddInputValidation(inputs);
+    let inputs = unstableInputValidation;
+    inputs['quantities'] = [...inputs['quantities'], true];
+    setUnstableInputValidation(inputs);
 
-    const messages = addErrorMessages;
-    messages.quantities = [...messages.quantities, ''];
-    setAddErrorMessages(messages);
+    let messages = errorMessages;
+    messages['quantities'] = [...messages['quantities'], ''];
+    setErrorMessages(messages);
   };
 
   /**
-   * Validates all the inputs that could be invalid and display an error message for adding a new product line.
-   * If any of the inputs are invalid, then the submit button is disabled.
+   * Sets the validity and error message if the input is invalid.
    *
    * @param {Event} e the triggered event
+   * @returns if all inputs are valid
    */
-  const validateUnstableAddInputs = (e) => {
-    const { name } = e.target;
-    const { value } = e.target;
-    const inputs = unstableAddInputsValidation;
-    const messages = addErrorMessages;
+   const setValidityErrors = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
 
     let valid = true;
     let message = '';
@@ -259,13 +194,14 @@ const Production = (props) => {
         if (value.trim().toLowerCase() == prod.name.trim().toLowerCase()) {
           valid = false;
           message = 'Cannot have two products with the same name';
+          return;
         }
       });
-      inputs[name] = valid;
-      messages[name] = message;
-
-      // Target is a quantity input
-    } else {
+      unstableInputValidation[name] = valid;
+      errorMessages[name] = message;
+    } 
+    // Target is a quantity input
+    else {
       if (isNaN(value)) {
         valid = false;
         message = 'Must be a number';
@@ -274,66 +210,267 @@ const Production = (props) => {
         message = 'Must be greater or equal to 1';
       }
 
-      const idx = Number(name.split('_')[1]);
-      inputs.quantities[idx] = valid;
-      messages.quantities[idx] = message;
+      let idx = Number(name.split('_')[1]);
+      unstableInputValidation['quantities'][idx] = valid;
+      errorMessages['quantities'][idx] = message;
     }
+  };
 
+  /**
+   * Returns whether all the unstable inputs are valid.
+   * 
+   * @returns true if all the inputs are valid; false otherwise
+   */
+  const returnIsUnstableInputValid = () => {
     // Disable add new product line if all inputs are not valid.
-    let isDisabled = !inputs.prodName;
-    inputs.quantities.forEach((validQuant) => {
+    let valid = unstableInputValidation['prodName'];
+    unstableInputValidation['quantities'].forEach((validQuant) => {
       if (!validQuant) {
-        isDisabled = true;
+        valid = false;
       }
     });
+    return valid;
+  }
 
-    setDisableAddNewProd(isDisabled);
-    setUnstableAddInputValidation(inputs);
-    setAddErrorMessages(messages);
+  /**
+   * Compacts an array of tuple of 2 elements so that there are no two tuples with the same first element.
+   * 
+   * @param {Array} looseList an array of tuples of 2 elements.
+   * @returns an array without duplicate keys
+   */
+   const returnCompactMaterialList = (looseList) => {
+    let compactList = [];
+    let names = [];
+    for (let index = 0; index < looseList.length; index++) {
+      const element = looseList[index];
+      const idx = inArray(element['matName'], names);
+      if (idx < 0) {
+        names.push(element['matName']);
+        compactList = [...compactList, [element['matName'], element['matQuantity']]];
+      } else {
+        const newQuantity = parseInt(compactList[idx][1]) + parseInt(element['matQuantity']);
+        compactList[idx] = [compactList[idx][0], newQuantity];
+      }
+    }
+    return compactList
+  }
+
+
+
+  /* -------------------------
+   * Functions dealing with the adding a new product line.
+   * --------------------------
+   */
+
+  /**
+   * Initialize the add product line modal with initial values.
+   */
+  const initAddModal = () => {
+    toggleAddModal();
+    setNewProdName('');
+    setNewProdType('final');
+    setMaterialList([{ matName: 'Leather', matQuantity: 1 }]);
+    setUnstableInputValidation({ prodName: false, quantities: [true] });
+    setErrorMessages({prodName: 'Cannot have an empty product name',quantities: ['']});
+
+    setDisableAddNewProd(true);
+    setHiddenLoading(true);
+  };
+
+  /**
+   * Validates all the inputs that could be invalid and display an error message for adding a new product line.
+   * If any of the inputs are invalid, then the submit button is disabled.
+   *
+   * @param {Event} e the triggered event
+   */
+  const validateUnstableAddInputs = (e) => {
+    setValidityErrors(e);
+    const disable = !returnIsUnstableInputValid();
+    setDisableAddNewProd(disable);
   };
 
   /**
    * Adds the new product defined in the modal to the database.
-   *
-   * @param {Event} e the triggered event.
    */
-  const addProduct = async (e) => {
-    let list = [];
-    const names = [];
-    for (let index = 0; index < prodMatList.length; index++) {
-      const element = prodMatList[index];
-      const idx = inArray(element.matName, names);
-      if (idx < 0) {
-        names.push(element.matName);
-        list = [...list, [element.matName, element.matQuantity]];
-      } else {
-        list[idx] = [
-          list[idx][0],
-          parseInt(list[idx][1]) + parseInt(element.matQuantity),
-        ];
+  const addProduct = async () => {
+    const materialArr = returnCompactMaterialList(materialList);
+    await addProductLine(newProdName, newProdType, materialArr);
+    updateProductlineView(!productlineView);
+  };
+
+
+
+  /* -------------------------
+   * Functions dealing with transfering Inventory.
+   * -------------------------
+   */
+
+  /**
+   * Initialize the transfer modal
+   */
+   const initTranferModal = () => {
+    toggleTransferModal();
+    setLocRetrieval(notCurLoc[0]);
+    setMaterialList([{ matName: 'Leather', matQuantity: 1 }]);
+    setUnstableInputValidation({ prodName: true, quantities: [true] });
+    setErrorMessages({prodName: '',quantities: ['']});
+    setDisableTransferButton(false);
+    setCreateTransferOutputHTML([]);
+    setHiddenConfirmBtns(false);
+    setHiddenLoading(true);
+  };
+
+  /**
+   * Validates all the inputs that could be invalid and display an error message for transfering materials.
+   * If any of the inputs are invalid, then the submit button is disabled.
+   *
+   * @param {Event} e the triggered event
+   */
+   const validateUnstableTransferInputs = (e) => {
+    setValidityErrors(e);
+    const disable = !returnIsUnstableInputValid();
+    setDisableTransferButton(disable);
+  };
+
+  /**
+   * Adds the new product defined in the modal to the database.
+   */
+  const transferProducts = async () => {
+    
+    const main = async () => {
+      setHiddenConfirmBtns(true);
+      setHiddenLoading(false);
+
+      try {
+        // Get material list compacted and which are invalid
+        const materialArr = returnCompactMaterialList(materialList);
+        const invalids = await returnInvalidMaterials(materialArr);
+        
+        // Check if there is are materials with not enough quantity to make the products.
+        if (invalids.length > 0){
+          setCreateTransferOutputHTML(createInvalidHTML(invalids));
+          setHiddenConfirmBtns(false);
+          return;
+        }
+        
+        // Send the products to the transportation department and remove items from inventory. Indicate that it was successful.
+        sendToTransportation(materialArr);
+        removeFromInventory(materialArr);
+        setCreateTransferOutputHTML(createSuccessHTML());
+
+      } finally {
+        setHiddenLoading(true);
+        updateInventoryView(!inventoryView);
       }
     }
 
-    await axios
-      .post(
-        '/api/product_line/add',
-        { name: newProdName, type: newProdType, material: list },
-        {
-          headers: {
-            'x-auth-token': userToken,
-          },
-        },
-      ).then(() => {
-        updateProductlineView(!productlineView);
-      })
-      .catch((err) => console.log('Error', err));
-  };
+    /**
+     * Loops through each material, which is an array composed of name and quantity, and determines if there is enough 
+     * of that material in inventory to create the desired number of products. Returns an array containing the materials 
+     * that did not have enough and the amount in inventory.
+     * 
+     * @param {Array} allMaterials an array of all materials needed to construct a product
+     * @returns an array of materials that do not have enough quantity in inventory
+     */
+    const returnInvalidMaterials = async (allMaterials) => {
+      let invalids = [];
+      for (let index = 0; index < allMaterials.length; index++) {
+        const material = allMaterials[index];
+        const name = material[0];
+        const num = material[1];
+        const inInventory = await returnQuantityInInventory(name, locRetrieval);
+        
+        if (inInventory < num * prodQuant){
+          invalids = [...invalids, {name:name, quantNeed:num * prodQuant, quantHave:inInventory}];
+        }
+      }
+      return invalids;
+    }
 
-  /* -------------------------
+    /**
+     * Removes all the materials from inventory. Each material is composed of its name and the quantity to be removed.
+     * 
+     * @param {Array} materialList the materials to be removes from inventory 
+     */
+    const removeFromInventory = (materialList) => {
+      materialList.forEach(material => {
+        const name = material[0];
+        const num = material[1];
+        const quantity = num * prodQuant;
+        decrementInventory(name, locRetrieval, quantity);
+      });
+    };
+
+    /**
+     * Sends a request to the transportation department for every material to be transfered.
+     * 
+     * @param {Array} materialList an array of the items and their quantities
+     */
+    const sendToTransportation = (materialList) => {
+      materialList.forEach(material => {
+        const name = material[0];
+        const quantity = material[1];
+        const itemType = returnTypeOfItem(name);
+        addTransportationShipment(name, quantity, itemType, locRetrieval, userLoc);
+      });
+    }
+
+    /**
+     * Returns the type of the item.
+     * 
+     * @param {String} name the name of the item
+     * @returns the type of the item
+     */
+    const returnTypeOfItem = (name) => {
+      for (let index = 0; index < materials.length; index++) {
+        const material = materials[index];
+        if (material['name'] === name) {
+          return material['type'];
+        }
+      }
+      for (let index = 0; index < product.length; index++) {
+        const prod = product[index];
+        if (prod['name'] === name) {
+          return prod['type'];
+        }
+      }
+    }
+
+    /**
+     * Creates an array of HTML elements to indicate that there are not enough of some materials available.
+     * 
+     * @param {Array} invalids list of materials with not enough quantity in inventory
+     * @returns An array of HTML elements
+     */
+    const createInvalidHTML = (invalids) => {
+      let html = [];
+      invalids.forEach(element => {
+        const {name, quantNeed, quantHave} = element;
+        html = [...html, <FormGroup><Button className='btn-danger' disabled>Don't have enough of <label className='text-indigo strong'>{name}</label> to 
+        transfer {quantNeed} from location {locRetrieval}.<br/> Only {quantHave} in inventory.</Button></FormGroup>];
+      });
+      return html
+    }
+
+    /**
+     * Creates an array of HTML elements to indicate that the transfer of the materials was successful.
+     * 
+     * @returns An array of HTML elements
+     */
+    const createSuccessHTML = () => {
+      const html = [<FormGroup><Button className='btn-success' disabled>Successfully requested materials to be shipped from location {locRetrieval} to location {userLoc}.</Button></FormGroup>];
+      return html;
+    }
+
+    main();
+  }
+
+  /* --------------------------
    * Functions dealing with the creating a product from the product line.
    * --------------------------
    */
 
+  
   /**
    * Initialize the create a product modal with initiaze values.
    *
@@ -348,7 +485,8 @@ const Production = (props) => {
     setCreateErrorMessages({ quantity: '' });
     setDisableCreateNewProd(false);
     setCreateProdOutputHTML([]);
-    setHiddenCreateBtns(false);
+    setHiddenConfirmBtns(false);
+    setHiddenLoading(true);
   };
 
   /**
@@ -367,8 +505,8 @@ const Production = (props) => {
    * @param {Event} e the triggered event
    */
   const validateUnstableCreateInputs = (e) => {
-    const { name } = e.target;
-    const { value } = e.target;
+    const name = e.target.name;
+    const value = e.target.value;
     const inputs = unstableCreateInputsValidation;
     const messages = createErrorMessages;
 
@@ -389,7 +527,7 @@ const Production = (props) => {
     }
 
     // Disable add new product line if all inputs are not valid.
-    const isDisabled = !inputs.quantity;
+    let isDisabled = !inputs['quantity'];
 
     setDisableCreateNewProd(isDisabled);
     setUnstableCreateInputValidation(inputs);
@@ -400,72 +538,74 @@ const Production = (props) => {
    * Creating product from product line.
    */
   const createProduct = async () => {
+
     /**
      * The main function to create the product.
      */
     const main = async () => {
-      setHiddenCreateBtns(true);
+      setHiddenConfirmBtns(true);
       setHiddenLoading(false);
 
       try {
         // Get all available machine at the user's location.
-        const availMachines = await returnAvailableMachines();
-
+        const availMachines = await returnAvailableMachines(userLoc);
+  
         // Check if there are enough machines to make the products.
         if (prodQuant > availMachines.length) {
-          const allMachines = await returnAllMachines();
+          const allMachines = await returnAllMachines(userLoc);
           const nextAvailable = await returnNextAvailable(allMachines);
           setCreateProdOutputHTML(createNoMachineHTML(availMachines.length, nextAvailable));
           return;
         }
-
+  
         // Get the materials to create the product.
-        const materialList = await returnProductLine();
+        const materialList = await returnProductLine(prodName);
         const invalids = await returnInvalidMaterials(materialList);
-
+  
         // Check if there is are materials with not enough quantity to make the products.
-        if (invalids.length > 0) {
+        if (invalids.length > 0){
           setCreateProdOutputHTML(createInvalidHTML(invalids));
           return;
         }
-
+        
         // Start the process to create the product by removing from inventory and adding it to production machines. Indicate that it was successful.
-        removeFromInventory(materialList);
         addToMachines(availMachines, prodName, prodType, prodQuant, userLoc);
+        removeFromInventory(materialList);
         setCreateProdOutputHTML(createSuccessHTML());
+
       } finally {
         setHiddenLoading(true);
         updateInventoryView(!inventoryView);
       }
-    };
+    }
 
     /**
      * Returns the finish_time of the machine that has an item and the smallest finish_time.
-     *
+     * 
      * @param {Array} allMachines an array of all the production machines
      * @returns the smallest finish_time
      */
     const returnNextAvailable = (allMachines) => {
       let nextAvailable = null;
-      allMachines.forEach((machine) => {
-        if (machine.item != '') {
-          if (nextAvailable == null) {
-            nextAvailable = new Date(machine.finish_time);
-          }
-          const machineDate = new Date(machine.finish_time);
+      allMachines.forEach(machine => {
+        if (machine['item'] != '') {
+          if (nextAvailable == null){
+            nextAvailable = new Date(machine['finish_time']);
+          } 
+          const machineDate = new Date(machine['finish_time']);
           if (machineDate.valueOf() < nextAvailable.valueOf()) {
             nextAvailable = machineDate;
           }
         }
       });
       return nextAvailable;
-    };
+    }
 
     /**
-     * Loops through each material, which is an array composed of name and quantity, and determines if there is enough
-     * of that material in inventory to create the desired number of products. Returns an array containing the materials
+     * Loops through each material, which is an array composed of name and quantity, and determines if there is enough 
+     * of that material in inventory to create the desired number of products. Returns an array containing the materials 
      * that did not have enough and the amount in inventory.
-     *
+     * 
      * @param {Array} allMaterials an array of all materials needed to construct a product
      * @returns an array of materials that do not have enough quantity in inventory
      */
@@ -476,21 +616,21 @@ const Production = (props) => {
         const name = material[0];
         const num = material[1];
         const inInventory = await returnQuantityInInventory(name, userLoc);
-
-        if (inInventory < num * prodQuant) {
-          invalids = [...invalids, { name, quantNeed: num * prodQuant, quantHave: inInventory }];
+        
+        if (inInventory < num * prodQuant){
+          invalids = [...invalids, {name:name, quantNeed:num * prodQuant, quantHave:inInventory}];
         }
       }
       return invalids;
-    };
+    }
 
     /**
      * Removes all the materials from inventory. Each material is composed of its name and the quantity to be removed.
-     *
-     * @param {Array} materialList the materials to be removes from inventory
+     * 
+     * @param {Array} materialList the materials to be removes from inventory 
      */
     const removeFromInventory = (materialList) => {
-      materialList.forEach((material) => {
+      materialList.forEach(material => {
         const name = material[0];
         const num = material[1];
         const quantity = num * prodQuant;
@@ -500,7 +640,7 @@ const Production = (props) => {
 
     /**
      * Adds the items to the production machines.
-     *
+     * 
      * @param {Array} availableMachines the list of available production machines at the user's location
      * @param {String} name the name of the item to be produced
      * @param {String} type the type of the item
@@ -509,98 +649,50 @@ const Production = (props) => {
     const addToMachines = (availableMachines, name, type, quantity) => {
       for (let index = 0; index < quantity; index++) {
         const machine = availableMachines[index];
-        addItemToMachine(machine._id, name, type);
+        addItemToMachine(machine['_id'], name, type)
       }
-    };
+      
+    }
 
     /**
      * Creates an array of HTML elements to indicate that there are not enough machines available.
-     *
+     * 
      * @param {BigInteger} available the number of available machines
      * @param {Date} nextAvailTime the date of the next available machine
      * @returns An array of HTML elements
      */
     const createNoMachineHTML = (available, nextAvailTime) => {
-      const html = [<FormGroup>
-        <Button className="btn-danger" disabled>
-          There are not enough machines available at your location (
-          {userLoc}
-          ). There are
-          {available}
-          {' '}
-          available,
-          the next available machine is at
-          {nextAvailTime.toString()}
-          .
-        </Button>
-      </FormGroup>];
+      const html = [<FormGroup><Button className='btn-danger' disabled>There are not enough machines available at your location ({userLoc}). {nextAvailTime == null ? '' : 'There are ' + available + ' available, ' +
+      'the next available machine is at ' + nextAvailTime.toString() + '.'}</Button></FormGroup>];
       return html;
-    };
+    }
 
     /**
      * Creates an array of HTML elements to indicate that there are not enough of some materials available.
-     *
+     * 
      * @param {Array} invalids list of materials with not enough quantity in inventory
      * @returns An array of HTML elements
      */
     const createInvalidHTML = (invalids) => {
       let html = [];
-      invalids.forEach((element) => {
-        const { name, quantNeed, quantHave } = element;
-        // const material = element['name'];
-        // const need = element[''];
-        // const have = element[2];
-        html = [...html, <FormGroup>
-          <Button className="btn-danger" disabled>
-            Don't have enough of
-            <label className="text-indigo strong">{name}</label>
-            {' '}
-            to
-            make
-            {prodQuant}
-            {' '}
-            {prodName}
-            {' '}
-            at your location (
-            {userLoc}
-            ).
-            <br />
-            Requires
-            {' '}
-            {quantNeed}
-            , but only
-            {' '}
-            {quantHave}
-            {' '}
-            in inventory.
-          </Button>
-        </FormGroup>];
+      invalids.forEach(element => {
+        const {name, quantNeed, quantHave} = element;
+        html = [...html, <FormGroup><Button className='btn-danger' disabled>Don't have enough of <label className='text-indigo strong'>{name}</label> to 
+        make {prodQuant} {prodName} at your location ({userLoc}).<br/>Requires {quantNeed}, but only {quantHave} in inventory.</Button></FormGroup>];
       });
-      return html;
-    };
+      return html
+    }
 
     /**
      * Creates an array of HTML elements to indicate that the creation of the material was successful.
-     *
+     * 
      * @returns An array of HTML elements
      */
     const createSuccessHTML = () => {
-      const html = [<FormGroup>
-        <Button className="btn-success" disabled>
-          Successfully creating
-          {prodQuant}
-          {' '}
-          <label className="text-indigo strong">{prodName}</label>
-          {' '}
-          in
-          production machines at
-          {' '}
-          {userLoc}
-          .
-        </Button>
-      </FormGroup>];
+      const html = [<FormGroup><Button className='btn-success' disabled>Successfully creating {prodQuant} <label className='text-indigo strong'>{prodName}</label> in 
+      production machines at {userLoc}.</Button></FormGroup>];
       return html;
-    };
+    }
 
     main();
   };
@@ -626,12 +718,12 @@ const Production = (props) => {
               setInventory(response.data);
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(function (error) {
+            console.error(error);
           });
       } else {
         const body = {
-          name: { $regex: `^${formData}`, $options: 'i' },
+          name: { $regex: '^' + formData, $options: 'i' },
         };
         await axios
           .post('/api/inventory', body, {
@@ -644,8 +736,8 @@ const Production = (props) => {
               setInventory(response.data);
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(function (error) {
+            console.error(error);
           });
       }
     };
@@ -665,12 +757,12 @@ const Production = (props) => {
               setProductLines(response.data);
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(function (error) {
+            console.error(error);
           });
       } else {
         const body = {
-          name: { $regex: `^${formProdData}`, $options: 'i' },
+          name: { $regex: '^' + formProdData, $options: 'i' },
         };
         await axios
           .post('/api/product_line', body, {
@@ -683,8 +775,8 @@ const Production = (props) => {
               setProductLines(response.data);
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(function (error) {
+            console.error(error);
           });
       }
     };
@@ -701,9 +793,9 @@ const Production = (props) => {
             'x-auth-token': userToken,
           },
         })
-        .catch((err) => console.log('Error', err));
+        .catch((err) => console.error('Error', err));
       if (response && response.data) {
-        const user = response.data;
+        var user = response.data;
         setUserLoc(user.location);
       }
     };
@@ -713,12 +805,13 @@ const Production = (props) => {
     const getAllLoc = async (userLoc) => {
       const response = await axios
         .get('/api/locations')
-        .catch((err) => console.log('Error', err));
+        .catch((err) => console.error('Error', err));
       if (response.data) {
         setAllLoc(response.data);
       }
     };
     getAllLoc();
+
 
     // Get all materials
     const getMaterialList = () => {
@@ -733,8 +826,8 @@ const Production = (props) => {
             setMaterials(response.data);
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(function (error) {
+          console.error(error);
         });
     };
     getMaterialList();
@@ -743,124 +836,213 @@ const Production = (props) => {
   useEffect(() => {
     // All Locations that are not the users
     const getNotCurLoc = async () => {
-      setNotCurLoc([]);
-      if (userLoc !== '') {
-        allLoc.forEach((loc) => {
-          if (loc.location !== userLoc) {
-            setNotCurLoc((notCurLoc) => [...notCurLoc, loc.location]);
-          }
-        });
-      }
-    };
-    getNotCurLoc();
-  }, [allLoc, userLoc]);
-
-  const returnAllMachines = () => {
+     setNotCurLoc([]);
+      if( userLoc !== '')
+     allLoc.forEach((loc) => {
+       if (loc.location !== userLoc) {
+         setNotCurLoc(notCurLoc => [...notCurLoc, loc.location])
+       } 
+     });
+   };
+   getNotCurLoc();
+  }, [allLoc, userLoc]);  
+     
+  
+  /**
+   * Returns all production machines at the location.
+   * 
+   * @param {String} location the location of the machines
+   * @returns all production machines
+   */
+  const returnAllMachines = (location) => {
     const response = axios.post('/api/machine/location',
       {
-        location: userLoc,
+        location: location
       },
       {
         headers: {
           'x-auth-token': userToken,
         },
-      }).then((response) => response.data).catch((err) => console.log('Error', err));
+      }
+    ).then((response) => {
+        return response.data;
+      }
+    ).catch((err) => console.error('Error', err));
 
     return response;
-  };
+  }
 
-  const returnAvailableMachines = () => {
+  /**
+   * Returns available production machines at the location.
+   * 
+   * @param {String} location the location of the machines
+   * @returns available production machines
+   */
+  const returnAvailableMachines = (location) => {
     const response = axios.post('/api/machine/available',
       {
-        location: userLoc,
+        location: location
       },
       {
         headers: {
           'x-auth-token': userToken,
         },
-      }).then((response) => response.data).catch((err) => console.log('Error', err));
+      }
+    ).then((response) => {
+        return response.data;
+      }
+    ).catch((err) => console.error('Error', err));
     return response;
-  };
+  }
 
-  const returnProductLine = () => {
+  /**
+   * Returns an array of materials from a product line. Each material is a tuple made up of the name and the quantity.
+   * 
+   * @param {String} productName the name of the product line
+   * @returns the materials for the product line
+   */
+  const returnProductLine = (productName) => {
     // Get materials for product.
-    const respoonse = axios.post('/api/product_line',
-      {
-        name: prodName,
+    const respoonse = axios.post('/api/product_line', 
+    { 
+      name: productName
+    },
+    {
+      headers: {
+      'x-auth-token': userToken,
       },
-      {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          const productLineMat = response.data[0].material;
-          return productLineMat;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    })
+    .then((response) => {
+      if (response.data) {
+        const productLineMat = response.data[0]['material'];
+        return productLineMat;
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
     return respoonse;
-  };
+  }
 
+  /**
+   * Returns the quantity of an item at a location in inventory. If the item does not exist, then it returns 0.
+   * 
+   * @param {String} name the name of the item in inventory
+   * @param {String} location the location of the item
+   * @returns the quantity of the item
+   */
   const returnQuantityInInventory = (name, location) => {
-    const inInventory = axios.post('/api/inventory/location',
-      {
-        name,
-        location,
+    const inInventory = axios.post('/api/inventory/location', 
+    { 
+      name: name,
+      location: location
+    },
+    {
+      headers: {
+      'x-auth-token': userToken,
       },
-      {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
+    }).then((response) => {
       if (response.data) {
         const material = response.data;
-        const inInventory = (material.length == 0 ? 0 : material[0].quantity);
+        const inInventory = (material.length == 0 ? 0 : material[0]['quantity']);
         return inInventory;
       }
-    }).catch((error) => {
-      console.log(error);
+    }).catch(function (error) {
+      console.error(error);
     });
     return inInventory;
-  };
+  }
 
+  /**
+   * Decrements a given quantity of items at a location from inventory.
+   * 
+   * @param {String} name the name of the item
+   * @param {String} location the location of the item
+   * @param {BigInteger} quantity the number of items to remove
+   */
   const decrementInventory = async (name, location, quantity) => {
-    await axios.put('/api/inventory/decrement',
-      {
-        name,
-        quantity,
-        location,
+    await axios.put('/api/inventory/decrement', 
+    { 
+      name: name,
+      quantity: quantity,
+      location: location
+    },
+    {
+      headers: {
+      'x-auth-token': userToken,
       },
-      {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).catch((error) => {
-      console.log(error);
+    }).catch(function (error) {
+      console.error(error);
     });
-  };
+  }
 
+  /**
+   * Adds an item into the machine. The item will be complete to be added to quality assurance after "MINUTE_TO_FINISH" is done.
+   * 
+   * @param {String} machine_key the key for the product machine
+   * @param {String} item name of the item to add
+   * @param {String} type the type of item
+   */  
   const addItemToMachine = async (machine_key, item, type) => {
     const MINUTES_TO_FINISH = 5;
     const final = new Date();
     final.setMinutes(new Date().getMinutes() + MINUTES_TO_FINISH);
 
     await axios.put('/api/machine/add',
-      {
-        _id: machine_key,
-        item,
-        type,
-        finish_time: final.toISOString(),
+    {
+      _id:machine_key,
+      item:item,
+      type:type,
+      finish_time:final.toISOString(),
+    },
+    {
+      headers: {
+        'x-auth-token': userToken,
       },
+    }).catch((err) => console.error('Error', err)); 
+  }
+
+  /**
+   * Creates a product line and adds it to the database. 
+   * 
+   * @param {String} name the name of the item
+   * @param {String} type the type of item
+   * @param {Array} material the array containing the material name and quantity
+   */
+  const addProductLine = async (name, type, material) => {
+    await axios
+    .post('/api/product_line/add',
+      { name: name, type: type, material: material },
       {
         headers: {
           'x-auth-token': userToken,
         },
-      }).catch((err) => console.log('Error', err));
-  };
+      }
+    )
+    .catch((err) => console.error('Error', err));
+  }
+
+  /**
+   * Adds a shipment request to the transportation department.
+   * 
+   * @param {String} name the name of the material 
+   * @param {BigInteger} quantity the quantity of the material
+   * @param {String} type the type of item
+   * @param {String} location the origin location
+   * @param {String} destination the destination location
+   */
+  const addTransportationShipment = async (name, quantity, type, location, destination) => {
+    await axios
+    .post('/api/transportation/add',
+      { name, quantity, type, location, destination, status : 'Awaiting Pickup' },
+      {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }
+    ).catch((err) => console.error('Error', err));
+  }
+
 
   /* ------------------------
    * Package for updating the production machine
@@ -877,60 +1059,65 @@ const Production = (props) => {
         const machines = await returnUnavailableMachines();
         for (let index = 0; index < machines.length; index++) {
           const machine = machines[index];
-          if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-            await addToQuality(machine.item, machine.type, userLoc);
-            await removeItemFromMachine(machine._id);
+          if ((new Date(machine['finish_time'])).valueOf() < (new Date()).valueOf()) {
+            
+            await addToQuality(machine['item'], machine['type'], userLoc);
+            await removeItemFromMachine(machine['_id']);
           }
         }
-      };
+      }
 
       const returnUnavailableMachines = () => {
         const response = axios.post('/api/machine/unavailable',
           {
-            location: userLoc,
+            location: userLoc
           },
           {
             headers: {
               'x-auth-token': userToken,
             },
-          }).then((response) => response.data).catch((err) => console.log('Error', err));
+          }
+        ).then((response) => {
+            return response.data;
+          }
+        ).catch((err) => console.error('Error', err));
         return response;
-      };
+      }
 
       const addToQuality = async (name, type, location) => {
-        await axios.post('/api/quality/add',
-          {
-            name,
-            type,
-            location,
+        await axios.post('/api/quality/add', 
+        { 
+          name: name,
+          type: type,
+          location: location,
+        },
+        {
+          headers: {
+          'x-auth-token': userToken,
           },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          }).catch((error) => {
-          console.log(error);
+        }).catch(function (error) {
+          console.error(error);
         });
-      };
-
+      }
+      
       const removeItemFromMachine = async (key) => {
         await axios.put('/api/machine/remove',
-          {
-            _id: key,
+        {
+          _id:key,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
           },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          }).catch((err) => console.log('Error', err));
-      };
+        }).catch((err) => console.error('Error', err));
+      }
 
       main();
-    };
+    }
 
     checkProductionFinished();
   }, [refreshMachines]);
-
+  
   useEffect(() => {
     setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
   }, []);
@@ -986,7 +1173,7 @@ const Production = (props) => {
                         outline
                         color="primary"
                         onClick={() => {
-                          // TODO: order from this tab or redirect to procurement tab
+                          //TODO: order from this tab or redirect to procurement tab
                         }}
                       >
                         Order
@@ -1008,7 +1195,7 @@ const Production = (props) => {
                   {inventory
                     .slice(
                       invPage * NUM_OF_ITEMS_IN_A_PAGE,
-                      (invPage + 1) * NUM_OF_ITEMS_IN_A_PAGE,
+                      (invPage + 1) * NUM_OF_ITEMS_IN_A_PAGE
                     )
                     .map((m) => (
                       <tr key={m.id} value={m.name}>
@@ -1085,18 +1272,18 @@ const Production = (props) => {
 
                     {Array.from(
                       Array(
-                        Math.ceil(inventory.length / NUM_OF_ITEMS_IN_A_PAGE),
-                      ).keys(),
+                        Math.ceil(inventory.length / NUM_OF_ITEMS_IN_A_PAGE)
+                      ).keys()
                     )
                       .slice(
                         invPage - 1 < 0
                           ? invPage
                           : invPage - 2 < 0
-                            ? invPage - 1
-                            : invPage - 2,
+                          ? invPage - 1
+                          : invPage - 2,
                         invPage + 1 >= inventory.length / NUM_OF_ITEMS_IN_A_PAGE
                           ? invPage + 2
-                          : invPage + 3,
+                          : invPage + 3
                       )
                       .map((idx) => (
                         <PaginationItem
@@ -1169,7 +1356,7 @@ const Production = (props) => {
                       <Button
                         outline
                         color="primary"
-                        onClick={() => { initAddModal(); }}
+                        onClick={() => {initAddModal();}}
                       >
                         Add New Product Line
                       </Button>
@@ -1188,7 +1375,7 @@ const Production = (props) => {
                   {product
                     .slice(
                       prodPage * NUM_OF_ITEMS_IN_A_PAGE,
-                      (prodPage + 1) * NUM_OF_ITEMS_IN_A_PAGE,
+                      (prodPage + 1) * NUM_OF_ITEMS_IN_A_PAGE
                     )
                     .map((m) => (
                       <tr key={m.id} value={m.name}>
@@ -1233,18 +1420,18 @@ const Production = (props) => {
 
                     {Array.from(
                       Array(
-                        Math.ceil(product.length / NUM_OF_ITEMS_IN_A_PAGE),
-                      ).keys(),
+                        Math.ceil(product.length / NUM_OF_ITEMS_IN_A_PAGE)
+                      ).keys()
                     )
                       .slice(
                         prodPage - 1 < 0
                           ? prodPage
                           : prodPage - 2 < 0
-                            ? prodPage - 1
-                            : prodPage - 2,
+                          ? prodPage - 1
+                          : prodPage - 2,
                         prodPage + 1 >= product.length / NUM_OF_ITEMS_IN_A_PAGE
                           ? prodPage + 2
-                          : prodPage + 3,
+                          : prodPage + 3
                       )
                       .map((idx) => (
                         <PaginationItem
@@ -1282,7 +1469,7 @@ const Production = (props) => {
         </Row>
       </Container>
 
-      {/** Modal For Add Product */}
+      {/** Modal For Add Product*/}
       <div>
         <Modal isOpen={addModal} toggle={toggleAddModal}>
           <ModalHeader toggle={toggleAddModal}>Add New Product</ModalHeader>
@@ -1294,19 +1481,17 @@ const Production = (props) => {
                 </label>
                 <InputGroup className="input-group-alternative">
                   <Input
-                    invalid={!unstableAddInputsValidation.prodName}
+                    invalid={!unstableInputValidation['prodName']}
                     type="text"
                     name="prodName"
                     required
                     onChange={(e) => {
-                      onNewProdChange(e);
+                      setNewProdName(e.target.value);
                       validateUnstableAddInputs(e);
                     }}
                   />
                   <FormFeedback className="invalid-tooltip" type="invalid">
-                    Error:
-                    {' '}
-                    {addErrorMessages.prodName}
+                    Error: {errorMessages['prodName']}
                   </FormFeedback>
                 </InputGroup>
               </FormGroup>
@@ -1329,7 +1514,7 @@ const Production = (props) => {
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
-                {prodMatList.map((x, i) => (
+                {materialList.map((x, i) => (
                   <div className="box">
                     <label>
                       <span
@@ -1342,9 +1527,7 @@ const Production = (props) => {
                           paddingRight: '50px',
                         }}
                       >
-                        Material
-                        {' '}
-                        {i + 1}
+                        Material {i + 1}
                       </span>
                     </label>
 
@@ -1364,7 +1547,7 @@ const Production = (props) => {
                     <InputGroup className="input-group-alternative">
                       <Input
                         type="select"
-                        name="matName"
+                        name={'matName'}
                         value={x.matName}
                         onChange={(e) => handleMaterialChange(e, i)}
                       >
@@ -1382,24 +1565,22 @@ const Production = (props) => {
                         type="number"
                         min="1"
                         className="ml10"
-                        name={`matQuantity_${i}`}
+                        name={'matQuantity_' + i}
                         value={x.matQuantity}
-                        invalid={!unstableAddInputsValidation.quantities[i]}
+                        invalid={!unstableInputValidation['quantities'][i]}
                         onChange={(e) => {
                           handleMaterialChange(e, i);
                           validateUnstableAddInputs(e);
                         }}
                       />
                       <FormFeedback className="invalid-tooltip" type="invalid">
-                        Error:
-                        {' '}
-                        {addErrorMessages.quantities[i]}
+                        Error: {errorMessages['quantities'][i]}
                       </FormFeedback>
-                      {prodMatList.length !== 1 && (
+                      {materialList.length !== 1 && (
                         <Button
                           color="secondary"
                           className="mr10"
-                          onClick={() => removeMaterial(i)}
+                          onClick={() => {removeMaterial(i); setDisableAddNewProd(!returnIsUnstableInputValid());}}
                         >
                           Remove
                         </Button>
@@ -1417,8 +1598,8 @@ const Production = (props) => {
             <Button
               disabled={disabledAddNewProd}
               color="primary"
-              onClick={(e) => {
-                addProduct(e);
+              onClick={() => {
+                addProduct();
                 toggleAddModal();
               }}
             >
@@ -1431,7 +1612,7 @@ const Production = (props) => {
         </Modal>
       </div>
 
-      {/** Modal For Create Product */}
+      {/** Modal For Create Product*/}
       <div>
         <Modal isOpen={createModal} toggle={toggleCreateModal}>
           <ModalHeader toggle={toggleCreateModal}>Create Product</ModalHeader>
@@ -1472,24 +1653,22 @@ const Production = (props) => {
                       onProdQuantChange(e);
                       validateUnstableCreateInputs(e);
                     }}
-                    invalid={!unstableCreateInputsValidation.quantity}
+                    invalid={!unstableCreateInputsValidation['quantity']}
                   />
                   <FormFeedback className="invalid-tooltip" type="invalid">
-                    Error:
-                    {' '}
-                    {createErrorMessages.quantity}
+                    Error: {createErrorMessages['quantity']}
                   </FormFeedback>
                 </InputGroup>
               </FormGroup>
-              {createProdOutputHTML.map((m) => m)}
             </Form>
           </ModalBody>
           <ModalFooter>
+            {createProdOutputHTML.map((m) => m)}
             <FormGroup hidden={hideLoading}>
               <section {...containerProps}>{indicatorEl}</section>
             </FormGroup>
             <Button
-              hidden={hideCreateBtns}
+              hidden={hideConfirmBtns}
               disabled={disabledCreateNewProd}
               color="primary"
               onClick={() => {
@@ -1499,7 +1678,7 @@ const Production = (props) => {
               Confirm
             </Button>
             <Button
-              hidden={hideCreateBtns}
+              hidden={hideConfirmBtns}
               color="secondary"
               onClick={toggleCreateModal}
             >
@@ -1509,7 +1688,7 @@ const Production = (props) => {
         </Modal>
       </div>
 
-      {/** Modal For Transfering Product */}
+      {/** Modal For Transfering Product*/}
       <div>
         <Modal isOpen={transferModal} toggle={toggleTransferModal}>
           <ModalHeader toggle={toggleTransferModal}>
@@ -1519,7 +1698,7 @@ const Production = (props) => {
             <Form className="form" name="addProductForm">
               <FormGroup>
                 <label>
-                  <span className="text-muted">Your Location</span>
+                  <span className="text-muted">Transfer To</span>
                 </label>
                 <InputGroup className="input-group-alternative">
                   <Input disabled type="text" name="location" value={userLoc} />
@@ -1527,7 +1706,7 @@ const Production = (props) => {
               </FormGroup>
               <FormGroup className="mb-3">
                 <label>
-                  <span className="text-muted">Desired Location</span>
+                  <span className="text-muted">Transfer From</span>
                 </label>
                 <InputGroup className="input-group-alternative">
                   <Input
@@ -1535,7 +1714,7 @@ const Production = (props) => {
                     name="location"
                     required
                     onChange={(e) => {
-                      setNewProdType(e.target.value);
+                      setLocRetrieval(e.target.value);
                     }}
                   >
                     {[...notCurLoc].map((m) => (
@@ -1545,7 +1724,7 @@ const Production = (props) => {
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
-                {prodMatList.map((x, i) => (
+                {materialList.map((x, i) => (
                   <div className="box">
                     <label>
                       <span
@@ -1558,9 +1737,7 @@ const Production = (props) => {
                           paddingRight: '50px',
                         }}
                       >
-                        Material
-                        {' '}
-                        {i + 1}
+                        Material {i + 1}
                       </span>
                     </label>
 
@@ -1580,7 +1757,7 @@ const Production = (props) => {
                     <InputGroup className="input-group-alternative">
                       <Input
                         type="select"
-                        name="matName"
+                        name={'matName'}
                         value={x.matName}
                         onChange={(e) => handleMaterialChange(e, i)}
                       >
@@ -1598,24 +1775,22 @@ const Production = (props) => {
                         type="number"
                         min="1"
                         className="ml10"
-                        name={`matQuantity_${i}`}
+                        name={'matQuantity_' + i}
                         value={x.matQuantity}
-                        invalid={!unstableAddInputsValidation.quantities[i]}
+                        invalid={!unstableInputValidation['quantities'][i]}
                         onChange={(e) => {
                           handleMaterialChange(e, i);
-                          validateUnstableAddInputs(e);
+                          validateUnstableTransferInputs(e);
                         }}
                       />
                       <FormFeedback className="invalid-tooltip" type="invalid">
-                        Error:
-                        {' '}
-                        {addErrorMessages.quantities[i]}
+                        Error: {errorMessages['quantities'][i]}
                       </FormFeedback>
-                      {prodMatList.length !== 1 && (
+                      {materialList.length !== 1 && (
                         <Button
                           color="secondary"
                           className="mr10"
-                          onClick={() => removeMaterial(i)}
+                          onClick={() => {removeMaterial(i); setDisableTransferButton(!returnIsUnstableInputValid());}}
                         >
                           Remove
                         </Button>
@@ -1630,17 +1805,26 @@ const Production = (props) => {
             </Button>
           </ModalBody>
           <ModalFooter>
+            {createTransferOutputHTML.map((m) => m)}
+            <FormGroup hidden={hideLoading}>
+              <section {...containerProps}>{indicatorEl}</section>
+            </FormGroup>
             <Button
-              disabled={disabledTransferModal}
+              hidden={hideConfirmBtns}
+              disabled={disabledTransferButton}
               color="primary"
-              onClick={(e) => {
-                // addProduct(e);
-                // TODO send info to Transpo tab
+              onClick={() => {
+                transferProducts();
+                // TODO send info to Transpo tab 
               }}
             >
               Confirm
             </Button>
-            <Button color="secondary" onClick={toggleTransferModal}>
+            <Button 
+              hidden={hideConfirmBtns}
+              color="secondary" 
+              onClick={toggleTransferModal}
+            >
               Cancel
             </Button>
           </ModalFooter>
