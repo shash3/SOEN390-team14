@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
+/* eslint-disable no-undef */
+/* eslint-disable no-underscore-dangle */
+/* eslint no-console: ["error", { allow: ["error"] }] */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
@@ -14,7 +18,6 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
@@ -24,41 +27,34 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  UncontrolledTooltip,
   ModalHeader,
   ModalBody,
   ModalFooter,
   Button,
   Modal,
-  Col,
-} from "reactstrap";
+} from 'reactstrap';
 // core components
-import Header from "components/Headers/CardlessHeader.js";
+import Header from '../../components/Headers/CardlessHeader';
 
 const Transportation = (props) => {
-  const userToken = JSON.parse(localStorage.getItem("user"));
+  const userToken = JSON.parse(localStorage.getItem('user'));
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
   const [transportationData, setTransportationData] = useState({
-    _id: "",
-    name: "",
+    _id: '',
+    name: '',
     quantity: 0,
-    type:"",
-    location: "",
-    destination: "",
-    status: "",
+    type: '',
+    location: '',
+    destination: '',
+    status: '',
   });
-  const [selectStatus,setSelectStatus]=useState("");
-
   const [tranPage, setTranPage] = useState(0);
   const [packPage, setPackPage] = useState(0);
-
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
-
-  const onSelectStatus = (e) => {
-    setSelectStatus(e.target.value);
-  }
-  const { name, quantity,type, location, destination, status } = transportationData;
+  const {
+    name, quantity, type, location, destination,
+  } = transportationData;
   const onChangeAdd = (e) => {
     setTransportationData({
       ...transportationData,
@@ -66,35 +62,50 @@ const Transportation = (props) => {
     });
   };
   // search input
-  const [formData, setFormData] = useState("");
+  const [formData, setFormData] = useState('');
 
   const onChange = (e) => setFormData(e.target.value);
 
   const [updated, setUpdated] = useState(false);
+
+  // Info for Modal
+  const [className] = props;
+  const [modal, setModal] = useState(false);
+  const [modal1, setModal1] = useState(false);
+
+  // Close Status Modal
+  function closeModal() {
+    setModal(!modal);
+  }
+
+  // Close Add Modal
+  function closeModal1() {
+    setModal1(!modal1);
+  }
 
   // get shipmeny information
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
       await axios
-          .get("/api/transportation/packaging", {
-            headers: {
-              "x-auth-token": userToken,
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              setPackaging(response.data);
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      if (formData === "") {
+        .get('/api/transportation/packaging', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setPackaging(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      if (formData === '') {
         await axios
-          .get("/api/transportation", {
+          .get('/api/transportation', {
             headers: {
-              "x-auth-token": userToken,
+              'x-auth-token': userToken,
             },
           })
           .then((response) => {
@@ -102,17 +113,17 @@ const Transportation = (props) => {
               setTransportation(response.data);
             }
           })
-          .catch(function (error) {
-            console.log(error);
+          .catch((error) => {
+            console.error(error);
           });
       } else {
         const body = {
-          name: { $regex: "^" + formData, $options: 'i' },
+          name: { $regex: `^${formData}`, $options: 'i' },
         };
         await axios
-          .post("/api/transportation", body, {
+          .post('/api/transportation', body, {
             headers: {
-              "x-auth-token": userToken,
+              'x-auth-token': userToken,
             },
           })
           .then((response) => {
@@ -120,48 +131,45 @@ const Transportation = (props) => {
               setTransportation(response.data);
             }
           })
-          .catch(function (error) {
-            console.log(error);
+          .catch((error) => {
+            console.error(error);
           });
       }
     };
     lookup();
   }, [formData, updated]);
 
-  const onSetReady = async(_id) => {
-    
+  const onSetReady = async (_id) => {
     const id = {
-      _id
-    }
+      _id,
+    };
     const body = JSON.stringify(id);
     try {
       await axios
-        .post("/api/transportation/sendShipment", body, {
+        .post('/api/transportation/sendShipment', body, {
           headers: {
-            "x-auth-token": userToken,
-            "Content-Type": "application/json",
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
           },
         })
         .then(() => {
           setUpdated(!updated);
         });
     } catch (err) {
-      console.log(err.response.data);
+      console.error(err.response.data);
     }
+  };
 
-
-  }
-
-  const onAdd = async (e) => {
+  const onAdd = async () => {
     if (
-      name == "" ||
-      quantity == 0 ||
-      location == "" ||
-      destination == 0 ||
-      type == ""
+      name === ''
+      || quantity === 0
+      || location === ''
+      || destination === 0
+      || type === ''
 
     ) {
-      window.alert("Please Enter Data Into All Fields");
+      alert('Please Enter Data Into All Fields');
     } else {
       closeModal1();
 
@@ -171,91 +179,67 @@ const Transportation = (props) => {
         type,
         location,
         destination,
-        status:"Awaiting Pickup",
+        status: 'Awaiting Pickup',
       };
 
       const body = JSON.stringify(newTransportation);
 
       try {
         await axios
-          .post("/api/transportation/add", body, {
+          .post('/api/transportation/add', body, {
             headers: {
-              "x-auth-token": userToken,
-              "Content-Type": "application/json",
+              'x-auth-token': userToken,
+              'Content-Type': 'application/json',
             },
           })
           .then(() => {
             setUpdated(!updated);
           });
       } catch (err) {
-        console.log(err.response.data);
+        console.error(err);
       }
     }
   };
 
-  const onChangeStatus = async(_id,status) => {
-   
-   
+  const onChangeStatus = async (_id, status) => {
     const data = {
       _id,
-      status
+      status,
     };
     const body = JSON.stringify(data);
 
-     
     try {
       await axios
-      .post("/api/transportation/changeStatus", body, {
-        headers: {
-          "x-auth-token": userToken,
-          "Content-Type": "application/json",
-        },
-      }).then(closeModal).then(setUpdated(!updated));
-
-  }
-  catch (err) {
-    console.log(err.response.data);
-  }
-}
+        .post('/api/transportation/changeStatus', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        }).then(closeModal).then(setUpdated(!updated));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const onDelete = async (_id) => {
     const shipmentId = {
       _id,
 
     };
-
-    console.log(_id);
     const body = JSON.stringify(shipmentId);
     try {
       await axios
-        .post("/api/transportation/delete", body, {
+        .post('/api/transportation/delete', body, {
           headers: {
-            "x-auth-token": userToken,
-            "Content-Type": "application/json",
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
           },
         })
         .then(setUpdated(!updated));
     } catch (err) {
-      console.log(err.response.data);
+      console.error(err);
     }
   };
-
-  //Info for Modal
-  const { buttonLabel, className } = props;
-  const [modal, setModal] = useState(false);
-  const [modal1, setModal1] = useState(false);
-
-  //Close Status Modal
-  function closeModal() {
-    setModal(!modal);
-  }
-
-  //Close Add Modal
-  function closeModal1() {
-    setModal1(!modal1);
-  }
-
-
 
   return (
     <>
@@ -272,7 +256,7 @@ const Transportation = (props) => {
                   <FormGroup className="mb-3 mt-3">
                     <InputGroup
                       className="input-group-alternative"
-                      style={{ backgroundColor: "#2181EC" }}
+                      style={{ backgroundColor: '#2181EC' }}
                     >
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
@@ -282,7 +266,7 @@ const Transportation = (props) => {
                       <Input
                         placeholder="Search"
                         type="text"
-                        onChange={(e) => {onChange(e); setTranPage(0);}}
+                        onChange={(e) => { onChange(e); setTranPage(0); }}
                       />
                     </InputGroup>
                   </FormGroup>
@@ -294,13 +278,13 @@ const Transportation = (props) => {
                   onClick={() => {
                     closeModal1();
                     setTransportationData({
-                      _id: "",
-                      name: "",
+                      _id: '',
+                      name: '',
                       quantity: 0,
-                      type:"",
-                      location: "",
-                      destination: "",
-                      status: "",
+                      type: '',
+                      location: '',
+                      destination: '',
+                      status: '',
                     });
                   }}
                 >
@@ -390,7 +374,6 @@ const Transportation = (props) => {
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
-                    <th scope="col" />
                   </tr>
                 </thead>
                 <tbody>
@@ -423,23 +406,26 @@ const Transportation = (props) => {
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
-                             href="#pablo" 
-                            onClick={(e)=> onChangeStatus(t._id,"Awaiting Pickup")}>
+                              href="#pablo"
+                              onClick={() => onChangeStatus(t._id, 'Awaiting Pickup')}
+                            >
                               Awaiting Pickup
                             </DropdownItem>
-                            <DropdownItem 
-                            href="#pablo" 
-                            onClick={(e)=> onChangeStatus(t._id,"In Transit")}>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onChangeStatus(t._id, 'In Transit')}
+                            >
                               In Transit
                             </DropdownItem>
-                            <DropdownItem 
-                            href="#pablo"
-                            onClick={(e)=> onChangeStatus(t._id,"Completed")}>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onChangeStatus(t._id, 'Completed')}
+                            >
                               Completed
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
-                              onClick={(e) => onDelete(t._id)}
+                              onClick={() => onDelete(t._id)}
                             >
                               Delete Shipment
                             </DropdownItem>
@@ -456,7 +442,7 @@ const Transportation = (props) => {
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
-                    <PaginationItem className={tranPage - 1 < 0 ? "disabled" : "active" }>
+                    <PaginationItem className={tranPage - 1 < 0 ? 'disabled' : 'active'}>
                       <PaginationLink
                         href=""
                         onClick={() => setTranPage(tranPage - 1)}
@@ -468,19 +454,28 @@ const Transportation = (props) => {
                     </PaginationItem>
 
                     {Array.from(Array(Math.ceil(transportation.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
-                    .slice(tranPage - 1 < 0 ? tranPage : tranPage - 2 < 0 ? tranPage-1: tranPage-2 , tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE ? tranPage+2 : tranPage+3 )
-                    .map((idx) => (
-                      <PaginationItem className={idx == tranPage ? "active" : "" }>
-                        <PaginationLink
-                          href=""
-                          onClick={() => setTranPage(idx)}
-                        >
-                          {idx + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
+                      .slice(
+                        tranPage - 1 < 0
+                          ? tranPage
+                          : tranPage - 2 < 0
+                            ? tranPage - 1
+                            : tranPage - 2,
+                        tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE
+                          ? tranPage + 2
+                          : tranPage + 3,
+                      )
+                      .map((idx) => (
+                        <PaginationItem className={idx === tranPage ? 'active' : ''}>
+                          <PaginationLink
+                            href=""
+                            onClick={() => setTranPage(idx)}
+                          >
+                            {idx + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
 
-                    <PaginationItem className={tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
+                    <PaginationItem className={tranPage + 1 >= transportation.length / NUM_OF_ITEMS_IN_A_PAGE ? 'disabled' : 'active'}>
                       <PaginationLink
                         href=""
                         onClick={() => setTranPage(tranPage + 1)}
@@ -498,7 +493,7 @@ const Transportation = (props) => {
         <br />
         <br />
 
-        {/* Packaging Table*/}
+        {/* Packaging Table */}
 
         <Row>
           <div className="col">
@@ -508,18 +503,17 @@ const Transportation = (props) => {
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Location</th>
-                  <th scope="col">Destination</th>
-                  <th scope="col" />
-                </tr>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Destination</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {packaging.slice(packPage * NUM_OF_ITEMS_IN_A_PAGE, (packPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
+                  {packaging.slice(packPage * NUM_OF_ITEMS_IN_A_PAGE, (packPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
                         <Media className="align-items-center">
@@ -536,22 +530,22 @@ const Transportation = (props) => {
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
                           >
                             <i className="fas fa-ellipsis-v" />
                           </DropdownToggle>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem href="#pablo" onClick={(e) => onSetReady(t._id)}>
+                            <DropdownItem href="#pablo" onClick={() => onSetReady(t._id)}>
                               Ready
                             </DropdownItem>
                             <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => onDelete(t._id)}
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
                             >
                               Delete Shipment
                             </DropdownItem>
@@ -559,7 +553,7 @@ const Transportation = (props) => {
                         </UncontrolledDropdown>
                       </td>
                     </tr>
-                ))}
+                  ))}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
@@ -568,7 +562,7 @@ const Transportation = (props) => {
                     className="pagination justify-content-end mb-0"
                     listClassName="justify-content-end mb-0"
                   >
-                    <PaginationItem className={packPage - 1 < 0 ? "disabled" : "active" }>
+                    <PaginationItem className={packPage - 1 < 0 ? 'disabled' : 'active'}>
                       <PaginationLink
                         href=""
                         onClick={() => setPackPage(packPage - 1)}
@@ -580,19 +574,19 @@ const Transportation = (props) => {
                     </PaginationItem>
 
                     {Array.from(Array(Math.ceil(packaging.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
-                    .slice(packPage - 1 < 0 ? packPage : packPage - 2 < 0 ? packPage-1: packPage-2 , packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? packPage+2 : packPage+3 )
-                    .map((idx) => (
-                      <PaginationItem className={idx == packPage ? "active" : "" }>
-                        <PaginationLink
-                          href=""
-                          onClick={() => setPackPage(idx)}
-                        >
-                          {idx + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
+                      .slice(packPage - 1 < 0 ? packPage : packPage - 2 < 0 ? packPage - 1 : packPage - 2, packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? packPage + 2 : packPage + 3)
+                      .map((idx) => (
+                        <PaginationItem className={idx === packPage ? 'active' : ''}>
+                          <PaginationLink
+                            href=""
+                            onClick={() => setPackPage(idx)}
+                          >
+                            {idx + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
 
-                    <PaginationItem className={packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
+                    <PaginationItem className={packPage + 1 >= packaging.length / NUM_OF_ITEMS_IN_A_PAGE ? 'disabled' : 'active'}>
                       <PaginationLink
                         href=""
                         onClick={() => setPackPage(packPage + 1)}

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Link, Redirect } from "react-router-dom";
+/* eslint-disable no-undef */
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 // reactstrap components
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -16,18 +16,20 @@ import {
   InputGroup,
   Row,
   Col,
-} from "reactstrap";
+} from 'reactstrap';
 
 const Register = () => {
-  const [isAuthenticated, setAuthenticated] = useState(false) ;
+  const [isAuthenticated, setAuthenticated] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password2: "",
+    name: '',
+    email: '',
+    password: '',
+    password2: '',
   });
 
-  const { name, email, password, password2 } = formData;
+  const {
+    name, email, password, password2,
+  } = formData;
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,9 +37,7 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (password != password2) {
-      console.log("passwords do not match");
-    } else {
+    if (password === password2) {
       const newUser = {
         name,
         email,
@@ -47,28 +47,27 @@ const Register = () => {
       try {
         const config = {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         };
-        console.log(newUser);
         const body = JSON.stringify(newUser);
         const response = await axios.post(
-          "/api/users/register",
+          '/api/users/register',
           body,
-          config
+          config,
         );
-        localStorage.setItem("user", JSON.stringify(response.data.token));
+        localStorage.setItem('user', JSON.stringify(response.data.token));
         setAuthenticated(true);
       } catch (err) {
-        console.log(err.response.data);
+        console.error(err);
       }
     }
   };
 
-// redirect when logged in
-if(isAuthenticated) {
-  return <Redirect to="/admin/user-profile"/>
-}
+  // redirect when logged in
+  if (isAuthenticated) {
+    return <Redirect to="/admin/user-profile" />;
+  }
 
   return (
     <>
@@ -148,7 +147,8 @@ if(isAuthenticated) {
               </FormGroup>
               <div className="text-muted font-italic">
                 <small>
-                  password strength:{" "}
+                  password strength:
+                  {' '}
                   <span className="text-success font-weight-700">strong</span>
                 </small>
               </div>
@@ -165,7 +165,8 @@ if(isAuthenticated) {
                       htmlFor="customCheckRegister"
                     >
                       <span className="text-muted">
-                        I agree with the{" "}
+                        I agree with the
+                        {' '}
                         <a href="#pablo" onClick={(e) => e.preventDefault()}>
                           Privacy Policy
                         </a>
