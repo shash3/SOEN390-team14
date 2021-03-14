@@ -392,11 +392,11 @@ const QualityAssurance = () => {
                       )
                       .map((idx) => (
                         <PaginationItem
-                          className={idx === invPage ? 'active' : ''}
+                          className={idx === qualPage ? 'active' : ''}
                         >
                           <PaginationLink
                             href=""
-                            onClick={() => setInvPage(idx)}
+                            onClick={() => setQualPage(idx)}
                           >
                             {idx + 1}
                           </PaginationLink>
