@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import axios from 'axios';
 // reactstrap components
 import {
   DropdownMenu,
@@ -17,7 +22,7 @@ import {
   Nav,
   Container,
   Media,
-} from "reactstrap";
+} from 'reactstrap';
 
 const AdminNavbar = (props) => {
   const [user, setUser] = useState({});
@@ -26,15 +31,15 @@ const AdminNavbar = (props) => {
   // get user information
   useEffect(() => {
     const getUserInformation = async () => {
-      const userToken = JSON.parse(localStorage.getItem("user"));
+      const userToken = JSON.parse(localStorage.getItem('user'));
 
       const response = await axios
-        .get("/api/auth", {
+        .get('/api/auth', {
           headers: {
-            "x-auth-token": userToken,
+            'x-auth-token': userToken,
           },
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => console.error(err));
       if (response && response.data) {
         setUser(response.data);
       }
@@ -44,8 +49,8 @@ const AdminNavbar = (props) => {
 
   // logout (remove token)
   const loggingOut = (e) => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("permission");
+    localStorage.removeItem('user');
+    localStorage.removeItem('permission');
     setLogout(true);
   };
 

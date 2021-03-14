@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+import React, { useState, useEffect } from 'react';
 
 // reactstrap components
 import {
@@ -17,7 +22,6 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
@@ -32,26 +36,27 @@ import {
   ModalBody,
   ModalFooter,
   Label,
-} from "reactstrap";
+} from 'reactstrap';
 // core components
-import UserHeader from "components/Headers/UserHeader.js";
-import axios from "axios";
+import axios from 'axios';
+import UserHeader from '../../components/Headers/UserHeader';
 
 const Profile = () => {
-  const userToken = JSON.parse(localStorage.getItem("user"));
+  const userToken = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState({});
   const [allUser, setAllUser] = useState([]);
-  const [newPermission, setNewPermission] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [newPermission, setNewPermission] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [changedPermition, setChangedPermition] = useState(false);
   // search input
-  const [formData, setFormData] = useState("");
-  const permission = JSON.parse(localStorage.getItem("permission"));
+  const [formData, setFormData] = useState('');
+  const permission = JSON.parse(localStorage.getItem('permission'));
   const [modal, setModal] = useState(false);
   const [userPage, setUserPage] = useState(0);
 
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
-  //toggle for modal
+
+  // toggle for modal
   const toggle = () => setModal(!modal);
   const onChange = (e) => setFormData(e.target.value);
 
@@ -59,12 +64,12 @@ const Profile = () => {
   useEffect(() => {
     const getUserInformation = async () => {
       const response = await axios
-        .get("/api/auth", {
+        .get('/api/auth', {
           headers: {
-            "x-auth-token": userToken,
+            'x-auth-token': userToken,
           },
         })
-        .catch((err) => console.log("Error", err));
+        .catch((err) => console.error(err));
       if (response && response.data) {
         setUser(response.data);
       }
@@ -76,29 +81,29 @@ const Profile = () => {
   useEffect(() => {
     // retrieve all users
     const lookup = async () => {
-      if (formData === "") {
+      if (formData === '') {
         const response = await axios
-          .get("/api/auth/all", {
+          .get('/api/auth/all', {
             headers: {
-              "x-auth-token": userToken,
+              'x-auth-token': userToken,
             },
           })
-          .catch((err) => console.log("Error", err));
+          .catch((err) => console.log('Error', err));
         if (response && response.data) {
           setAllUser(response.data);
         }
       } else {
         console.log(formData);
         const body = {
-          name: { $regex: "^" + formData, $options: 'i' },
+          name: { $regex: `^${formData}`, $options: 'i' },
         };
         const response = await axios
-          .post("/api/auth/name", body, {
+          .post('/api/auth/name', body, {
             headers: {
-              "x-auth-token": userToken,
+              'x-auth-token': userToken,
             },
           })
-          .catch((err) => console.log("Error", err));
+          .catch((err) => console.log('Error', err));
         if (response && response.data) {
           setAllUser(response.data);
         }
@@ -107,12 +112,12 @@ const Profile = () => {
     lookup();
   }, [formData, changedPermition]);
 
-  //store dropdown value
+  // store dropdown value
   const handleClick = (e) => {
     setNewPermission(e);
   };
 
-  //change submission
+  // change submission
   const submitPermission = async () => {
     setChangedPermition(false);
     toggle();
@@ -121,9 +126,9 @@ const Profile = () => {
       permission: newPermission,
     };
     await axios
-      .put("http://localhost:5000/api/auth/permission", body, {
+      .put('http://localhost:5000/api/auth/permission', body, {
         headers: {
-          "x-auth-token": userToken,
+          'x-auth-token': userToken,
         },
       })
       .then((response) => {
@@ -131,7 +136,7 @@ const Profile = () => {
           setChangedPermition(true);
         }
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -140,7 +145,7 @@ const Profile = () => {
     <>
       <UserHeader user={user} />
       {/* Page content */}
-      {permission === "admin" && (
+      {permission === 'admin' && (
         <Container className="mt--7" fluid>
           {/* Table */}
           <Row>
@@ -152,7 +157,7 @@ const Profile = () => {
                     <FormGroup className="mb-3 mt-3">
                       <InputGroup
                         className="input-group-alternative"
-                        style={{ backgroundColor: "#2181EC" }}
+                        style={{ backgroundColor: '#2181EC' }}
                       >
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
@@ -162,7 +167,7 @@ const Profile = () => {
                         <Input
                           placeholder="Search"
                           type="text"
-                          onChange={(e) => {onChange(e); setUserPage(0);}}
+                          onChange={(e) => { onChange(e); setUserPage(0); }}
                         />
                       </InputGroup>
                     </FormGroup>
@@ -175,7 +180,6 @@ const Profile = () => {
                       <th scope="col">Email</th>
                       <th scope="col">Location</th>
                       <th scope="col">Permission</th>
-                      <th scope="col" />
                     </tr>
                   </thead>
                   <tbody>
@@ -231,10 +235,9 @@ const Profile = () => {
                                               type="radio"
                                               name="radio2"
                                               value="none"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             None
                                           </Label>
                                         </FormGroup>
@@ -243,13 +246,10 @@ const Profile = () => {
                                             <Input
                                               type="radio"
                                               name="radio2"
-                                              type="radio"
-                                              name="radio2"
                                               value="production"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             Production
                                           </Label>
                                         </FormGroup>
@@ -258,13 +258,10 @@ const Profile = () => {
                                             <Input
                                               type="radio"
                                               name="radio2"
-                                              type="radio"
-                                              name="radio2"
                                               value="transportation"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             Transportation
                                           </Label>
                                         </FormGroup>
@@ -273,13 +270,10 @@ const Profile = () => {
                                             <Input
                                               type="radio"
                                               name="radio2"
-                                              type="radio"
-                                              name="radio2"
                                               value="finance"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             Finance
                                           </Label>
                                         </FormGroup>
@@ -288,13 +282,10 @@ const Profile = () => {
                                             <Input
                                               type="radio"
                                               name="radio2"
-                                              type="radio"
-                                              name="radio2"
                                               value="assurance"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             Quality Assurance
                                           </Label>
                                         </FormGroup>
@@ -303,13 +294,10 @@ const Profile = () => {
                                             <Input
                                               type="radio"
                                               name="radio2"
-                                              type="radio"
-                                              name="radio2"
                                               value="admin"
-                                              onClick={(e) =>
-                                                handleClick(e.target.value)
-                                              }
-                                            />{" "}
+                                              onClick={(e) => handleClick(e.target.value)}
+                                            />
+                                            {' '}
                                             Admin
                                           </Label>
                                         </FormGroup>
@@ -324,7 +312,8 @@ const Profile = () => {
                                     onClick={() => submitPermission()}
                                   >
                                     Change
-                                  </Button>{" "}
+                                  </Button>
+                                  {' '}
                                   <Button color="secondary" onClick={toggle}>
                                     Cancel
                                   </Button>
@@ -348,7 +337,7 @@ const Profile = () => {
                       className="pagination justify-content-end mb-0"
                       listClassName="justify-content-end mb-0"
                     >
-                      <PaginationItem  className={userPage - 1 < 0 ? "disabled" : "active" }>
+                      <PaginationItem className={userPage - 1 < 0 ? 'disabled' : 'active'}>
                         <PaginationLink
                           href=""
                           onClick={() => setUserPage(userPage - 1)}
@@ -360,19 +349,28 @@ const Profile = () => {
                       </PaginationItem>
 
                       {Array.from(Array(Math.ceil(allUser.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
-                      .slice(userPage - 1 < 0 ? userPage : userPage - 2 < 0 ? userPage-1: userPage-2 , userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE ? userPage+2 : userPage+3 )
-                      .map((idx) => (
-                        <PaginationItem className={idx == userPage ? "active" : "" }>
-                          <PaginationLink
-                            href=""
-                            onClick={() => setUserPage(idx)}
-                          >
-                            {idx + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
+                        .slice(
+                          userPage - 1 < 0
+                            ? userPage
+                            : userPage - 2 < 0
+                              ? userPage - 1
+                              : userPage - 2,
+                          userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE
+                            ? userPage + 2
+                            : userPage + 3,
+                        )
+                        .map((idx) => (
+                          <PaginationItem className={idx === userPage ? 'active' : ''}>
+                            <PaginationLink
+                              href=""
+                              onClick={() => setUserPage(idx)}
+                            >
+                              {idx + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
 
-                      <PaginationItem className={userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE ? "disabled" : "active" }>
+                      <PaginationItem className={userPage + 1 >= allUser.length / NUM_OF_ITEMS_IN_A_PAGE ? 'disabled' : 'active'}>
                         <PaginationLink
                           href=""
                           onClick={() => setUserPage(userPage + 1)}
@@ -389,7 +387,7 @@ const Profile = () => {
           </Row>
         </Container>
       )}
-      {permission !== "admin" && (
+      {permission !== 'admin' && (
         <Container className="mt--7" fluid>
           <Row>
             <Col className="order-xl-1" xl="8">
