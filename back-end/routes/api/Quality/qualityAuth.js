@@ -31,11 +31,11 @@ router.post("/", auth, async (req, res) => {
     }
   });
 
-// Retrieve specific quality data by name and location
+// Retrieve specific quality data by location
 router.post("/location", auth, async (req, res) => {
-  const { name, location } = req.body;
+  const { location } = req.body;
   try {
-    const quality = await Quality.find({ name, location })
+    const quality = await Quality.find({ location })
     res.json(quality);
   } catch (err) {
     console.error(err.message);

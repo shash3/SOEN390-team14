@@ -271,7 +271,7 @@ const QualityAssurance = () => {
    */
   useEffect(() => {
     getQualityData();
-  }, []);
+  }, [userLoc]);
 
   /* ------------------------
    * HTML display
