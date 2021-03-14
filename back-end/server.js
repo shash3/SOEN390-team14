@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 
 // Define Routes
 app.use('/api/users', require('./routes/api/users/users'))
-app.use('/api/auth', require('./routes/api/users/userAuth'))
+app.use('/api/auth', require('./routes/api/users/Auth'))
 
 app.use('/api/inventory', require('./routes/api/Inventory/inventoryAuth'))
 
