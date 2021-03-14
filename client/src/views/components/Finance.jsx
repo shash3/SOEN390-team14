@@ -21,7 +21,7 @@ import {
   UncontrolledTooltip,
 } from 'reactstrap';
 // core components
-import Header from '../../components/Headers/Header';
+import FinanceHeader from '../../components/Headers/FinanceHeader';
 
 const boostStrapImg = require('../../assets/img/theme/bootstrap.jpg');
 const team1ThemeImg = require('../../assets/img/theme/team-1-800x800.jpg');
@@ -40,7 +40,7 @@ const Finance = () => {
 
   return (
     <>
-      <Header />
+      <FinanceHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
         {/* Table */}

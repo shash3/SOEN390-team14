@@ -23,6 +23,8 @@ import Production from '../views/components/Production';
 import QualityAssurance from '../views/components/QualityAssurance';
 import ProductionScheduling from '../views/components/Production_Scheduling';
 import Help from '../views/components/Help';
+import AccountPayable from '../views/components/AccountPayable';
+import AccountReceivable from '../views/components/AccountPayable';
 
 const logoImg = require('../assets/img/brand/logo.png');
 
@@ -188,6 +190,30 @@ const Admin = (props) => {
             <Route
               path="/admin/production-scheduling"
               component={ProductionScheduling}
+            />
+          )}
+           {permission === 'finance' && (
+            <Route
+              path="/admin/finance-payable"
+              component={AccountPayable}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-payable"
+              component={AccountPayable}
+            />
+          )}
+           {permission === 'finance' && (
+            <Route
+              path="/admin/finance-receivable"
+              component={AccountReceivable}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-receivable"
+              component={AccountReceivable}
             />
           )}
           {getRoutes(routes)}

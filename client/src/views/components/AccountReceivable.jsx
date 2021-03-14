@@ -20,19 +20,19 @@ import {
 } from 'reactstrap';
 
 // core components
-import CardlessHeader from '../../components/Headers/CardlessHeader';
+import FinanceHeader from '../../components/Headers/FinanceHeader';
 
-const Help = () => {
+const AccountReceivable = () => {
  
   return (
     <>
-      <CardlessHeader />
+      <FinanceHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
-          
+       
       </Container>
     </>
   );
 };
 
-export default Help;
+export default AccountReceivable;

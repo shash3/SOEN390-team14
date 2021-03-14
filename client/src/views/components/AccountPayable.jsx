@@ -20,16 +20,16 @@ import {
 } from 'reactstrap';
 
 // core components
-import CardlessHeader from '../../components/Headers/CardlessHeader';
+import FinanceHeader from '../../components/Headers/FinanceHeader';
 
 const Help = () => {
  
   return (
     <>
-      <CardlessHeader />
+      <FinanceHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
-          
+      
       </Container>
     </>
   );
