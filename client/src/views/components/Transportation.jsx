@@ -36,7 +36,7 @@ import {
 // core components
 import Header from '../../components/Headers/CardlessHeader';
 
-const Transportation = (props) => {
+const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
@@ -69,7 +69,6 @@ const Transportation = (props) => {
   const [updated, setUpdated] = useState(false);
 
   // Info for Modal
-  const [className] = props;
   const [modal, setModal] = useState(false);
   const [modal1, setModal1] = useState(false);
 
@@ -294,7 +293,6 @@ const Transportation = (props) => {
                 <Modal
                   isOpen={modal1}
                   changeStatus={closeModal1}
-                  className={className}
                 >
                   <ModalHeader changeStatus={closeModal1}>
                     Fill In The Form Below
