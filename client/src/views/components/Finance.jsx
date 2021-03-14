@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // reactstrap components
 import {
@@ -24,9 +24,20 @@ import {
 import Header from '../../components/Headers/Header';
 
 const boostStrapImg = require('../../assets/img/theme/bootstrap.jpg');
+const team1ThemeImg = require('../../assets/img/theme/team-1-800x800.jpg');
+const team2ThemeImg = require('../../assets/img/theme/team-2-800x800.jpg');
+const team3ThemeImg = require('../../assets/img/theme/team-3-800x800.jpg');
+const team4ThemeImg = require('../../assets/img/theme/team-4-800x800.jpg');
+const angularImg = require('../../assets/img/theme/angular.jpg');
+const sketchThemeImg = require('../../assets/img/theme/sketch.jpg');
+const reactImg = require('../../assets/img/theme/react.jpg');
+const vueImg = require('../../assets/img/theme/vue.jpg');
 
 const Finance = () => {
-  const [example, set] = useState([]);
+  // Useless function
+  const tester = () => {
+  };
+
   return (
     <>
       <Header />
@@ -89,10 +100,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -110,10 +118,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -131,10 +136,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -152,10 +154,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -223,10 +222,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/angular.jpg')
-                                  .default
-                              }
+                            src={angularImg.default}
                           />
                         </a>
                         <Media>
@@ -254,10 +250,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -275,10 +268,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -296,10 +286,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -317,10 +304,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -388,10 +372,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/sketch.jpg')
-                                  .default
-                              }
+                            src={sketchThemeImg.default}
                           />
                         </a>
                         <Media>
@@ -417,10 +398,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -438,10 +416,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -459,10 +434,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -480,10 +452,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -551,10 +520,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/react.jpg')
-                                  .default
-                              }
+                            src={reactImg.default}
                           />
                         </a>
                         <Media>
@@ -577,15 +543,12 @@ const Finance = () => {
                           className="avatar avatar-sm"
                           href="#pablo"
                           id="tooltip875258217"
-                          onClick={(e) => e.preventDefault()}
+                          onClick={(e) => { e.preventDefault(); tester(); }}
                         >
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -603,10 +566,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -624,10 +584,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -645,10 +602,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -716,9 +670,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/vue.jpg').default
-                              }
+                            src={vueImg.default}
                           />
                         </a>
                         <Media>
@@ -746,10 +698,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -767,10 +716,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -788,10 +734,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -809,10 +752,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -947,7 +887,7 @@ const Finance = () => {
                     <th scope="col">Status</th>
                     <th scope="col">Users</th>
                     <th scope="col">Completion</th>
-                    <th scope="col" />
+                    <th scope="col"> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -961,10 +901,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/bootstrap.jpg')
-                                  .default
-                              }
+                            src={boostStrapImg.default}
                           />
                         </a>
                         <Media>
@@ -992,10 +929,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1013,10 +947,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1034,10 +965,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1055,10 +983,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1126,10 +1051,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/angular.jpg')
-                                  .default
-                              }
+                            src={angularImg.default}
                           />
                         </a>
                         <Media>
@@ -1157,10 +1079,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1178,10 +1097,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip delay={0} target="tooltip66535734">
@@ -1196,10 +1112,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1217,10 +1130,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1288,10 +1198,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/sketch.jpg')
-                                  .default
-                              }
+                            src={sketchThemeImg.default}
                           />
                         </a>
                         <Media>
@@ -1317,10 +1224,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1338,10 +1242,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1359,10 +1260,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1380,10 +1278,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1451,10 +1346,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/react.jpg')
-                                  .default
-                              }
+                            src={reactImg.default}
                           />
                         </a>
                         <Media>
@@ -1482,10 +1374,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1503,10 +1392,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1524,10 +1410,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1545,10 +1428,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1616,9 +1496,7 @@ const Finance = () => {
                         >
                           <img
                             alt="..."
-                            src={
-                                require('../../assets/img/theme/vue.jpg').default
-                              }
+                            src={vueImg.default}
                           />
                         </a>
                         <Media>
@@ -1646,10 +1524,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-1-800x800.jpg')
-                                  .default
-                              }
+                            src={team1ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1667,10 +1542,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-2-800x800.jpg')
-                                  .default
-                              }
+                            src={team2ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1688,10 +1560,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-3-800x800.jpg')
-                                  .default
-                              }
+                            src={team3ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
@@ -1709,10 +1578,7 @@ const Finance = () => {
                           <img
                             alt="..."
                             className="rounded-circle"
-                            src={
-                                require('../../assets/img/theme/team-4-800x800.jpg')
-                                  .default
-                              }
+                            src={team4ThemeImg.default}
                           />
                         </a>
                         <UncontrolledTooltip
