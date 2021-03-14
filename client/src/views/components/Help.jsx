@@ -1,0 +1,38 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-underscore-dangle */
+/* eslint no-console: ["error", { allow: ["error"] }] */
+import React, { useState, useEffect } from 'react';
+
+import axios from 'axios';
+// reactstrap components
+import {
+  Badge,
+  Card,
+  CardHeader,
+  CardFooter,
+  Media,
+  Table,
+  Container,
+  Row,
+  ButtonGroup,
+  Button,
+  Form,
+} from 'reactstrap';
+
+// core components
+import CardlessHeader from '../../components/Headers/CardlessHeader';
+
+const Help = () => {
+ 
+  return (
+    <>
+      <CardlessHeader />
+      {/* Page content */}
+      <Container className="mt--7" fluid>
+        HELP PAGE
+      </Container>
+    </>
+  );
+};
+
+export default Help;
