@@ -40,6 +40,7 @@ import Header from '../../components/Headers/Header';
 
 const QualityAssurance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
+  const [userLoc, setUserLoc] = useState('');
 
   // Quality database data
   const [dirtyQualityData, setDirtyQualityData] = useState([]);
@@ -57,6 +58,24 @@ const QualityAssurance = () => {
    * Function that interact with database backend
    * ------------------------
    */
+
+  useEffect(() => {
+    // Retrieve product line location from user
+    const getUserLoc = async () => {
+      const response = await axios
+        .get('/api/auth', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .catch((err) => console.error('Error', err));
+      if (response && response.data) {
+        const user = response.data;
+        setUserLoc(user.location);
+      }
+    };
+    getUserLoc();
+  }, []);
 
   /**
    * Retrieve all items in inventory with the specified name and location.
@@ -121,7 +140,10 @@ const QualityAssurance = () => {
    */
   const getQualityData = async () => {
     // Update the view from database
-    await axios.get('/api/quality',
+    await axios.post('/api/quality/location',
+      {
+        location: userLoc,
+      },
       {
         headers: {
           'x-auth-token': userToken,
