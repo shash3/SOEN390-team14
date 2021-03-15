@@ -836,18 +836,18 @@ const Production = () => {
           <FormGroup>
             <Button className="btn-danger" disabled>
               Don&apos;t have enough of
+              {' '}
               <label className="text-indigo strong">{name}</label>
               {' '}
-              to
-              transfer
+              to transfer
+              {' '}
               {quantNeed}
               {' '}
               from location
-              {locRetrieval}
-              .
-              <br />
               {' '}
-              Only
+              {locRetrieval}
+              . Only
+              {' '}
               {quantHave}
               {' '}
               in inventory.
