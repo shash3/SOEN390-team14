@@ -136,7 +136,7 @@ const Procurement = () => {
                       </FormGroup>
                       <div className="text-center">
                         <Button color="primary">
-                          Add Sales Order
+                          Add Procurement Order
                         </Button>
                       </div>
                     </Form>
