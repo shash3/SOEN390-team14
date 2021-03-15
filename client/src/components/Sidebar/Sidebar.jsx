@@ -1,8 +1,11 @@
-/*eslint-disable*/
-import React, { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom";
+/* eslint-disable react/require-default-props */
+/* eslint-disable global-require */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState } from 'react';
+import { NavLink as NavLinkRRD, Link } from 'react-router-dom';
 // nodejs library to set properties for components
-import { PropTypes } from "prop-types";
+import { PropTypes } from 'prop-types';
 
 // reactstrap components
 import {
@@ -25,16 +28,11 @@ import {
   Container,
   Row,
   Col,
-} from "reactstrap";
-
-var ps;
+} from 'reactstrap';
 
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
   // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
-  };
   // toggles collapse between opened and closed (true/false)
   const toggleCollapse = () => {
     setCollapseOpen((data) => !data);
@@ -44,25 +42,21 @@ const Sidebar = (props) => {
     setCollapseOpen(false);
   };
   // creates the links that appear in the left menu / Sidebar
-  const createLinks = (routes) => {
-    return routes.map((prop, key) => {
-      return (
-        <NavItem key={key}>
-          <NavLink
-            to={prop.layout + prop.path}
-            tag={NavLinkRRD}
-            onClick={closeCollapse}
-            activeClassName="active"
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-        </NavItem>
-      );
-    });
-  };
+  const createLinks = (routes) => routes.map((prop, key) => (
+    <NavItem key={key}>
+      <NavLink
+        to={prop.layout + prop.path}
+        tag={NavLinkRRD}
+        onClick={closeCollapse}
+        activeClassName="active"
+      >
+        <i className={prop.icon} />
+        {prop.name}
+      </NavLink>
+    </NavItem>
+  ));
 
-  const { bgColor, routes, logo } = props;
+  const { routes, logo } = props;
   let navbarBrandProps;
   if (logo && logo.innerLink) {
     navbarBrandProps = {
@@ -72,11 +66,9 @@ const Sidebar = (props) => {
   } else if (logo && logo.outterLink) {
     navbarBrandProps = {
       href: logo.outterLink,
-      target: "_blank",
+      target: '_blank',
     };
   }
-
-
 
   return (
     <Navbar
@@ -127,7 +119,7 @@ const Sidebar = (props) => {
                   <img
                     alt="..."
                     src={
-                      require("../../assets/img/theme/team-1-800x800.jpg")
+                      require('../../assets/img/theme/team-1-800x800.jpg')
                         .default
                     }
                   />
@@ -213,8 +205,7 @@ const Sidebar = (props) => {
           {/* Divider */}
           <hr className="my-3" />
           {/* Heading */}
-         
-         
+
           <Nav className="mb-md-3" navbar>
             <NavItem className="active-pro active">
               <NavLink href="https://github.com/shash3/SOEN390-team14/">
