@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-console */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
@@ -168,7 +169,6 @@ const Transportation = () => {
       || type === ''
 
     ) {
-      // eslint-disable-next-line no-alert
       alert('Please Enter Data Into All Fields');
     } else {
       closeModal1();
