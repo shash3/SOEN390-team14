@@ -119,15 +119,6 @@ const Sales = () => {
                         <InputGroup>
                           <Input
                               type="number"
-                              placeholder="Receipt Number"
-                              name="receiptNumber"
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
-                              type="number"
                               placeholder="Net Value"
                               name="netValue"
                           />
@@ -163,7 +154,7 @@ const Sales = () => {
                   <th scope="col">Quantity</th>
                   <th scope="col">Location</th>
                   <th scope="col">Purchaser</th>
-                  <th scope="col">Receipt Number</th>
+                  <th scope="col">Receipt ID</th>
                   <th scope="col">Net Value</th>
                   <th scope="col">Date</th>
                 </tr>

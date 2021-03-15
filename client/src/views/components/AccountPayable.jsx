@@ -65,15 +65,6 @@ const AccountPayable = () => {
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="number"
-                              placeholder="Invoice Number"
-                              name="receiptNumber"
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
                               type="date"
                               placeholder="Date"
                               name="date"
@@ -106,7 +97,7 @@ const AccountPayable = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                 <tr>
-                  <th scope="col">Invoice Number</th>
+                  <th scope="col">Invoice ID</th>
                   <th scope="col">Date</th>
                   <th scope="col">Status</th>
                 </tr>

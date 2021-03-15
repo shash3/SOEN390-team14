@@ -116,15 +116,6 @@ const Procurement = () => {
                         <InputGroup>
                           <Input
                               type="number"
-                              placeholder="Receipt Number"
-                              name="receiptNumber"
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
-                              type="number"
                               placeholder="Net Value"
                               name="netValue"
                           />
@@ -160,7 +151,7 @@ const Procurement = () => {
                   <th scope="col">Quantity</th>
                   <th scope="col">Supplier</th>
                   <th scope="col">Destination</th>
-                  <th scope="col">Receipt Number</th>
+                  <th scope="col">Receipt ID</th>
                   <th scope="col">Net Value</th>
                   <th scope="col">Date</th>
                 </tr>
