@@ -51,6 +51,7 @@ const QualityAssurance = () => {
   const [qualityFormSearch, setQualityFormSearch] = useState('');
   const [updateSearch, setUpdateSearch] = useState(false);
   const [qualPage, setQualPage] = useState(0);
+  const [qualityMessages, setQualityMessages] = useState([]);
 
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
 
@@ -203,6 +204,58 @@ const QualityAssurance = () => {
   };
 
   /**
+   * Updates the message for the quality table to the appropriate topic.
+   *
+   * @param {BigInteger} numOfChanges the number of changes made ot the quality tab
+   */
+  const updateQualityMessages = (numOfChanges) => {
+    if (numOfChanges > 0) {
+      const html = [
+        <FormGroup>
+          <ButtonGroup className="">
+            <Button className="btn-info disabled">
+              Successfully updated the quality of
+              {' '}
+              {numOfChanges}
+              {' '}
+              products.
+            </Button>
+            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
+              &nbsp;X&nbsp;
+            </Button>
+          </ButtonGroup>
+        </FormGroup>];
+      setQualityMessages(html);
+    } else if (numOfChanges === 0) {
+      const html = [
+        <FormGroup>
+          <ButtonGroup className="">
+            <Button className="btn-info disabled">
+              No updates have been made to the table.
+            </Button>
+            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
+              &nbsp;X&nbsp;
+            </Button>
+          </ButtonGroup>
+        </FormGroup>];
+      setQualityMessages(html);
+    } else if (numOfChanges < 0) {
+      const html = [
+        <FormGroup>
+          <ButtonGroup className="">
+            <Button className="btn-info disabled">
+              Cancelled any changes made.
+            </Button>
+            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
+              &nbsp;X&nbsp;
+            </Button>
+          </ButtonGroup>
+        </FormGroup>];
+      setQualityMessages(html);
+    }
+  };
+
+  /**
    * Adds or updates the product to the database.
    *
    * @param {Array} product the product to add to inventory
@@ -221,6 +274,7 @@ const QualityAssurance = () => {
    * If an item is good then it is added to the inventory database.
    */
   const updateQualityTable = async () => {
+    let qualityChanges = 0;
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product.Quality !== 'None') {
@@ -228,9 +282,11 @@ const QualityAssurance = () => {
           case 'Good':
             await addProductToInventory(product);
             removeQualityProduct(product._id);
+            qualityChanges += 1;
             break;
           case 'Faulty':
             removeQualityProduct(product._id);
+            qualityChanges += 1;
             break;
           default:
             break;
@@ -242,6 +298,17 @@ const QualityAssurance = () => {
     // Update the quality table view
     getQualityData();
     setUpdateSearch(!updateSearch);
+    updateQualityMessages(qualityChanges);
+  };
+
+  /**
+   * Removes any changes done to the quality table.
+   */
+  const cancelChanges = () => {
+    // Update the quality table view
+    getQualityData();
+    setUpdateSearch(!updateSearch);
+    updateQualityMessages(-1);
   };
 
   /**
@@ -372,15 +439,26 @@ const QualityAssurance = () => {
                 </tbody>
               </Table>
               <CardFooter className="py-4">
-                <ButtonGroup>
+                <ButtonGroup className="mb-2">
                   <Button
+                    className="btn-success"
                     onClick={() => {
                       updateQualityTable();
                     }}
                   >
                     Apply Changes
                   </Button>
+                  <div className="mx-2" />
+                  <Button
+                    className="btn-warning"
+                    onClick={() => {
+                      cancelChanges();
+                    }}
+                  >
+                    Cancel Changes
+                  </Button>
                 </ButtonGroup>
+                {qualityMessages}
                 <nav aria-label="...">
                   <Pagination
                     className="pagination justify-content-end mb-0"
