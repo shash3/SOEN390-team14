@@ -6,6 +6,7 @@ import Login from './views/components/Login';
 import Finance from './views/components/Finance';
 import Production from './views/components/Production';
 import QualityAssurance from './views/components/QualityAssurance';
+import Help from './views/components/Help';
 
 // IN ADMIN.JS AS WELL IF MODIFYING
 const routes = [
@@ -64,6 +65,13 @@ const routes = [
     icon: 'ni ni-circle-08 text-pink',
     component: Register,
     layout: '/auth',
+  },
+  {
+    path: '/help',
+    name: 'Help',
+    icon: 'ni ni-world-2 text-black',
+    component: Help,
+    layout: '/admin',
   },
 ];
 export default routes;

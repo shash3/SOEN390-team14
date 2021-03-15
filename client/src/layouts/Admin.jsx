@@ -22,6 +22,11 @@ import Finance from '../views/components/Finance';
 import Production from '../views/components/Production';
 import QualityAssurance from '../views/components/QualityAssurance';
 import ProductionScheduling from '../views/components/Production_Scheduling';
+import Help from '../views/components/Help';
+import AccountPayable from '../views/components/AccountPayable';
+import AccountReceivable from '../views/components/AccountPayable';
+import Sales from '../views/components/Sales';
+import Procurement from '../views/components/Procurement';
 
 const logoImg = require('../assets/img/brand/logo.png');
 
@@ -83,6 +88,13 @@ const Admin = (props) => {
       icon: 'ni ni-circle-08 text-pink',
       component: Register,
       layout: '/auth',
+    },
+    {
+      path: '/help',
+      name: 'Help',
+      icon: 'ni ni-world-2 text-black',
+      component: Help,
+      layout: '/admin',
     },
   ];
   const permission = JSON.parse(localStorage.getItem('permission'));
@@ -180,6 +192,54 @@ const Admin = (props) => {
             <Route
               path="/admin/production-scheduling"
               component={ProductionScheduling}
+            />
+          )}
+           {permission === 'finance' && (
+            <Route
+              path="/admin/finance-payable"
+              component={AccountPayable}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-payable"
+              component={AccountPayable}
+            />
+          )}
+           {permission === 'finance' && (
+            <Route
+              path="/admin/finance-receivable"
+              component={AccountReceivable}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-receivable"
+              component={AccountReceivable}
+            />
+          )}
+            {permission === 'finance' && (
+            <Route
+              path="/admin/finance-sales"
+              component={Sales}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-sales"
+              component={Sales}
+            />
+          )}
+               {permission === 'finance' && (
+            <Route
+              path="/admin/finance-procurement"
+              component={Procurement}
+            />
+          )}
+          {permission === 'admin' && (
+            <Route
+              path="/admin/finance-procurement"
+              component={Procurement}
             />
           )}
           {getRoutes(routes)}
