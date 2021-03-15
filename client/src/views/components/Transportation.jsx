@@ -42,6 +42,7 @@ const Transportation = () => {
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
   const [completed, setCompleted] = useState([]);
+  const [complete, setComplete] = useState(false);
   const [transportationData, setTransportationData] = useState({
     _id: '',
     name: '',
@@ -117,7 +118,7 @@ const Transportation = () => {
         .catch((error) => {
           console.error(error);
         });
-        
+
       if (formData === '') {
         await axios
           .get('/api/transportation', {
@@ -155,6 +156,8 @@ const Transportation = () => {
     };
     lookup();
   }, [formData, updated]);
+
+ 
 
   const onSetReady = async (_id) => {
     const id = {
@@ -218,16 +221,43 @@ const Transportation = () => {
     }
   };
 
-  const onChangeStatus = async (_id, status) => {
+  const onChangeStatus = async (_id, status, name, type, quantity, destination) => {
+   
+    if(status == "Completed"){
+      
+      const data = { 
+        name,
+        type,
+        quantity,
+        location: destination,
+      };
+      const body = JSON.stringify(data);
+      try {
+        console.log("hello");
+        await axios
+          .put('/api/inventory/superIncrement', body, {
+            headers: {
+              'x-auth-token': userToken,
+              'Content-Type': 'application/json',
+            },
+          });
+          console.log("hello");
+      } catch (err) {
+        console.error(err);
+      }
+
+
+    }
+    
     const data = {
       _id,
       status,
     };
-    const body = JSON.stringify(data);
+    const body2 = JSON.stringify(data);
 
     try {
       await axios
-        .post('/api/transportation/changeStatus', body, {
+        .post('/api/transportation/changeStatus', body2, {
           headers: {
             'x-auth-token': userToken,
             'Content-Type': 'application/json',
@@ -236,6 +266,7 @@ const Transportation = () => {
     } catch (err) {
       console.error(err);
     }
+  
   };
 
   const onDelete = async (_id) => {
@@ -435,7 +466,7 @@ const Transportation = () => {
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
-                              onClick={() => onChangeStatus(t._id, 'Completed')}
+                              onClick={() => onChangeStatus(t._id, 'Completed',t.name,t.type,t.quantity,t.destination)}
                             >
                               Completed
                             </DropdownItem>
