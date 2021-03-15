@@ -29,7 +29,35 @@ const Procurement = () => {
       <FinanceHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
-      
+        <Row>
+          <div className="col">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <h2 className="mb-0">Procurement</h2>
+                <Button className="mt-4"
+                        color="primary">
+                  Add Purchase Order
+                </Button>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Supplier</th>
+                  <th scope="col">Destination</th>
+                  <th scope="col">Receipt Number</th>
+                  <th scope="col">Net Value</th>
+                  <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </Table>
+            </Card>
+          </div>
+        </Row>
       </Container>
     </>
   );
