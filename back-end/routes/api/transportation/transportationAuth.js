@@ -21,6 +21,17 @@ router.get("/", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+router.get("/completed", auth, async (req, res) => {
+  try {
+    const transportation = await Transportation.find({status:"Completed"});
+    res.json(transportation);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 router.get("/packaging", auth, async (req, res) => {
   try {
     const transportation = await Transportation.find({packagingStatus:false});
