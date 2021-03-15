@@ -14,7 +14,7 @@ const config = require("config");
 // Retrieve all shipments
 router.get("/", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find({packagingStatus:true});
+    const transportation = await Transportation.find({packagingStatus:true, status:{$ne:"Completed"}});
     res.json(transportation);
   } catch (err) {
     console.error(err.message);
@@ -24,8 +24,8 @@ router.get("/", auth, async (req, res) => {
 
 router.get("/completed", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find({status:"Completed"});
-    res.json(transportation);
+    const completed = await Transportation.find({status:"Completed"});
+    res.json(completed);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -34,8 +34,8 @@ router.get("/completed", auth, async (req, res) => {
 
 router.get("/packaging", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find({packagingStatus:false});
-    res.json(transportation);
+    const packaging = await Transportation.find({packagingStatus:false});
+    res.json(packaging);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
