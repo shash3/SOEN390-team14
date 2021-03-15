@@ -25,7 +25,7 @@ import QualityAssurance from '../views/components/QualityAssurance';
 import ProductionScheduling from '../views/components/Production_Scheduling';
 import Help from '../views/components/Help';
 import AccountPayable from '../views/components/AccountPayable';
-import AccountReceivable from '../views/components/AccountPayable';
+import AccountReceivable from '../views/components/AccountReceivable';
 import Sales from '../views/components/Sales';
 import Procurement from '../views/components/Procurement';
 

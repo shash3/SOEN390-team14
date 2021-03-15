@@ -65,6 +65,11 @@ const Sales = () => {
                 >
                   Add Sales Order
                 </Button>
+                <Button className="mt-4 float-right"
+                        color="danger"
+                >
+                  Export to PDF
+                </Button>
                 <Modal
                     isOpen={modal}
                     changeStatus={closeModal}
