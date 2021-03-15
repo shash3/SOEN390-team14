@@ -233,7 +233,6 @@ const Transportation = () => {
       };
       const body = JSON.stringify(data);
       try {
-        console.log("hello");
         await axios
           .put('/api/inventory/superIncrement', body, {
             headers: {
@@ -241,7 +240,6 @@ const Transportation = () => {
               'Content-Type': 'application/json',
             },
           });
-          console.log("hello");
       } catch (err) {
         console.error(err);
       }
