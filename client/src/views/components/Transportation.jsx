@@ -419,9 +419,10 @@ const Transportation = () => {
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{overflow:"auto"}}>
                   {transportation.slice(tranPage * NUM_OF_ITEMS_IN_A_PAGE, (tranPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
@@ -437,7 +438,7 @@ const Transportation = () => {
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
-                      <td className="text-right">
+                      <td className="text-right" >
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
@@ -555,9 +556,10 @@ const Transportation = () => {
                     <th scope="col">Type</th>
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style={{overflow:"auto"}}>
                   {packaging.slice(packPage * NUM_OF_ITEMS_IN_A_PAGE, (packPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
