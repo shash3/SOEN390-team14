@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // reactstrap components
 import {
-  Card, CardBody, CardTitle, Container, Row, Col,
+  Card, CardBody, Container, Row, Col,
 } from 'reactstrap';
 
 const FinanceHeader = () => (
@@ -17,7 +17,7 @@ const FinanceHeader = () => (
               <Card className="card-stats mb-4 mb-xl-0">
                 <CardBody>
                   <Row>
-                  <div className="col">
+                    <div className="col">
                       <span className="h2 font-weight-bold mb-0">
                         <Link to="/admin/finance-payable" activeClassName="active">
                           Accounts Payable
@@ -37,7 +37,7 @@ const FinanceHeader = () => (
               <Card className="card-stats mb-4 mb-xl-0">
                 <CardBody>
                   <Row>
-                  <div className="col">
+                    <div className="col">
                       <span className="h2 font-weight-bold mb-0">
                         <Link to="/admin/finance-receivable" activeClassName="active">
                           Accounts Receivable
@@ -57,7 +57,7 @@ const FinanceHeader = () => (
               <Card className="card-stats mb-4 mb-xl-0">
                 <CardBody>
                   <Row>
-                  <div className="col">
+                    <div className="col">
                       <span className="h2 font-weight-bold mb-0">
                         <Link to="/admin/finance-sales" activeClassName="active">
                           Sales
@@ -77,7 +77,7 @@ const FinanceHeader = () => (
               <Card className="card-stats mb-4 mb-xl-0">
                 <CardBody>
                   <Row>
-                  <div className="col">
+                    <div className="col">
                       <span className="h2 font-weight-bold mb-0">
                         <Link to="/admin/finance-procurement" activeClassName="active">
                           Procurement

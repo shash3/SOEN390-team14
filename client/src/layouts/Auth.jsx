@@ -1,3 +1,6 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-shadow */
+/* eslint-disable no-undef */
 import React from 'react';
 import {
   useLocation, Route, Switch, Redirect,
@@ -8,10 +11,9 @@ import { Container, Row, Col } from 'reactstrap';
 // core components
 import AuthNavbar from '../components/Navbars/AuthNavbar';
 import AuthFooter from '../components/Footers/AuthFooter';
+import routes from '../routes';
 
-import routes from '../routes.js';
-
-const Auth = (props) => {
+const Auth = () => {
   const mainContent = React.useRef(null);
   const location = useLocation();
 
