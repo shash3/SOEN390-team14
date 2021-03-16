@@ -3,9 +3,15 @@ const sendgridAPIKey = 'SG.jhlwxEk7SHaTc3GmpJ7Rmw.l2Bw899tWQvZsWWAPWQDLhYBRiJ-px
 
 sgMail.setApiKey(sendgridAPIKey);
 
-sgMail.send({
-    to: "soen390shop@gmail.com",
-    from: "soen390shop@gmail.com",
-    subject: "test",
-    text: "test1"
-});
+const sendSignupEmail = (email, name) => {
+    sgMail.send({
+        to: email,
+        from: 'soen390shop@gmail.com',
+        subject: 'this is test email',
+        text: `Hello ${name}, you have successfully signed up! `
+    })
+}
+
+module.exports = {
+    sendSignupEmail
+}
