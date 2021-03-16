@@ -157,7 +157,7 @@ const Procurement = () => {
       type:"raw",
       location:supplier,
       destination,
-      status:"On Route",
+      status:"In Transit",
       packagingStatus:true
 
 
