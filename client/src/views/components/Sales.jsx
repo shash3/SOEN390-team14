@@ -251,13 +251,14 @@ const Sales = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                 <tr>
+                  <th scope="col">Receipt ID</th>
                   <th scope="col">Name</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Location</th>
                   <th scope="col">Purchaser</th>
-                  <th scope="col">Receipt ID</th>
                   <th scope="col">Net Value</th>
                   <th scope="col">Date</th>
+                  <th scope="col"></th>
                 </tr>
                 </thead>
 
@@ -276,7 +277,7 @@ const Sales = () => {
                       <td>{t.purchaser}</td>
                       <td>{t.location}</td>
                       <td>{t.value}</td>
-                      <td>{t.date}</td>
+                      <td>{t.date.substr(0,10)}</td>
                       <td className="text-right" >
                         <UncontrolledDropdown>
                           <DropdownToggle
