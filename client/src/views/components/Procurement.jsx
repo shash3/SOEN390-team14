@@ -41,6 +41,8 @@ import FinanceHeader from '../../components/Headers/FinanceHeader';
 
 const Procurement = () => {
   const [procurement,setProcurement] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [materials,setMaterials] = useState([]);
   const [updated,setUpdated] = useState(false);
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [procurementData,setProcurementData] = useState({
@@ -80,6 +82,37 @@ const Procurement = () => {
       [e.target.name]:e.target.value
     });
   };
+  useEffect (()=>{
+    const getMaterials = async() => {
+    await axios
+      .get('/api/material', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setMaterials(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    };
+      const getAllLoc = async () => {
+        const response = await axios
+          .get('/api/locations')
+          .catch((err) => console.error('Error', err));
+        if (response.data) {
+          setLocations(response.data);
+        }
+      };
+      getAllLoc();
+      getMaterials();
+
+      
+  },[])
+
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
@@ -188,7 +221,8 @@ const Procurement = () => {
                             value:0,
                             date:""
 
-                          })
+                          });
+                          
                         }}
                 >
                   Add Procurement 
@@ -210,11 +244,15 @@ const Procurement = () => {
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="text"
+                              type="select"
                               placeholder="NAME"
                               name="name"
                               onChange = {(e) => onChangeProcurementData(e)}
-                          />
+                          >
+                            {[...materials].map((m)=>(
+                              <option>{m.name}</option>
+                            ))}
+                            </Input>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
@@ -240,11 +278,16 @@ const Procurement = () => {
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="text"
+                              type="select"
                               placeholder="Destination"
                               name="destination"
                               onChange = {(e) => onChangeProcurementData(e)}
-                          />
+
+                          >
+                            {locations.map((l) => (
+                              <option>{l.location}</option>
+                            ))}
+                            </Input>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
