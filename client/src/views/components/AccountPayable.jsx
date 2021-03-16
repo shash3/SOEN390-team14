@@ -103,6 +103,7 @@ const AccountPayable = () => {
                 </tr>
                 </thead>
                 <tbody>
+
                 </tbody>
               </Table>
             </Card>

@@ -409,7 +409,7 @@ const Transportation = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-9" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -422,7 +422,7 @@ const Transportation = () => {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody style={{overflow:"auto"}}>
+                <tbody>
                   {transportation.slice(tranPage * NUM_OF_ITEMS_IN_A_PAGE, (tranPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
@@ -547,7 +547,7 @@ const Transportation = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Packaging</h2>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-9" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -559,7 +559,7 @@ const Transportation = () => {
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody style={{overflow:"auto"}}>
+                <tbody>
                   {packaging.slice(packPage * NUM_OF_ITEMS_IN_A_PAGE, (packPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
@@ -656,7 +656,7 @@ const Transportation = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Completed Shipments</h2>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-9" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
