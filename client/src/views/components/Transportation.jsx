@@ -409,7 +409,7 @@ const Transportation = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-9" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -547,7 +547,7 @@ const Transportation = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Packaging</h2>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-9" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -656,7 +656,7 @@ const Transportation = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Completed Shipments</h2>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-9" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -665,6 +665,7 @@ const Transportation = () => {
                     <th scope="col">Type</th>
                     <th scope="col">Location</th>
                     <th scope="col">Destination</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
