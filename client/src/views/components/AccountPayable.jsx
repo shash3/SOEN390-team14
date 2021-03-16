@@ -22,17 +22,12 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader';
 
-const Help = () => {
- 
-  return (
-    <>
-      <FinanceHeader />
-      {/* Page content */}
-      <Container className="mt--7" fluid>
-      
-      </Container>
-    </>
-  );
-};
+const Help = () => (
+  <>
+    <FinanceHeader />
+    {/* Page content */}
+    <Container className="mt--7" fluid />
+  </>
+);
 
 export default Help;

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -194,11 +195,11 @@ const Admin = (props) => {
               component={ProductionScheduling}
             />
           )}
-           {permission === 'finance' && (
-            <Route
-              path="/admin/finance-payable"
-              component={AccountPayable}
-            />
+          {permission === 'finance' && (
+          <Route
+            path="/admin/finance-payable"
+            component={AccountPayable}
+          />
           )}
           {permission === 'admin' && (
             <Route
@@ -206,11 +207,11 @@ const Admin = (props) => {
               component={AccountPayable}
             />
           )}
-           {permission === 'finance' && (
-            <Route
-              path="/admin/finance-receivable"
-              component={AccountReceivable}
-            />
+          {permission === 'finance' && (
+          <Route
+            path="/admin/finance-receivable"
+            component={AccountReceivable}
+          />
           )}
           {permission === 'admin' && (
             <Route
@@ -218,7 +219,7 @@ const Admin = (props) => {
               component={AccountReceivable}
             />
           )}
-            {permission === 'finance' && (
+          {permission === 'finance' && (
             <Route
               path="/admin/finance-sales"
               component={Sales}
@@ -230,11 +231,11 @@ const Admin = (props) => {
               component={Sales}
             />
           )}
-               {permission === 'finance' && (
-            <Route
-              path="/admin/finance-procurement"
-              component={Procurement}
-            />
+          {permission === 'finance' && (
+          <Route
+            path="/admin/finance-procurement"
+            component={Procurement}
+          />
           )}
           {permission === 'admin' && (
             <Route
