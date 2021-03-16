@@ -48,10 +48,14 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 ### Name Convention
 * As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide.
 
-### Enforcing Convention
-* Eslint has been installed.
-* npm -g i eslint-cli
-* cmd (front-end): eslint src
+  #### Enforcing Convention
+  * Eslint has been installed.
+  * `npm -g i eslint-cli` if you have never used eslint-cli before
+  * navigate into the client folder and run `eslint src`
+
+### Generate Complexity Report
+* `npm install -g plato` if you are generating the document for the very first time
+* `plato -r -d report -t "report" soen390-team14-master`
 
 ### Contributor
 * Adam Richard (Project Manager)
