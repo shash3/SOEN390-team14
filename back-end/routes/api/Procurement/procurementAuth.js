@@ -31,7 +31,7 @@ router.post("/add", auth, async (req, res) => {
     const {name, quantity, supplier, destination, value, date } = req.body;
 
     console.log("hello");
-    sales = new Procurement({
+    procurement = new Procurement({
      name,
      quantity,
      supplier,

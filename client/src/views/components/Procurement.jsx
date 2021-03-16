@@ -151,7 +151,7 @@ const Procurement = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h2 className="mb-0">Sales</h2>
+                <h2 className="mb-0">Procurement</h2>
                 <Button className="mt-4"
                         color="primary"
                         onClick={() => {
@@ -189,7 +189,7 @@ const Procurement = () => {
                               type="text"
                               placeholder="NAME"
                               name="name"
-                              onChange = {(e) => onChangeprocurementData(e)}
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -321,4 +321,4 @@ const Procurement = () => {
   );
 };
 
-export default Sales;
+export default Procurement;
