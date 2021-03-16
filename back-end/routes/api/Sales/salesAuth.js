@@ -16,7 +16,17 @@ router.get("/", auth, async(req,res) => {
         console.error(err.message);
         res.status(500).send("Server Error");
       }
-})
+});
+
+router.get("/receivables", auth, async(req,res) => {
+  try {
+      const receivables = await Sales.find({paid:false});
+      res.json(receivables);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+});
 
 router.post("/delete",auth,async (req,res) =>{
   
@@ -37,7 +47,8 @@ router.post("/add", auth, async (req, res) => {
      purchaser,
      location,
      value,
-     date
+     date,
+     paid:false
     });
     
     await sales.save();

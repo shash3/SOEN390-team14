@@ -304,7 +304,7 @@ const Sales = () => {
                               href="#pablo"
                               onClick={() => onDelete(t._id)}
                             >
-                              Delete Shipment
+                              Delete 
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>

@@ -24,6 +24,10 @@ const SalesSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
+    },
+    paid: {
+        type: Boolean,
+        required: true
     }
     
     

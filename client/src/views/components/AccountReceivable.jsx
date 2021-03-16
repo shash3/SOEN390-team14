@@ -6,23 +6,63 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle,
   Media,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
   Table,
   Container,
   Row,
-  ButtonGroup,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Button,
-  Form, Modal, ModalHeader, ModalBody, FormGroup, InputGroup, Input, ModalFooter,
+  Modal,
 } from 'reactstrap';
-
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader';
 
 const AccountReceivable = () => {
+
+  const [receivables, setReceivables] = useState([]);
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  const [updated,setUpdated] = useState(false);
+  useEffect(() => {
+    // retrieve information
+    const lookup = async () => {
+      
+      
+        await axios
+          .get('/api/sales/receivables', {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setReceivables(response.data);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      
+    };
+    lookup();
+  }, [updated]);
 
   const [modal, setModal] = useState(false);
 
@@ -99,11 +139,63 @@ const AccountReceivable = () => {
                 <tr>
                   <th scope="col">Invoice ID</th>
                   <th scope="col">Date</th>
+                  <th scope="col">Value</th>
                   <th scope="col">Status</th>
+                  <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody>
+                
+                <tbody style={{overflow:"auto"}}>
+                  {receivables.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                     
+                      <td>{t.date.substr(0,10)}</td>
+                      <td>{t.value}</td>
+                      <td>{t.paid ? "Paid":"Not Paid"} </td>
+                      
+                    
+                    
+                    
+
+                      <td className="text-right" >
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Delete 
+                            </DropdownItem>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Paid
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
+              
               </Table>
             </Card>
           </div>
