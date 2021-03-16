@@ -416,7 +416,7 @@ const Transportation = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Location</th>
+                    <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
                     <th scope="col"></th>
@@ -554,7 +554,7 @@ const Transportation = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Location</th>
+                    <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
                     <th scope="col"></th>
                   </tr>
@@ -663,7 +663,7 @@ const Transportation = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Location</th>
+                    <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
                     <th></th>
                   </tr>
