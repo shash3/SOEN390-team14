@@ -156,6 +156,15 @@ const Sales = () => {
                         color="primary"
                         onClick={() => {
                           closeModal();
+                          setSalesData({
+                            name:"",
+                            quantity:0,
+                            purchaser:"",
+                            location:"",
+                            value:0,
+                            date:""
+
+                          })
                         }}
                 >
                   Add Sales Order
