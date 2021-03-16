@@ -18,6 +18,15 @@ router.get("/", auth, async(req,res) => {
       }
 })
 
+router.post("/delete",auth,async (req,res) =>{
+  
+    const {_id}= req.body;
+    
+    
+    await Sales.deleteOne({_id:_id});
+    res.send(true);
+    });
+
 router.post("/add", auth, async (req, res) => {
     const {name, quantity, purchaser, location, value, date } = req.body;
 

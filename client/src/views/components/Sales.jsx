@@ -51,8 +51,26 @@ const Sales = () => {
     value:0,
     date:""
   });
-  const onDelete = async() => {
-    
+  const onDelete = async(_id) => {
+
+    const salesId = {
+      _id,
+
+    };
+    const body = JSON.stringify(salesId);
+    try {
+      await axios
+        .post('/api/sales/delete', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(setUpdated(!updated));
+    } catch (err) {
+      console.error(err);
+    }
+
   }
   const [modal, setModal] = useState(false);
   const onChangeSalesData = (e) => {
@@ -99,6 +117,8 @@ const Sales = () => {
     } catch (err) {
       console.error(err);
     }
+
+    setUpdated(!updated);
   }
 
   
