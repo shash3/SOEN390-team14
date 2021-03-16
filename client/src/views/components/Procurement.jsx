@@ -122,7 +122,7 @@ const Procurement = () => {
       name,
       quantity,
       type:"raw",
-      supplier,
+      location:supplier,
       destination,
       status:"On Route",
       packagingStatus:true
