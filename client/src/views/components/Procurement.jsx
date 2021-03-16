@@ -63,7 +63,7 @@ const Procurement = () => {
     const body = JSON.stringify(procurementId);
     try {
       await axios
-        .post('/api/procurement/delet', body, {
+        .post('/api/procurement/delete', body, {
           headers: {
             'x-auth-token': userToken,
             'Content-Type': 'application/json',
