@@ -142,9 +142,9 @@ const Procurement = () => {
       name === ''
       || quantity === 0
       || supplier === ''
-      || value === 0
-      || date === ''
-      ||destination ===''
+      || destination === 0
+      || value === ''
+      ||date ===''
 
     ) {
       // eslint-disable-next-line no-alert
@@ -249,7 +249,7 @@ const Procurement = () => {
                               name="name"
                               onChange = {(e) => onChangeProcurementData(e)}
                           >
-                            {[...materials].map((m)=>(
+                            {[{name:"Select Material"},...materials].map((m)=>(
                               <option>{m.name}</option>
                             ))}
                             </Input>
@@ -284,7 +284,7 @@ const Procurement = () => {
                               onChange = {(e) => onChangeProcurementData(e)}
 
                           >
-                            {locations.map((l) => (
+                            {[{location:"Select Destination"},...locations].map((l) => (
                               <option>{l.location}</option>
                             ))}
                             </Input>
