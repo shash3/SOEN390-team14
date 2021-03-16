@@ -7,7 +7,7 @@ const sendSignupEmail = (email, name) => {
     sgMail.send({
         to: email,
         from: 'soen390shop@gmail.com',
-        subject: 'this is test email',
+        subject: 'Soen390-team14 signup',
         text: `Hello ${name}, you have successfully signed up! `
     })
 }
