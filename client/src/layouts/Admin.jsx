@@ -25,7 +25,7 @@ import QualityAssurance from '../views/components/QualityAssurance';
 import ProductionScheduling from '../views/components/Production_Scheduling';
 import Help from '../views/components/Help';
 import AccountPayable from '../views/components/AccountPayable';
-import AccountReceivable from '../views/components/AccountPayable';
+import AccountReceivable from '../views/components/AccountReceivable';
 import Sales from '../views/components/Sales';
 import Procurement from '../views/components/Procurement';
 
@@ -44,21 +44,21 @@ const Admin = (props) => {
     {
       path: '/production',
       name: 'Production',
-      icon: 'ni ni-planet text-blue',
+      icon: 'ni ni-box-2 text-blue',
       component: Production,
       layout: '/admin',
     },
     {
       path: '/transportation',
       name: 'Transportation',
-      icon: 'ni ni-pin-3 text-orange',
+      icon: 'ni ni-delivery-fast text-green',
       component: Transportation,
       layout: '/admin',
     },
     {
       path: '/finance',
       name: 'Finance',
-      icon: 'ni ni-bullet-list-67 text-red',
+      icon: 'ni ni-briefcase-24 text-red',
       component: Finance,
       layout: '/admin',
     },
