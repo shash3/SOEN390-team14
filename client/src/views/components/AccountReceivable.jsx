@@ -80,6 +80,49 @@ const AccountReceivable = () => {
     lookup();
   }, [updated]);
 
+  const onDelete = async(_id) => {
+
+    const salesId = {
+      _id,
+
+    };
+    const body = JSON.stringify(salesId);
+    try {
+      await axios
+        .post('/api/sales/delete', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(setUpdated(!updated));
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+  const onSetPaid = async(_id) => {
+
+    const salesId = {
+      _id,
+
+    };
+    const body = JSON.stringify(salesId);
+    try {
+      await axios
+        .post('/api/sales/setPaid', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(setUpdated(!updated));
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+
   const [modal, setModal] = useState(false);
 
   function closeModal() {

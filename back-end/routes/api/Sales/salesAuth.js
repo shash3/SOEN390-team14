@@ -46,6 +46,15 @@ router.post("/delete",auth,async (req,res) =>{
     res.send(true);
     });
 
+ router.post("/setPaid",auth,async (req,res) =>{
+  
+      const {_id}= req.body;
+      
+      
+      await Sales.updateOne({_id:_id},{$set:{paid:true}});
+      res.send(true);
+      });
+
 router.post("/add", auth, async (req, res) => {
     const {name, quantity, purchaser, location, value, date } = req.body;
 
