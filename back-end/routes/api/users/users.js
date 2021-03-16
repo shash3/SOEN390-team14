@@ -5,7 +5,7 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-
+const { sendSignupEmail } = require("../../../emails/signup");
 const User = require("../../../models/User");
 
 // Register user
@@ -52,6 +52,9 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
 
       await user.save();
+
+      //send email on signup
+      sendSignupEmail(email,name);
 
       // Return jsonwebtoken
       const payload = {
