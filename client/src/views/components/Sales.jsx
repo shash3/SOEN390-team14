@@ -51,6 +51,7 @@ const Sales = () => {
     value:0,
     date:""
   });
+  const { name, quantity, purchaser, location, value, date } = salesData;
   const onDelete = async(_id) => {
 
     const salesId = {
@@ -104,6 +105,18 @@ const Sales = () => {
   }, [updated]);
 
   const addSale = async () =>{
+    if (
+      name === ''
+      || quantity === 0
+      || location === ''
+      || value === 0
+      || date === ''
+      ||purchaser ===''
+
+    ) {
+      // eslint-disable-next-line no-alert
+      alert('Please Enter Data Into All Fields');
+    } else {
     const body = JSON.stringify(salesData);
     console.log("hello");
     try {
@@ -119,6 +132,7 @@ const Sales = () => {
     }
 
     setUpdated(!updated);
+  }
   }
 
   
