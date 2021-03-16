@@ -14,17 +14,28 @@ const config = require("config");
 // Retrieve all shipments
 router.get("/", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find({packagingStatus:true});
+    const transportation = await Transportation.find({packagingStatus:true, status:{$ne:"Completed"}});
     res.json(transportation);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
+router.get("/completed", auth, async (req, res) => {
+  try {
+    const completed = await Transportation.find({status:"Completed"});
+    res.json(completed);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 router.get("/packaging", auth, async (req, res) => {
   try {
-    const transportation = await Transportation.find({packagingStatus:false});
-    res.json(transportation);
+    const packaging = await Transportation.find({packagingStatus:false});
+    res.json(packaging);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -60,6 +71,24 @@ router.post("/add", auth, async (req, res) => {
   await transportation.save();
   res.send(true);
 });
+
+router.post("/addP", auth, async (req, res) => {
+  const {name, quantity, type, location, destination, status, packagingStatus } = req.body;
+  
+  transportation = new Transportation({
+    name,
+    quantity,
+    type,
+    location,
+    destination,
+    status,
+    packagingStatus
+  });
+  
+  await transportation.save();
+  res.send(true);
+});
+
 router.post("/delete",auth,async (req,res) =>{
   
 const {_id}= req.body;

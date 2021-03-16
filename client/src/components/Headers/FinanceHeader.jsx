@@ -26,7 +26,7 @@ const FinanceHeader = () => (
                     </div>
                     <Col className="col-auto">
                       <div className="icon icon-shape bg-danger text-white rounded-circle shadow">
-                        <i className="fas fa-chart-bar" />
+                        <i className="fas fa-file-invoice" />
                       </div>
                     </Col>
                   </Row>
@@ -46,7 +46,7 @@ const FinanceHeader = () => (
                     </div>
                     <Col className="col-auto">
                       <div className="icon icon-shape bg-warning text-white rounded-circle shadow">
-                        <i className="fas fa-chart-pie" />
+                        <i className="fas fa-file-invoice-dollar" />
                       </div>
                     </Col>
                   </Row>
@@ -66,7 +66,7 @@ const FinanceHeader = () => (
                     </div>
                     <Col className="col-auto">
                       <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                        <i className="fas fa-users" />
+                        <i className="fas fa-hand-holding-usd" />
                       </div>
                     </Col>
                   </Row>
@@ -86,7 +86,7 @@ const FinanceHeader = () => (
                     </div>
                     <Col className="col-auto">
                       <div className="icon icon-shape bg-info text-white rounded-circle shadow">
-                        <i className="fas fa-percent" />
+                        <i className="fas fa-boxes" />
                       </div>
                     </Col>
                   </Row>
