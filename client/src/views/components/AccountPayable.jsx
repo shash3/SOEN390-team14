@@ -47,7 +47,7 @@ const AccountPayable = () => {
       
       
         await axios
-          .get('/api/procurements/payables', {
+          .get('/api/procurement/payables', {
             headers: {
               'x-auth-token': userToken,
             },
@@ -62,7 +62,7 @@ const AccountPayable = () => {
           });
 
           await axios
-          .get('/api/sales/payablesP', {
+          .get('/api/procurement/payablesP', {
             headers: {
               'x-auth-token': userToken,
             },
@@ -89,7 +89,7 @@ const AccountPayable = () => {
     const body = JSON.stringify(salesId);
     try {
       await axios
-        .post('/api/procurements/delete', body, {
+        .post('/api/procurement/delete', body, {
           headers: {
             'x-auth-token': userToken,
             'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ const AccountPayable = () => {
     const body = JSON.stringify(salesId);
     try {
       await axios
-        .post('/api/procurements/setPaid', body, {
+        .post('/api/procurement/setPaid', body, {
           headers: {
             'x-auth-token': userToken,
             'Content-Type': 'application/json',

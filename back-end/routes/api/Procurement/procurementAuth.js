@@ -37,11 +37,40 @@ router.post("/add", auth, async (req, res) => {
      supplier,
      destination,
      value,
-     date
+     date,
+     paid:false
     });
     
     await procurement.save();
     res.send(true);
   });
+
+  router.get("/payables", auth, async(req,res) => {
+    try {
+        const payables = await Procurement.find({paid:false});
+        res.json(payables);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+      }
+  });
+  router.get("/payablesP", auth, async(req,res) => {
+    try {
+        const payablesP = await Procurement.find({paid:true});
+        res.json(payablesP);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+      }
+  });
+
+  router.post("/setPaid",auth,async (req,res) =>{
+  
+    const {_id}= req.body;
+    
+    
+    await Procurement.updateOne({_id:_id},{$set:{paid:true}});
+    res.send(true);
+    });
 
   module.exports = router;
