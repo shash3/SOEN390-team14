@@ -56,6 +56,7 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 ### Generate Complexity Report
 * `npm install -g plato` if you are generating the document for the very first time
 * `plato -r -d report -t "report" soen390-team14-master`
+*  The generated report can be found under the folder named `code-analysis report`. `index.html` contains the code analysis for the entirety of the project.  
 
 ### Contributor
 * Adam Richard (Project Manager)
