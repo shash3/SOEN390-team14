@@ -38,6 +38,7 @@ import FinanceHeader from '../../components/Headers/FinanceHeader';
 const AccountReceivable = () => {
 
   const [receivables, setReceivables] = useState([]);
+  const [receivablesP, setReceivablesP] = useState([]);
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [updated,setUpdated] = useState(false);
   useEffect(() => {
@@ -54,6 +55,21 @@ const AccountReceivable = () => {
           .then((response) => {
             if (response.data) {
               setReceivables(response.data);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+
+          await axios
+          .get('/api/sales/receivablesP', {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setReceivablesP(response.data);
             }
           })
           .catch((error) => {
@@ -185,9 +201,9 @@ const AccountReceivable = () => {
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
-                              onClick={() => onDelete(t._id)}
+                              onClick={() => onSetPaid(t._id)}
                             >
-                              Paid
+                              Set To Paid
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>
@@ -197,9 +213,82 @@ const AccountReceivable = () => {
                 </tbody>
               
               </Table>
+             
             </Card>
           </div>
         </Row>
+        <br/>
+        <br/>
+        <Row>
+          <div className="col">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <h2 className="mb-0">Paid Accounts Receivable</h2>
+                
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                <tr>
+                  <th scope="col">Invoice ID</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"></th>
+                </tr>
+                </thead>
+                
+                <tbody style={{overflow:"auto"}}>
+                  {receivablesP.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                     
+                      <td>{t.date.substr(0,10)}</td>
+                      <td>{t.value}</td>
+                      <td>{t.paid ? "Paid":"Not Paid"} </td>
+                      
+                    
+                    
+                    
+
+                      <td className="text-right" >
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Delete 
+                            </DropdownItem>
+                            
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              
+              </Table>
+             
+            </Card>
+          </div>
+        </Row>
+
       </Container>
     </>
   );

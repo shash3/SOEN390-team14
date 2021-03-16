@@ -27,6 +27,15 @@ router.get("/receivables", auth, async(req,res) => {
       res.status(500).send("Server Error");
     }
 });
+router.get("/receivablesP", auth, async(req,res) => {
+  try {
+      const receivables = await Sales.find({paid:true});
+      res.json(receivables);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+});
 
 router.post("/delete",auth,async (req,res) =>{
   
