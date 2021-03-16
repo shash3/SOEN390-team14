@@ -36,9 +36,107 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader';
 
-const Procurement = () => {
 
+
+
+const Procurement = () => {
+  const [procurement,setProcurement] = useState([]);
+  const [updated,setUpdated] = useState(false);
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  const [procurementData,setProcurementData] = useState({
+    name:"",
+    quantity:0,
+    supplier:"",
+    destination:"",
+    value:0,
+    date:""
+  });
+  const { name, quantity, supplier, destination, value, date } = procurementData;
+  const onDelete = async(_id) => {
+
+    const procurementId = {
+      _id,
+
+    };
+    const body = JSON.stringify(procurementId);
+    try {
+      await axios
+        .post('/api/procurement/delet', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(setUpdated(!updated));
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
   const [modal, setModal] = useState(false);
+  const onChangeProcurementData = (e) => {
+    setProcurementData({
+      ...procurementData,
+      [e.target.name]:e.target.value
+    });
+  };
+  useEffect(() => {
+    // retrieve information
+    const lookup = async () => {
+      
+      
+        await axios
+          .get('/api/procurement', {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setProcurement(response.data);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      
+    };
+    lookup();
+  }, [updated]);
+
+  const addProcurement = async () =>{
+    if (
+      name === ''
+      || quantity === 0
+      || supplier === ''
+      || value === 0
+      || date === ''
+      ||destination ===''
+
+    ) {
+      // eslint-disable-next-line no-alert
+      alert('Please Enter Data Into All Fields');
+    } else {
+    const body = JSON.stringify(procurementData);
+    console.log("hello");
+    try {
+      await axios
+        .post('/api/procurement/add', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        });
+    } catch (err) {
+      console.error(err);
+    }
+
+    setUpdated(!updated);
+  }
+  }
+
+  
+
 
   function closeModal() {
     setModal(!modal);
@@ -53,14 +151,23 @@ const Procurement = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h2 className="mb-0">Procurement</h2>
+                <h2 className="mb-0">Sales</h2>
                 <Button className="mt-4"
                         color="primary"
                         onClick={() => {
                           closeModal();
+                          setProcurementData({
+                            name:"",
+                            quantity:0,
+                            purchaser:"",
+                            location:"",
+                            value:0,
+                            date:""
+
+                          })
                         }}
                 >
-                  Add Purchase Order
+                  Add Procurement 
                 </Button>
                 <Button className="mt-4 float-right"
                         color="danger"
@@ -82,6 +189,7 @@ const Procurement = () => {
                               type="text"
                               placeholder="NAME"
                               name="name"
+                              onChange = {(e) => onChangeprocurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -91,6 +199,7 @@ const Procurement = () => {
                               type="number"
                               placeholder="QUANTITY  (please use scroller on right)"
                               name="quantity"
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -100,6 +209,7 @@ const Procurement = () => {
                               type="text"
                               placeholder="Supplier"
                               name="supplier"
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -109,6 +219,7 @@ const Procurement = () => {
                               type="text"
                               placeholder="Destination"
                               name="destination"
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -117,7 +228,8 @@ const Procurement = () => {
                           <Input
                               type="number"
                               placeholder="Net Value"
-                              name="netValue"
+                              name="value"
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -127,12 +239,13 @@ const Procurement = () => {
                               type="date"
                               placeholder="Date"
                               name="date"
+                              onChange = {(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary">
-                          Add Procurement Order
+                        <Button color="primary" onClick = {(e) => { addProcurement(); closeModal();}}>
+                          Add Procurement
                         </Button>
                       </div>
                     </Form>
@@ -147,17 +260,57 @@ const Procurement = () => {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                 <tr>
+                  <th scope="col">Receipt ID</th>
                   <th scope="col">Name</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Supplier</th>
                   <th scope="col">Destination</th>
-                  <th scope="col">Receipt ID</th>
                   <th scope="col">Net Value</th>
                   <th scope="col">Date</th>
+                  <th scope="col"></th>
                 </tr>
                 </thead>
-                <tbody>
 
+                <tbody style={{overflow:"auto"}}>
+                  {procurement.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                      <td>{t.name}</td>
+                      <td>{t.quantity}</td>
+                      <td>{t.supplier}</td>
+                      <td>{t.destination}</td>
+                      <td>{t.value}</td>
+                      <td>{t.date.substr(0,10)}</td>
+                      <td className="text-right" >
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Delete Shipment
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </Card>
@@ -168,4 +321,4 @@ const Procurement = () => {
   );
 };
 
-export default Procurement;
+export default Sales;
