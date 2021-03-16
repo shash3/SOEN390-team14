@@ -324,7 +324,7 @@ const Procurement = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                 <tr>
                   <th scope="col">Receipt ID</th>

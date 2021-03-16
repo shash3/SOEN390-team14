@@ -193,7 +193,7 @@ const AccountPayable = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                 <tr>
                   <th scope="col">Invoice ID</th>
@@ -269,7 +269,7 @@ const AccountPayable = () => {
                 <h2 className="mb-0">Paid Accounts Payable</h2>
                 
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                 <tr>
                   <th scope="col">Invoice ID</th>
