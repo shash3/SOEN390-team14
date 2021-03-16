@@ -19,6 +19,8 @@ app.use('/api/auth', require('./routes/api/users/Auth'))
 
 app.use('/api/inventory', require('./routes/api/Inventory/inventoryAuth'))
 
+app.use('/api/sales', require('./routes/api/Sales/salesAuth'))
+
 app.use('/api/product_line', require('./routes/api/Product_line/productLineAuth'))
 
 app.use('/api/material', require('./routes/api/Material/materialAuth'))

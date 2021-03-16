@@ -40,8 +40,69 @@ import FinanceHeader from '../../components/Headers/FinanceHeader';
 
 
 const Sales = () => {
-
+  const [sales,setSales] = useState([]);
+  const [updated,setUpdated] = useState(false);
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  const [salesData,setSalesData] = useState({
+    name:"",
+    quantity:0,
+    purchaser:"",
+    location:"",
+    value:0,
+    date:""
+  });
+  const onDelete = async() => {
+    
+  }
   const [modal, setModal] = useState(false);
+  const onChangeSalesData = (e) => {
+    setSalesData({
+      ...salesData,
+      [e.target.name]:e.target.value
+    });
+  };
+  useEffect(() => {
+    // retrieve information
+    const lookup = async () => {
+      
+      
+        await axios
+          .get('/api/sales', {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          })
+          .then((response) => {
+            if (response.data) {
+              setSales(response.data);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      
+    };
+    lookup();
+  }, [updated]);
+
+  const addSale = async () =>{
+    const body = JSON.stringify(salesData);
+    console.log("hello");
+    try {
+      await axios
+        .post('/api/sales/add', body, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  
+
 
   function closeModal() {
     setModal(!modal);
@@ -85,6 +146,7 @@ const Sales = () => {
                               type="text"
                               placeholder="NAME"
                               name="name"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -94,6 +156,7 @@ const Sales = () => {
                               type="number"
                               placeholder="QUANTITY  (please use scroller on right)"
                               name="quantity"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -103,6 +166,7 @@ const Sales = () => {
                               type="text"
                               placeholder="Purchaser"
                               name="purchaser"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -112,6 +176,7 @@ const Sales = () => {
                               type="text"
                               placeholder="Location"
                               name="location"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -120,7 +185,8 @@ const Sales = () => {
                           <Input
                               type="number"
                               placeholder="Net Value"
-                              name="netValue"
+                              name="value"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
@@ -130,11 +196,12 @@ const Sales = () => {
                               type="date"
                               placeholder="Date"
                               name="date"
+                              onChange = {(e) => onChangeSalesData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary">
+                        <Button color="primary" onClick = {(e) => { addSale(); closeModal();}}>
                           Add Sales Order
                         </Button>
                       </div>
@@ -159,8 +226,47 @@ const Sales = () => {
                   <th scope="col">Date</th>
                 </tr>
                 </thead>
-                <tbody>
 
+                <tbody style={{overflow:"auto"}}>
+                  {sales.map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                      <td>{t.name}</td>
+                      <td>{t.quantity}</td>
+                      <td>{t.purchaser}</td>
+                      <td>{t.location}</td>
+                      <td>{t.value}</td>
+                      <td>{t.date}</td>
+                      <td className="text-right" >
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Delete Shipment
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </Card>
