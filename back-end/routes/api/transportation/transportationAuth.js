@@ -71,6 +71,24 @@ router.post("/add", auth, async (req, res) => {
   await transportation.save();
   res.send(true);
 });
+
+router.post("/addP", auth, async (req, res) => {
+  const {name, quantity, type, location, destination, status, packagingStatus } = req.body;
+  
+  transportation = new Transportation({
+    name,
+    quantity,
+    type,
+    location,
+    destination,
+    status,
+    packagingStatus
+  });
+  
+  await transportation.save();
+  res.send(true);
+});
+
 router.post("/delete",auth,async (req,res) =>{
   
 const {_id}= req.body;

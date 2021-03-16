@@ -118,6 +118,30 @@ const Procurement = () => {
       alert('Please Enter Data Into All Fields');
     } else {
     const body = JSON.stringify(procurementData);
+    const shipmentData = {
+      name,
+      quantity,
+      type:"raw",
+      supplier,
+      destination,
+      status:"On Route",
+      packagingStatus:true
+
+
+    }
+    const body2 = JSON.stringify(shipmentData);
+
+    try {
+      await axios
+        .post('/api/transportation/addP', body2, {
+          headers: {
+            'x-auth-token': userToken,
+            'Content-Type': 'application/json',
+          },
+        });
+    } catch (err) {
+      console.error(err);
+    }
     console.log("hello");
     try {
       await axios
