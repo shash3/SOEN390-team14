@@ -27,6 +27,16 @@ router.post("/delete",auth,async (req,res) =>{
     res.send(true);
     });
 
+
+    router.post("/deleteN",auth,async (req,res) =>{
+  
+      const {name}= req.body;
+      
+      
+      await Procurement.deleteOne({name:name});
+      res.send(true);
+      });
+
 router.post("/add", auth, async (req, res) => {
     const {name, quantity, supplier, destination, value, date } = req.body;
 

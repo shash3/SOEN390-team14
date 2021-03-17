@@ -109,6 +109,35 @@ router.post("/changeStatus", auth, async (req,res)=>{
  res.send(true);
 
 });
+router.post("/delete",auth,async (req,res) =>{
+  
+const {_id}= req.body;
+
+
+await Transportation.deleteOne({_id:_id});
+res.send(true);
+});
+
+router.post("/deleteN",auth,async (req,res) =>{
+  
+  const {name}= req.body;
+  
+  
+  await Transportation.deleteOne({name:name});
+  res.send(true);
+  });
+
+router.post("/changeStatus", auth, async (req,res)=>{
+  const{
+    _id,
+    status
+  } = req.body;
+ 
+ 
+ await Transportation.updateOne({_id:_id},{$set:{status:status}});
+ res.send(true);
+
+});
 router.post("/sendShipment", auth, async (req,res)=>{
   const{
     _id,

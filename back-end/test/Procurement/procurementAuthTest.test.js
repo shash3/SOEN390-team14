@@ -9,25 +9,32 @@ it("test logging in ", async () => {
     token = res.body.token;
 });
 
-it('tests adding a shipment', async() => {
+it('tests adding a procurement', async() => {
     const body ={
     name:"test",
     quantity:99,
-    type:"test",
-    location:"test",
+    supplier:"test",
     destination:"test",
-    status:"test",
-    packagingStatus:false
+    value:"test",
+    date: Date.now(),
+    paid:false
     }
-    const res2 = await request(app).get('/api/transportation/add',body).set('x-auth-token', token)
+    const res2 = await request(app).post('/api/procurement/add',{
+        headers: {
+            'x-auth-token': token,
+            'Content-Type': 'application/json',
+          },
+    }).send(JSON.stringify(body));
+    
     
     expect(res2.body).toBeTruthy();
 })
+
 it('tests deletion', async() => {
    
-    const res2 = await request(app).post('/api/transportation/deleteN',"test").set('x-auth-token', token)
+    const res2 = await request(app).post('/api/procurement/deleteN',"test").set('x-auth-token', token)
     
     expect(res2.body).toBeTruthy();
-})
+});
 
 

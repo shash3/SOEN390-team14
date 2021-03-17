@@ -39,9 +39,11 @@ describe("Post Endpoints", () => {
       });
 
       it("Adding new product line ", async () => {
+        
         const res1 = await request(app).post("/api/product_line/add", {
             headers: {
               "x-auth-token": token,
+              'Content-Type': 'application/json'
             },
           }).send({
             name: "New Prod"
