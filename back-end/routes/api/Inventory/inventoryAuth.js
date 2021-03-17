@@ -52,6 +52,7 @@ router.post("/add", async (req, res) => {
     location:location
   });
   await inventory.save();
+  res.json("added");
 });
 
 // Remove a certain quantity from inventory 
@@ -75,18 +76,6 @@ router.put("/decrement", async (req,res) => {
     await Inventory.find({name: name , location: location}).updateOne({quantity:newQuantity});
     res.json("decreased");
   } catch(err){
-    console.log(err.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-//retrieve inventory by location 
-router.get("/", auth, async (req, res) => {
-  const {location} = req.body;
-  try{
-    const inventory = await Inventory.find({location})
-    res.json(inventory);
-  }catch(err){
     console.log(err.message);
     res.status(500).send("Server Error");
   }

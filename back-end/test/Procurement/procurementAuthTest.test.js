@@ -55,16 +55,14 @@ describe("Post Endpoints", () => {
       date: Date.now(),
       paid: false,
     };
-    const res2 = await request(app)
-      .post({
-        headers: {
-          "x-auth-token": token,
-          "Content-Type": "application/json",
-        },
-        url: "/api/procurement/add",
-        body: body,
-      })
-      .send(JSON.stringify(body));
+    const res2 = await request(app).post("/api/procurement/add", {
+      headers: {
+        "x-auth-token": token,
+        "Content-Type": "application/json",
+      },
+      body: body,
+    })
+    .send(JSON.stringify(body));
 
     console.log(res2.body);
     expect(res2.body).toBeTruthy();
