@@ -4,6 +4,15 @@ const app = require("../../server.js");
 let token = "";
 
 describe("Post Endpoints", () => {
+  it("create testing user", async () => {
+    await request(app).post("/api/users/admin").send({
+      name: "admin",
+      email: "admin@gmail.com",
+      password: "12345678",
+    });
+  });
+  
+
   it("test logging in ", async () => {
     const res = await request(app).post("/api/auth/login").send({
       email: "admin@gmail.com",
@@ -13,6 +22,7 @@ describe("Post Endpoints", () => {
   });
 
   it("Retrieve specific inventory by name", async () => {
+    console.log('token: ' + token);
     const res1 = await request(app).post("/api/material/", {
         headers: {
           "x-auth-token": token,
@@ -20,6 +30,7 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Screw"
       });
+      console.log(res1.body);
       expect(res1.body).toBeTruthy();
   });
 
@@ -28,9 +39,8 @@ describe("Post Endpoints", () => {
           headers: {
             "x-auth-token": token,
           },
-        }).send({
-          name: "Screw"
         });
-        expect(res1.body).toBeTruthy();
+      console.log(res1.body);
+      expect(res1.body).toBeTruthy();
     });
 });

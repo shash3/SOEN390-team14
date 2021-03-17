@@ -4,6 +4,14 @@ const app = require("../../server.js");
 let token = "";
 
 describe("Post Endpoints", () => {
+  it("create testing user", async () => {
+    await request(app).post("/api/users/admin").send({
+      name: "admin",
+      email: "admin@gmail.com",
+      password: "12345678",
+    });
+  });
+  
   it("test logging in ", async () => {
     const res = await request(app).post("/api/auth/login").send({
       email: "admin@gmail.com",
