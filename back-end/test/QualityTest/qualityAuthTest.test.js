@@ -31,7 +31,7 @@ describe("Post Endpoints", () => {
       location: "Plant 1"
     });
     expect(res1.body).toBeTruthy();
-});
+  });
   it("Retrieve all quality data", async () => {
     const res1 = await request(app).get("/api/quality/", {
         headers: {
