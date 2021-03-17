@@ -38,7 +38,7 @@ describe("Post Endpoints", () => {
           expect(res1.body).toBeTruthy();
       });
 
-      it("Adding new product line ", async () => {
+     /* it("Adding new product line ", async () => {
         
         const res1 = await request(app).post("/api/product_line/add", {
             headers: {
@@ -49,5 +49,5 @@ describe("Post Endpoints", () => {
             name: "New Prod"
           });
           expect(res1.body).toBeTruthy();
-      });
-  });
+      }); */
+  }); 
