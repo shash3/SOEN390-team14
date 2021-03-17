@@ -8,6 +8,23 @@ it("test logging in ", async () => {
     });
     token = res.body.token;
 });
+it("receiving shipments ", async () => {
+    const res = await request(app).get("/api/transportation");
+    
+    expect(res.body).toBeTruthy();
+});
+
+it("receiving items in packaging ", async () => {
+    const res = await request(app).get("/api/transportation/packaging");
+    
+    expect(res.body).toBeTruthy();
+});
+
+it("receiving completed shipments ", async () => {
+    const res = await request(app).get("/api/transportation/completed");
+    
+    expect(res.body).toBeTruthy();
+});
 
 it('tests adding a shipment', async() => {
     const body ={
@@ -17,9 +34,23 @@ it('tests adding a shipment', async() => {
     location:"test",
     destination:"test",
     status:"test",
-    packagingStatus:false
+    
     }
     const res2 = await request(app).get('/api/transportation/add',body).set('x-auth-token', token)
+    
+    expect(res2.body).toBeTruthy();
+})
+it('tests adding a shipmentfrom procurements', async() => {
+    const body ={
+    name:"test",
+    quantity:99,
+    type:"test",
+    location:"test",
+    destination:"test",
+    status:"test",
+    packagingStatus:false
+    }
+    const res2 = await request(app).get('/api/transportation/addP',body).set('x-auth-token', token)
     
     expect(res2.body).toBeTruthy();
 })
