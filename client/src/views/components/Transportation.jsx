@@ -41,6 +41,8 @@ const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
+  const [completed, setCompleted] = useState([]);
+  const [complete, setComplete] = useState(false);
   const [transportationData, setTransportationData] = useState({
     _id: '',
     name: '',
@@ -52,6 +54,7 @@ const Transportation = () => {
   });
   const [tranPage, setTranPage] = useState(0);
   const [packPage, setPackPage] = useState(0);
+  const [compPage, setCompPage] = useState(0);
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
   const {
     name, quantity, type, location, destination,
@@ -101,6 +104,21 @@ const Transportation = () => {
         .catch((error) => {
           console.error(error);
         });
+        await axios
+        .get('/api/transportation/completed', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setCompleted(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       if (formData === '') {
         await axios
           .get('/api/transportation', {
@@ -138,6 +156,8 @@ const Transportation = () => {
     };
     lookup();
   }, [formData, updated]);
+
+ 
 
   const onSetReady = async (_id) => {
     const id = {
@@ -201,16 +221,41 @@ const Transportation = () => {
     }
   };
 
-  const onChangeStatus = async (_id, status) => {
+  const onChangeStatus = async (_id, status, name, type, quantity, destination) => {
+   
+    if(status == "Completed"){
+      
+      const data = { 
+        name,
+        type,
+        quantity,
+        location: destination,
+      };
+      const body = JSON.stringify(data);
+      try {
+        await axios
+          .put('/api/inventory/superIncrement', body, {
+            headers: {
+              'x-auth-token': userToken,
+              'Content-Type': 'application/json',
+            },
+          });
+      } catch (err) {
+        console.error(err);
+      }
+
+
+    }
+    
     const data = {
       _id,
       status,
     };
-    const body = JSON.stringify(data);
+    const body2 = JSON.stringify(data);
 
     try {
       await axios
-        .post('/api/transportation/changeStatus', body, {
+        .post('/api/transportation/changeStatus', body2, {
           headers: {
             'x-auth-token': userToken,
             'Content-Type': 'application/json',
@@ -219,6 +264,7 @@ const Transportation = () => {
     } catch (err) {
       console.error(err);
     }
+  
   };
 
   const onDelete = async (_id) => {
@@ -363,16 +409,17 @@ const Transportation = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Location</th>
+                    <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -391,7 +438,7 @@ const Transportation = () => {
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
-                      <td className="text-right">
+                      <td className="text-right" >
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
@@ -418,7 +465,7 @@ const Transportation = () => {
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
-                              onClick={() => onChangeStatus(t._id, 'Completed')}
+                              onClick={() => onChangeStatus(t._id, 'Completed',t.name,t.type,t.quantity,t.destination)}
                             >
                               Completed
                             </DropdownItem>
@@ -500,15 +547,16 @@ const Transportation = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Packaging</h2>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Location</th>
+                    <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -589,6 +637,112 @@ const Transportation = () => {
                       <PaginationLink
                         href=""
                         onClick={() => setPackPage(packPage + 1)}
+                      >
+                        <i className="fas fa-angle-right" />
+                        <span className="sr-only">Next</span>
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </nav>
+              </CardFooter>
+            </Card>
+          </div>
+        </Row>
+        <br />
+        <br />
+        <Row>
+          <div className="col">
+            <Card className="shadow">
+              <CardHeader className="border-0">
+                <h2 className="mb-0">Completed Shipments</h2>
+              </CardHeader>
+              <Table className="align-items-center table-flush mb-6" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Origin</th>
+                    <th scope="col">Destination</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {completed.slice(compPage * NUM_OF_ITEMS_IN_A_PAGE, (compPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((t) => (
+                    <tr key={t._id} value={t.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{t._id}</span>
+                          </Media>
+                        </Media>
+                      </th>
+                      <td>{t.name}</td>
+                      <td>{t.quantity}</td>
+                      <td>{t.type}</td>
+                      <td>{t.location}</td>
+                      <td>{t.destination}</td>
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <DropdownToggle
+                            className="btn-icon-only text-light"
+                            href="#pablo"
+                            role="button"
+                            size="sm"
+                            color=""
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="fas fa-ellipsis-v" />
+                          </DropdownToggle>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
+                            <DropdownItem
+                              href="#pablo"
+                              onClick={() => onDelete(t._id)}
+                            >
+                              Delete Shipment
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <CardFooter className="py-4">
+                <nav aria-label="...">
+                  <Pagination
+                    className="pagination justify-content-end mb-0"
+                    listClassName="justify-content-end mb-0"
+                  >
+                    <PaginationItem className={compPage - 1 < 0 ? 'disabled' : 'active'}>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setCompPage(compPage - 1)}
+                        tabIndex="-1"
+                      >
+                        <i className="fas fa-angle-left" />
+                        <span className="sr-only">Previous</span>
+                      </PaginationLink>
+                    </PaginationItem>
+
+                    {Array.from(Array(Math.ceil(completed.length / NUM_OF_ITEMS_IN_A_PAGE)).keys())
+                      .slice(compPage - 1 < 0 ? compPage : compPage - 2 < 0 ? compPage - 1 : compPage - 2, compPage + 1 >= completed.length / NUM_OF_ITEMS_IN_A_PAGE ? compPage + 2 : compPage + 3)
+                      .map((idx) => (
+                        <PaginationItem className={idx === compPage ? 'active' : ''}>
+                          <PaginationLink
+                            href=""
+                            onClick={() => setCompPage(idx)}
+                          >
+                            {idx + 1}
+                          </PaginationLink>
+                        </PaginationItem>
+                      ))}
+
+                    <PaginationItem className={compPage + 1 >= completed.length / NUM_OF_ITEMS_IN_A_PAGE ? 'disabled' : 'active'}>
+                      <PaginationLink
+                        href=""
+                        onClick={() => setCompPage(compPage + 1)}
                       >
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>

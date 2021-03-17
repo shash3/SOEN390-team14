@@ -26,6 +26,7 @@
   "homepage": "https://github.com/shash3/SOEN390-team14#readme",
   "dependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
+    "@sendgrid/mail": "^6.5.5",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.3",
     "cors": "^2.8.5",

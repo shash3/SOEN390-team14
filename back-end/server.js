@@ -17,7 +17,12 @@ const PORT = process.env.PORT || 5000;
 app.use('/api/users', require('./routes/api/users/users'))
 app.use('/api/auth', require('./routes/api/users/Auth'))
 
+
 app.use('/api/inventory', require('./routes/api/Inventory/inventoryAuth'))
+
+app.use('/api/procurement',require('./routes/api/Procurement/procurementAuth'))
+app.use('/api/sales', require('./routes/api/Sales/salesAuth'))
+
 
 app.use('/api/product_line', require('./routes/api/Product_line/productLineAuth'))
 
