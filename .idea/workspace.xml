@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="585e4052-c1e9-4655-8b0c-272e0bbcf882" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/layouts/Admin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/layouts/Admin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/AccountPayable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/AccountPayable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/AccountReceivable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/AccountReceivable.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/Procurement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Procurement.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/Sales.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Sales.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/views/components/Help.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Help.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +40,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -67,6 +63,7 @@
       <workItem from="1614019213501" duration="51000" />
       <workItem from="1615775976093" duration="750000" />
       <workItem from="1615828357490" duration="993000" />
+      <workItem from="1616014118380" duration="2543000" />
     </task>
     <servers />
   </component>
