@@ -22,7 +22,6 @@ describe("Post Endpoints", () => {
   });
 
   it("Retrieve specific inventory by name", async () => {
-    console.log('token: ' + token);
     const res1 = await request(app).post("/api/material/", {
         headers: {
           "x-auth-token": token,
@@ -30,7 +29,6 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Screw"
       });
-      console.log(res1.body);
       expect(res1.body).toBeTruthy();
   });
 
@@ -40,7 +38,6 @@ describe("Post Endpoints", () => {
             "x-auth-token": token,
           },
         });
-      console.log(res1.body);
       expect(res1.body).toBeTruthy();
     });
 });

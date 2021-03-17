@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const config = require('config');
 const db = config.get('mongoURI'); // cloud database
 
-//import { MongoMemoryServer } from 'mongodb-memory-server';
 const MongoMemoryServer = require('mongodb-memory-server');
 const mongodb = new MongoMemoryServer.MongoMemoryServer();
 const connectionString = 'mongodb://mongo:27017/erp'; // local database

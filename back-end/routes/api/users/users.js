@@ -79,7 +79,7 @@ router.post(
   }
 );
 
-// Create an admine user
+// Create an admin user
 router.post("/admin", 
   [
     // form validation
