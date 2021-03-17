@@ -53,7 +53,6 @@ describe("Post Endpoints", () => {
       });
       expect(res1.body).toBeTruthy();
   });
-
   it("Retrieve specific inventory by name and location", async () => {
     const res1 = await request(app).post("/api/inventory/location", {
         headers: {
@@ -65,7 +64,6 @@ describe("Post Endpoints", () => {
       });
       expect(res1.body).toBeTruthy();
   });
-
   it("Change a specific inventory item to a new quantity", async () => {
     const res1 = await request(app).put("/api/inventory/remove", {
         headers: {
