@@ -8,14 +8,14 @@ it("test logging in ", async () => {
     });
     token = res.body.token;
 });
-it("receiving shipments ", async () => {
-    const res = await request(app).get("/api/transportation");
+
+it("receiving procurements ", async () => {
+    const res = await request(app).get("/api/procurement");
     
     expect(res.body).toBeTruthy();
 });
-
-it("receiving items in packaging ", async () => {
-    const res = await request(app).get("/api/transportation/packaging");
+it("receiving payables ", async () => {
+    const res = await request(app).get("/api/procurement/payables");
     
     expect(res.body).toBeTruthy();
 });

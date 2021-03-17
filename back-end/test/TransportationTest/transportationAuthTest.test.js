@@ -40,7 +40,7 @@ it('tests adding a shipment', async() => {
     
     expect(res2.body).toBeTruthy();
 })
-it('tests adding a shipmentfrom procurements', async() => {
+it('tests adding a shipment from procurements', async() => {
     const body ={
     name:"test",
     quantity:99,
