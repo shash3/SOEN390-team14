@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express();
 
 // Connect Database
-connectDB();
+connectDB(process.env.NODE_ENV === 'test');
 
 app.use(cors())
 // Init Middleware
