@@ -52,7 +52,7 @@ router.post("/add", auth, async (req, res) => {
     });
     
     await procurement.save();
-    res.send(true);
+    res.json("hello");
   });
 
   router.get("/payables", auth, async(req,res) => {
