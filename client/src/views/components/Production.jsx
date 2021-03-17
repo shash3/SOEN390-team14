@@ -175,7 +175,6 @@ const Production = () => {
     };
 
     const main = async () => {
-      console.log(new Date().toString());
       const machines = await returnUnavailableMachines();
       for (let index = 0; index < machines.length; index += 1) {
         const machine = machines[index];

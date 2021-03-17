@@ -1,9 +1,9 @@
 /* eslint-disable no-alert */
-/* eslint-disable no-console */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
+/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // reactstrap components
@@ -42,7 +42,6 @@ const Transportation = () => {
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
   const [completed, setCompleted] = useState([]);
-  const [complete, setComplete] = useState(false);
   const [transportationData, setTransportationData] = useState({
     _id: '',
     name: '',
@@ -104,7 +103,7 @@ const Transportation = () => {
         .catch((error) => {
           console.error(error);
         });
-        await axios
+      await axios
         .get('/api/transportation/completed', {
           headers: {
             'x-auth-token': userToken,
@@ -156,8 +155,6 @@ const Transportation = () => {
     };
     lookup();
   }, [formData, updated]);
-
- 
 
   const onSetReady = async (_id) => {
     const id = {
@@ -221,15 +218,13 @@ const Transportation = () => {
     }
   };
 
-  const onChangeStatus = async (_id, status, name, type, quantity, destination) => {
-   
-    if(status == "Completed"){
-      
-      const data = { 
-        name,
-        type,
-        quantity,
-        location: destination,
+  const onChangeStatus = async (_id, status, changedName, changedType, changedQuantity, changedDestination) => {
+    if (status === 'Completed') {
+      const data = {
+        name: changedName,
+        type: changedType,
+        quantity: changedQuantity,
+        location: changedDestination,
       };
       const body = JSON.stringify(data);
       try {
@@ -243,10 +238,8 @@ const Transportation = () => {
       } catch (err) {
         console.error(err);
       }
-
-
     }
-    
+
     const data = {
       _id,
       status,
@@ -264,7 +257,6 @@ const Transportation = () => {
     } catch (err) {
       console.error(err);
     }
-  
   };
 
   const onDelete = async (_id) => {
@@ -419,7 +411,7 @@ const Transportation = () => {
                     <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
                     <th scope="col">Status</th>
-                    <th scope="col"></th>
+                    <th scope="col"> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -438,7 +430,7 @@ const Transportation = () => {
                       <td>{t.location}</td>
                       <td>{t.destination}</td>
                       <td>{t.status}</td>
-                      <td className="text-right" >
+                      <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
@@ -465,7 +457,7 @@ const Transportation = () => {
                             </DropdownItem>
                             <DropdownItem
                               href="#pablo"
-                              onClick={() => onChangeStatus(t._id, 'Completed',t.name,t.type,t.quantity,t.destination)}
+                              onClick={() => onChangeStatus(t._id, 'Completed', t.name, t.type, t.quantity, t.destination)}
                             >
                               Completed
                             </DropdownItem>
@@ -556,7 +548,7 @@ const Transportation = () => {
                     <th scope="col">Type</th>
                     <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
-                    <th scope="col"></th>
+                    <th scope="col"> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -665,7 +657,7 @@ const Transportation = () => {
                     <th scope="col">Type</th>
                     <th scope="col">Origin</th>
                     <th scope="col">Destination</th>
-                    <th></th>
+                    <th> </th>
                   </tr>
                 </thead>
                 <tbody>

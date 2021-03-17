@@ -1,3 +1,4 @@
+/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState } from 'react';
 // node.js library that concatenates classes (strings)
 import classnames from 'classnames';
@@ -96,7 +97,7 @@ const Index = () => {
                   <Line
                     data={chartExample1[chartExample1Data]}
                     options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
+                    getDatasetAtEvent={(e) => console.error(e)}
                   />
                 </div>
               </CardBody>

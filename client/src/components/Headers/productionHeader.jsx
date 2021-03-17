@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 
 // reactstrap components
 import {
-  Card, CardBody, CardTitle, Container, Row, Col,
+  Card, CardBody, Container, Row, Col,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
