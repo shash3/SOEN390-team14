@@ -40,7 +40,7 @@ router.post("/add", async (req, res) => {
     material
   });
   await product.save();
-  res.json();
+  res.json("added");
 });
 
 module.exports = router;

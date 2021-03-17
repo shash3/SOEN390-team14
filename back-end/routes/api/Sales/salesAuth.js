@@ -58,7 +58,6 @@ router.post("/delete",auth,async (req,res) =>{
 router.post("/add", auth, async (req, res) => {
     const {name, quantity, purchaser, location, value, date } = req.body;
 
-    console.log("hello");
     sales = new Sales({
      name,
      quantity,
