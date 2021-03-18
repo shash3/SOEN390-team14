@@ -21,6 +21,7 @@ router.post("/add", async (req, res) => {
       location : location
     });
     await locations.save();
+    res.json('added');
   });
 
   module.exports = router;

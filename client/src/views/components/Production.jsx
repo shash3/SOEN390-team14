@@ -10,6 +10,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
 // reactstrap components
 import {
   Badge,
@@ -118,6 +119,74 @@ const Production = () => {
   const toggleTransferModal = () => {
     setTransferModal(!transferModal);
   };
+
+  /**
+   * Refresh Production Machines
+   */
+
+  const [refreshMachine, setRefreshMachine] = useState(false);
+  useEffect(() => {
+    let refresh = true;
+    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 30);
+  }, []);
+  /**
+   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+   */
+  useEffect(async () => {
+    const returnUnavailableMachines = () => {
+      const reply = axios.post('/api/machine/unavailable',
+        {
+          location: userLoc,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).then((response) => response.data).catch((err) => console.error('Error', err));
+      return reply;
+    };
+
+    const addToQuality = async (name, type, location) => {
+      await axios.post('/api/quality/add',
+        {
+          name,
+          type,
+          location,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((error) => {
+        console.error(error);
+      });
+    };
+
+    const removeItemFromMachine = async (key) => {
+      await axios.put('/api/machine/remove',
+        {
+          _id: key,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((err) => console.error('Error', err));
+    };
+
+    const main = async () => {
+      const machines = await returnUnavailableMachines();
+      for (let index = 0; index < machines.length; index += 1) {
+        const machine = machines[index];
+        if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
+          await addToQuality(machine.item, machine.type, userLoc);
+          await removeItemFromMachine(machine._id);
+        }
+      }
+    };
+
+    main();
+  }, [refreshMachine]);
 
   /* -------------------------
    * Functions that retrieve information from databases.
@@ -456,79 +525,6 @@ const Production = () => {
         }).catch((err) => console.error('Error', err));
   };
 
-  /* ------------------------
-   * Package for updating the production machine
-   * ------------------------
-   */
-
-  const [refreshMachines, updateRefreshMachines] = useState(false);
-  useEffect(() => {
-    /**
-     * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
-     */
-    const checkProductionFinished = () => {
-      const returnUnavailableMachines = () => {
-        const reply = axios.post('/api/machine/unavailable',
-          {
-            location: userLoc,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          }).then((response) => response.data).catch((err) => console.error('Error', err));
-        return reply;
-      };
-
-      const addToQuality = async (name, type, location) => {
-        await axios.post('/api/quality/add',
-          {
-            name,
-            type,
-            location,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          }).catch((error) => {
-          console.error(error);
-        });
-      };
-
-      const removeItemFromMachine = async (key) => {
-        await axios.put('/api/machine/remove',
-          {
-            _id: key,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          }).catch((err) => console.error('Error', err));
-      };
-
-      const main = async () => {
-        const machines = await returnUnavailableMachines();
-        for (let index = 0; index < machines.length; index += 1) {
-          const machine = machines[index];
-          if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-            await addToQuality(machine.item, machine.type, userLoc);
-            await removeItemFromMachine(machine._id);
-          }
-        }
-      };
-
-      main();
-    };
-
-    checkProductionFinished();
-  }, [refreshMachines]);
-
-  useEffect(() => {
-    setInterval(() => updateRefreshMachines(!refreshMachines), 1000 * 30);
-  }, []);
-
   /* ---------------------------
    * Functions for both new product line and transfer product.
    * ---------------------------
@@ -836,18 +832,18 @@ const Production = () => {
           <FormGroup>
             <Button className="btn-danger" disabled>
               Don&apos;t have enough of
+              {' '}
               <label className="text-indigo strong">{name}</label>
               {' '}
-              to
-              transfer
+              to transfer
+              {' '}
               {quantNeed}
               {' '}
               from location
-              {locRetrieval}
-              .
-              <br />
               {' '}
-              Only
+              {locRetrieval}
+              . Only
+              {' '}
               {quantHave}
               {' '}
               in inventory.
@@ -1180,7 +1176,7 @@ const Production = () => {
   };
 
   /* -------------------------
-   * Returns the HTML code for the productino tab.
+   * Returns the HTML code for the production tab.
    * -------------------------
    */
   return (

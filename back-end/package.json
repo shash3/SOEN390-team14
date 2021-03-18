@@ -8,7 +8,7 @@
     "server": "nodemon server",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
     "testRegex": "./test/.*.js$",
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/shash3/SOEN390-team14#readme",
   "dependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
     "@sendgrid/mail": "^6.5.5",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.3",
@@ -33,6 +34,7 @@
     "express-validator": "^6.9.2",
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
+    "mongodb-memory-server": "^6.9.6",
     "mongoose": "^5.11.13"
   },
   "devDependencies": {

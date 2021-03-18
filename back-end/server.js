@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express();
 
 // Connect Database
-connectDB();
+connectDB(process.env.NODE_ENV === 'test');
 
 app.use(cors())
 // Init Middleware
@@ -15,14 +15,14 @@ const PORT = process.env.PORT || 5000;
 
 // Define Routes
 app.use('/api/users', require('./routes/api/users/users'))
-app.use('/api/auth', require('./routes/api/users/Auth'))
 
+app.use('/api/auth', require('./routes/api/users/Auth'))
 
 app.use('/api/inventory', require('./routes/api/Inventory/inventoryAuth'))
 
 app.use('/api/procurement',require('./routes/api/Procurement/procurementAuth'))
-app.use('/api/sales', require('./routes/api/Sales/salesAuth'))
 
+app.use('/api/sales', require('./routes/api/Sales/salesAuth'))
 
 app.use('/api/product_line', require('./routes/api/Product_line/productLineAuth'))
 
@@ -31,7 +31,6 @@ app.use('/api/material', require('./routes/api/Material/materialAuth'))
 app.use('/api/transportation', require('./routes/api/transportation/transportationAuth'))
 
 app.use('/api/quality', require('./routes/api/Quality/qualityAuth'))
-
 
 app.use('/api/locations', require('./routes/api/Locations/locationAuth'))
 

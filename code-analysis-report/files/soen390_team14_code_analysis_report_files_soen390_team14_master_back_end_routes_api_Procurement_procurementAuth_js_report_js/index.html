@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - soen390-team14\code-analysis-report\files\soen390_team14_master_back_end_routes_api_Procurement_procurementAuth_js\report.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>soen390-team14\code-analysis-report\files\soen390_team14_master_back_end_routes_api_Procurement_procurementAuth_js\report.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">23.11</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">1</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">6.89</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">2.63</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">__report = {&quot;info&quot;:{&quot;file&quot;:&quot;soen390-team14-master\\back-end\\routes\\api\\Procurement\\procurementAuth.js&quot;,&quot;fileShort&quot;:&quot;soen390-team14-master\\back-end\\routes\\api\\Procurement\\procurementAuth.js&quot;,&quot;fileSafe&quot;:&quot;soen390_team14_master_back_end_routes_api_Procurement_procurementAuth_js&quot;,&quot;link&quot;:&quot;files/soen390_team14_master_back_end_routes_api_Procurement_procurementAuth_js/index.html&quot;},&quot;complexity&quot;:{&quot;methodAggregate&quot;:{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:1.493,&quot;halstead&quot;:{&quot;bugs&quot;:0.642,&quot;difficulty&quot;:15.083,&quot;effort&quot;:29029.306,&quot;length&quot;:314,&quot;time&quot;:1612.739,&quot;vocabulary&quot;:70,&quot;volume&quot;:1924.595,&quot;operands&quot;:{&quot;distinct&quot;:60,&quot;total&quot;:181,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:10,&quot;total&quot;:133,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:12,&quot;sloc&quot;:{&quot;logical&quot;:67,&quot;physical&quot;:76}},&quot;settings&quot;:{&quot;commonjs&quot;:true,&quot;forin&quot;:false,&quot;logicalor&quot;:true,&quot;switchcase&quot;:true,&quot;trycatch&quot;:false,&quot;newmi&quot;:true},&quot;classes&quot;:[],&quot;dependencies&quot;:[{&quot;line&quot;:1,&quot;path&quot;:&quot;express&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:3,&quot;path&quot;:&quot;../../../middleware/auth&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:4,&quot;path&quot;:&quot;../../../models/Procurement&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:5,&quot;path&quot;:&quot;express-validator&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:6,&quot;path&quot;:&quot;bcryptjs&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:7,&quot;path&quot;:&quot;jsonwebtoken&quot;,&quot;type&quot;:&quot;cjs&quot;},{&quot;line&quot;:8,&quot;path&quot;:&quot;config&quot;,&quot;type&quot;:&quot;cjs&quot;}],&quot;errors&quot;:[],&quot;lineEnd&quot;:76,&quot;lineStart&quot;:1,&quot;maintainability&quot;:66.415,&quot;methods&quot;:[{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:16.667,&quot;halstead&quot;:{&quot;bugs&quot;:0.048,&quot;difficulty&quot;:3.857,&quot;effort&quot;:550.12,&quot;length&quot;:33,&quot;time&quot;:30.562,&quot;vocabulary&quot;:20,&quot;volume&quot;:142.624,&quot;operands&quot;:{&quot;distinct&quot;:14,&quot;total&quot;:18,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:6,&quot;total&quot;:15,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:6,&quot;physical&quot;:9},&quot;errors&quot;:[],&quot;lineEnd&quot;:19,&quot;lineStart&quot;:11,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;},{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:20,&quot;halstead&quot;:{&quot;bugs&quot;:0.029,&quot;difficulty&quot;:4.875,&quot;effort&quot;:426.9,&quot;length&quot;:23,&quot;time&quot;:23.717,&quot;vocabulary&quot;:14,&quot;volume&quot;:87.569,&quot;operands&quot;:{&quot;distinct&quot;:8,&quot;total&quot;:13,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:6,&quot;total&quot;:10,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:5,&quot;physical&quot;:8},&quot;errors&quot;:[],&quot;lineEnd&quot;:28,&quot;lineStart&quot;:21,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;},{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:5.556,&quot;halstead&quot;:{&quot;bugs&quot;:0.085,&quot;difficulty&quot;:7.368,&quot;effort&quot;:1870.28,&quot;length&quot;:54,&quot;time&quot;:103.904,&quot;vocabulary&quot;:26,&quot;volume&quot;:253.824,&quot;operands&quot;:{&quot;distinct&quot;:19,&quot;total&quot;:40,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:7,&quot;total&quot;:14,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:18,&quot;physical&quot;:17},&quot;errors&quot;:[],&quot;lineEnd&quot;:46,&quot;lineStart&quot;:30,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;},{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:14.286,&quot;halstead&quot;:{&quot;bugs&quot;:0.057,&quot;difficulty&quot;:5,&quot;effort&quot;:848.218,&quot;length&quot;:37,&quot;time&quot;:47.123,&quot;vocabulary&quot;:24,&quot;volume&quot;:169.644,&quot;operands&quot;:{&quot;distinct&quot;:16,&quot;total&quot;:20,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:8,&quot;total&quot;:17,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:7,&quot;physical&quot;:9},&quot;errors&quot;:[],&quot;lineEnd&quot;:56,&quot;lineStart&quot;:48,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;},{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:14.286,&quot;halstead&quot;:{&quot;bugs&quot;:0.057,&quot;difficulty&quot;:5,&quot;effort&quot;:848.218,&quot;length&quot;:37,&quot;time&quot;:47.123,&quot;vocabulary&quot;:24,&quot;volume&quot;:169.644,&quot;operands&quot;:{&quot;distinct&quot;:16,&quot;total&quot;:20,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:8,&quot;total&quot;:17,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:7,&quot;physical&quot;:9},&quot;errors&quot;:[],&quot;lineEnd&quot;:65,&quot;lineStart&quot;:57,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;},{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:14.286,&quot;halstead&quot;:{&quot;bugs&quot;:0.04,&quot;difficulty&quot;:4.8,&quot;effort&quot;:576,&quot;length&quot;:30,&quot;time&quot;:32,&quot;vocabulary&quot;:16,&quot;volume&quot;:120,&quot;operands&quot;:{&quot;distinct&quot;:10,&quot;total&quot;:16,&quot;identifiers&quot;:[&quot;__stripped__&quot;]},&quot;operators&quot;:{&quot;distinct&quot;:6,&quot;total&quot;:14,&quot;identifiers&quot;:[&quot;__stripped__&quot;]}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:7,&quot;physical&quot;:8},&quot;errors&quot;:[],&quot;lineEnd&quot;:74,&quot;lineStart&quot;:67,&quot;name&quot;:&quot;&lt;anonymous&gt;&quot;}],&quot;methodAverage&quot;:{&quot;cyclomatic&quot;:1,&quot;cyclomaticDensity&quot;:14.18,&quot;halstead&quot;:{&quot;bugs&quot;:0.052,&quot;difficulty&quot;:5.15,&quot;effort&quot;:853.289,&quot;length&quot;:35.667,&quot;time&quot;:47.405,&quot;vocabulary&quot;:20.667,&quot;volume&quot;:157.217,&quot;operands&quot;:{&quot;distinct&quot;:13.833,&quot;total&quot;:21.167},&quot;operators&quot;:{&quot;distinct&quot;:6.833,&quot;total&quot;:14.5}},&quot;params&quot;:2,&quot;sloc&quot;:{&quot;logical&quot;:8.333,&quot;physical&quot;:10}},&quot;module&quot;:&quot;soen390-team14-master\\back-end\\routes\\api\\Procurement\\procurementAuth.js&quot;},&quot;jshint&quot;:{&quot;messages&quot;:[{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:1,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:2,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:3,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:4,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:5,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:5,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;destructuring binding&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:6,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:7,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:8,&quot;column&quot;:1,&quot;message&quot;:&quot;&#039;const&#039; is available in ES6 (use &#039;esversion: 6&#039;) or Mozilla JS extensions (use moz).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is available in ES{b} (use &#039;esversion: {b}&#039;) or Mozilla JS extensions (use moz).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:11,&quot;column&quot;:41,&quot;message&quot;:&quot;Expected &#039;(&#039; and instead saw &#039;{&#039;.&quot;,&quot;source&quot;:&quot;Expected &#039;{a}&#039; and instead saw &#039;{b}&#039;.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:12,&quot;column&quot;:5,&quot;message&quot;:&quot;Expected an identifier and instead saw &#039;try&#039; (a reserved word).&quot;,&quot;source&quot;:&quot;Expected an identifier and instead saw &#039;{a}&#039; (a reserved word).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:12,&quot;column&quot;:9,&quot;message&quot;:&quot;Expected &#039;)&#039; to match &#039;{&#039; from line 11 and instead saw &#039;{&#039;.&quot;,&quot;source&quot;:&quot;Expected &#039;{a}&#039; to match &#039;{b}&#039; from line {c} and instead saw &#039;{d}&#039;.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:12,&quot;column&quot;:9,&quot;message&quot;:&quot;&#039;arrow function syntax (=&gt;)&#039; is only available in ES6 (use &#039;esversion: 6&#039;).&quot;,&quot;source&quot;:&quot;&#039;{a}&#039; is only available in ES{b} (use &#039;esversion: {b}&#039;).&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:13,&quot;column&quot;:9,&quot;message&quot;:&quot;Expected an identifier and instead saw &#039;const&#039;.&quot;,&quot;source&quot;:&quot;Expected an identifier and instead saw &#039;{a}&#039;.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:13,&quot;column&quot;:15,&quot;message&quot;:&quot;Expected &#039;)&#039; and instead saw &#039;procurement&#039;.&quot;,&quot;source&quot;:&quot;Expected &#039;{a}&#039; and instead saw &#039;{b}&#039;.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:13,&quot;column&quot;:27,&quot;message&quot;:&quot;Bad assignment.&quot;,&quot;source&quot;:&quot;Bad assignment.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:13,&quot;column&quot;:34,&quot;message&quot;:&quot;Missing semicolon.&quot;,&quot;source&quot;:&quot;Missing semicolon.&quot;},{&quot;severity&quot;:&quot;error&quot;,&quot;line&quot;:14,&quot;column&quot;:30,&quot;message&quot;:&quot;Unrecoverable syntax error. (18% scanned).&quot;,&quot;source&quot;:&quot;Unrecoverable syntax error.&quot;}]}}</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

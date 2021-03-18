@@ -33,11 +33,13 @@ router.post("/", auth, async (req, res) => {
 
 // add new material
 router.post("/add", async (req, res) => {
-  const { name } = req.body;
+  const { name, type } = req.body;
   material = new Material({
-    name
+    name,
+    type,
   });
   await material.save();
+  res.json("added");
 });
 
 module.exports = router;

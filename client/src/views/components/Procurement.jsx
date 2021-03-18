@@ -8,23 +8,17 @@ import axios from 'axios';
 import {
   Card,
   CardHeader,
-  CardFooter,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
   Media,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
   Container,
   Row,
   Form,
   FormGroup,
   InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Input,
   ModalHeader,
   ModalBody,
@@ -36,26 +30,24 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader';
 
-
-
-
 const Procurement = () => {
-  const [procurement,setProcurement] = useState([]);
+  const [procurement, setProcurement] = useState([]);
   const [locations, setLocations] = useState([]);
-  const [materials,setMaterials] = useState([]);
-  const [updated,setUpdated] = useState(false);
+  const [materials, setMaterials] = useState([]);
+  const [updated, setUpdated] = useState(false);
   const userToken = JSON.parse(localStorage.getItem('user'));
-  const [procurementData,setProcurementData] = useState({
-    name:"",
-    quantity:0,
-    supplier:"",
-    destination:"",
-    value:0,
-    date:""
+  const [procurementData, setProcurementData] = useState({
+    name: '',
+    quantity: 0,
+    supplier: '',
+    destination: '',
+    value: 0,
+    date: '',
   });
-  const { name, quantity, supplier, destination, value, date } = procurementData;
-  const onDelete = async(_id) => {
-
+  const {
+    name, quantity, supplier, destination, value, date,
+  } = procurementData;
+  const onDelete = async (_id) => {
     const procurementId = {
       _id,
 
@@ -73,127 +65,116 @@ const Procurement = () => {
     } catch (err) {
       console.error(err);
     }
-
-  }
+  };
   const [modal, setModal] = useState(false);
   const onChangeProcurementData = (e) => {
     setProcurementData({
       ...procurementData,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value,
     });
   };
-  useEffect (()=>{
-    const getMaterials = async() => {
-    await axios
-      .get('/api/material', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setMaterials(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  useEffect(() => {
+    const getMaterials = async () => {
+      await axios
+        .get('/api/material', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setMaterials(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     };
-      const getAllLoc = async () => {
-        const response = await axios
-          .get('/api/locations')
-          .catch((err) => console.error('Error', err));
-        if (response.data) {
-          setLocations(response.data);
-        }
-      };
-      getAllLoc();
-      getMaterials();
-
-      
-  },[])
+    const getAllLoc = async () => {
+      const response = await axios
+        .get('/api/locations')
+        .catch((err) => console.error('Error', err));
+      if (response.data) {
+        setLocations(response.data);
+      }
+    };
+    getAllLoc();
+    getMaterials();
+  }, []);
 
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
-      
-      
-        await axios
-          .get('/api/procurement', {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          })
-          .then((response) => {
-            if (response.data) {
-              setProcurement(response.data);
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      
+      await axios
+        .get('/api/procurement', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .then((response) => {
+          if (response.data) {
+            setProcurement(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     };
     lookup();
   }, [updated]);
 
-  const addProcurement = async () =>{
+  const addProcurement = async () => {
     if (
       name === ''
       || quantity === 0
       || supplier === ''
       || destination === 0
       || value === ''
-      ||date ===''
+      || date === ''
 
     ) {
       // eslint-disable-next-line no-alert
       alert('Please Enter Data Into All Fields');
     } else {
-    const body = JSON.stringify(procurementData);
-    const shipmentData = {
-      name,
-      quantity,
-      type:"raw",
-      location:supplier,
-      destination,
-      status:"In Transit",
-      packagingStatus:true
+      const body = JSON.stringify(procurementData);
+      const shipmentData = {
+        name,
+        quantity,
+        type: 'raw',
+        location: supplier,
+        destination,
+        status: 'In Transit',
+        packagingStatus: true,
 
+      };
+      const body2 = JSON.stringify(shipmentData);
 
+      try {
+        await axios
+          .post('/api/transportation/addP', body2, {
+            headers: {
+              'x-auth-token': userToken,
+              'Content-Type': 'application/json',
+            },
+          });
+      } catch (err) {
+        console.error(err);
+      }
+      try {
+        await axios
+          .post('/api/procurement/add', body, {
+            headers: {
+              'x-auth-token': userToken,
+              'Content-Type': 'application/json',
+            },
+          });
+      } catch (err) {
+        console.error(err);
+      }
+
+      setUpdated(!updated);
     }
-    const body2 = JSON.stringify(shipmentData);
-
-    try {
-      await axios
-        .post('/api/transportation/addP', body2, {
-          headers: {
-            'x-auth-token': userToken,
-            'Content-Type': 'application/json',
-          },
-        });
-    } catch (err) {
-      console.error(err);
-    }
-    console.log("hello");
-    try {
-      await axios
-        .post('/api/procurement/add', body, {
-          headers: {
-            'x-auth-token': userToken,
-            'Content-Type': 'application/json',
-          },
-        });
-    } catch (err) {
-      console.error(err);
-    }
-
-    setUpdated(!updated);
-  }
-  }
-
-  
-
+  };
 
   function closeModal() {
     setModal(!modal);
@@ -209,32 +190,33 @@ const Procurement = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Procurement</h2>
-                <Button className="mt-4"
-                        color="primary"
-                        onClick={() => {
-                          closeModal();
-                          setProcurementData({
-                            name:"",
-                            quantity:0,
-                            purchaser:"",
-                            location:"",
-                            value:0,
-                            date:""
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  onClick={() => {
+                    closeModal();
+                    setProcurementData({
+                      name: '',
+                      quantity: 0,
+                      purchaser: '',
+                      location: '',
+                      value: 0,
+                      date: '',
 
-                          });
-                          
-                        }}
+                    });
+                  }}
                 >
-                  Add Procurement 
+                  Add Procurement
                 </Button>
-                <Button className="mt-4 float-right"
-                        color="danger"
+                <Button
+                  className="mt-4 float-right"
+                  color="danger"
                 >
                   Export to PDF
                 </Button>
                 <Modal
-                    isOpen={modal}
-                    changeStatus={closeModal}
+                  isOpen={modal}
+                  changeStatus={closeModal}
                 >
                   <ModalHeader changeStatus={closeModal}>
                     Fill In The Form Below
@@ -244,74 +226,74 @@ const Procurement = () => {
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="select"
-                              placeholder="NAME"
-                              name="name"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="select"
+                            placeholder="NAME"
+                            name="name"
+                            onChange={(e) => onChangeProcurementData(e)}
                           >
-                            {[{name:"Select Material"},...materials].map((m)=>(
+                            {[{ name: 'Select Material' }, ...materials].map((m) => (
                               <option>{m.name}</option>
                             ))}
-                            </Input>
+                          </Input>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="number"
-                              placeholder="QUANTITY  (please use scroller on right)"
-                              name="quantity"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="number"
+                            placeholder="QUANTITY  (please use scroller on right)"
+                            name="quantity"
+                            onChange={(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="text"
-                              placeholder="Supplier"
-                              name="supplier"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="text"
+                            placeholder="Supplier"
+                            name="supplier"
+                            onChange={(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="select"
-                              placeholder="Destination"
-                              name="destination"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="select"
+                            placeholder="Destination"
+                            name="destination"
+                            onChange={(e) => onChangeProcurementData(e)}
 
                           >
-                            {[{location:"Select Destination"},...locations].map((l) => (
+                            {[{ location: 'Select Destination' }, ...locations].map((l) => (
                               <option>{l.location}</option>
                             ))}
-                            </Input>
+                          </Input>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="number"
-                              placeholder="Net Value"
-                              name="value"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="number"
+                            placeholder="Net Value"
+                            name="value"
+                            onChange={(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Input
-                              type="date"
-                              placeholder="Date"
-                              name="date"
-                              onChange = {(e) => onChangeProcurementData(e)}
+                            type="date"
+                            placeholder="Date"
+                            name="date"
+                            onChange={(e) => onChangeProcurementData(e)}
                           />
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary" onClick = {(e) => { addProcurement(); closeModal();}}>
+                        <Button color="primary" onClick={() => { addProcurement(); closeModal(); }}>
                           Add Procurement
                         </Button>
                       </div>
@@ -326,19 +308,19 @@ const Procurement = () => {
               </CardHeader>
               <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
-                <tr>
-                  <th scope="col">Receipt ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Supplier</th>
-                  <th scope="col">Destination</th>
-                  <th scope="col">Net Value</th>
-                  <th scope="col">Date</th>
-                  <th scope="col"></th>
-                </tr>
+                  <tr>
+                    <th scope="col">Receipt ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Supplier</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Net Value</th>
+                    <th scope="col">Date</th>
+                    <th scope="col"> </th>
+                  </tr>
                 </thead>
 
-                <tbody style={{overflow:"auto"}}>
+                <tbody style={{ overflow: 'auto' }}>
                   {procurement.map((t) => (
                     <tr key={t._id} value={t.name}>
                       <th scope="row">
@@ -353,8 +335,8 @@ const Procurement = () => {
                       <td>{t.supplier}</td>
                       <td>{t.destination}</td>
                       <td>{t.value}</td>
-                      <td>{t.date.substr(0,10)}</td>
-                      <td className="text-right" >
+                      <td>{t.date.substr(0, 10)}</td>
+                      <td className="text-right">
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
@@ -371,7 +353,7 @@ const Procurement = () => {
                               href="#pablo"
                               onClick={() => onDelete(t._id)}
                             >
-                              Delete 
+                              Delete
                             </DropdownItem>
                           </DropdownMenu>
                         </UncontrolledDropdown>

@@ -21,7 +21,6 @@ router.get("/", auth, async (req, res) => {
 // Retrieve specific quality data by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
- 
     try {
       const quality = await Quality.find({ name })
       res.json(quality);
@@ -31,11 +30,11 @@ router.post("/", auth, async (req, res) => {
     }
   });
 
-// Retrieve specific quality data by name and location
+// Retrieve specific quality data by location
 router.post("/location", auth, async (req, res) => {
-  const { name, location } = req.body;
+  const { location } = req.body;
   try {
-    const quality = await Quality.find({ name, location })
+    const quality = await Quality.find({ location })
     res.json(quality);
   } catch (err) {
     console.error(err.message);
@@ -53,7 +52,7 @@ router.post("/add", async (req, res) => {
     quality:"None",
   });
   await quality.save();
-  res.json();
+  res.json("added");
 });
 
 // delete 
