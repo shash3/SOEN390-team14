@@ -52,7 +52,7 @@ router.post("/add", async (req, res) => {
     quality:"None",
   });
   await quality.save();
-  res.json();
+  res.json("added");
 });
 
 // delete 
