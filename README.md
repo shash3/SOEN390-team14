@@ -54,10 +54,12 @@ The project is a simplified ERP website for our client who is the owner of a Bik
   * navigate into the client folder and run `eslint src`
 
 ### Generate Complexity Report
-* `npm install -g plato` if you are generating the document for the very first time
-* `plato -r -d report -t "report" soen390-team14-master`
-*  The generated report can be found under the folder named `code-analysis report`. `index.html` contains the code analysis for the entirety of the project.  
-*  ![analysis](https://i.imgur.com/sTRYzKp.png)
+* `npm install -g plato`
+* download the project and unzip it
+* navigate to the root of where you unzipped the project
+* `plato -r -d report -t "code-analysis report" soen390-team14-master`
+*  The generated report can be found under the folder named `code-analysis report` and the `index.html` contains the code analysis for the entirety of the project.  
+ ![analysis](https://i.imgur.com/7JkdETw.png)
 
 ### Contributor
 * Adam Richard (Project Manager)
