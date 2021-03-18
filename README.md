@@ -29,9 +29,12 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 * `npm start` will run front-end only
 
 ### Docker
-* docker pull soen390team14/backend
-* docker pull soen390team14/frontend
-* `docker run -d --name api-server -it -p 5000:5000 soen390team14/backend && docker run -d --link api-server -it -p 3000:3000 soen390team14/frontend`
+* Ensure you have Docker installed
+* Open terminal
+* execute `docker pull soen390team14/backend`
+* execute `docker pull soen390team14/frontend`
+* execute `docker run -d --name api-server -it -p 5000:5000 soen390team14/backend && docker run -d --link api-server -it -p 3000:3000 soen390team14/frontend`
+* You can now navigate the application through http://localhost:3000/
 
 * https://hub.docker.com/repository/docker/soen390team14/backend
 * https://hub.docker.com/repository/docker/soen390team14/frontend
