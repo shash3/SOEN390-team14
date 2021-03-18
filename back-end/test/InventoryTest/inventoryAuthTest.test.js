@@ -1,9 +1,15 @@
 const request = require("supertest");
-const app = require("../../server.js");
+const { disconnectDB } = require('../../config/db');
 
 let token = "";
-
+let app;
 describe("Post Endpoints", () => {
+  beforeAll(() => {
+    app = require("../../server.js");
+  });
+  afterAll(() => {
+    disconnectDB();
+  });
   it("create testing user", async () => {
     await request(app).post("/api/users/admin").send({
       name: "admin",
@@ -35,7 +41,7 @@ describe("Post Endpoints", () => {
   });
 
   it("Retrieve all inventory", async () => {
-    const res1 = await request(app).get("/api/inventory/", {
+    const res1 = await request(app).get("/api/inventory", {
         headers: {
           "x-auth-token": token,
         },
@@ -44,7 +50,7 @@ describe("Post Endpoints", () => {
   });
 
   it("Retrieve specific inventory by name", async () => {
-    const res1 = await request(app).post("/api/inventory/", {
+    const res1 = await request(app).post("/api/inventory", {
         headers: {
           "x-auth-token": token
         }
@@ -98,6 +104,7 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Saddle",
         quantity: 4,
+        type: "part",
         location: "Plant 1",
       });
       expect(res1.body).toBeTruthy();
@@ -111,6 +118,7 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Saddle",
         quantity: 3,
+        type: "part",
         location: "Plant 2",
       });
       expect(res1.body).toBeTruthy();
@@ -124,6 +132,7 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Saddle",
         quantity: 1,
+        type: "part",
         location: "Plant 2",
       });
       expect(res1.body).toBeTruthy();
@@ -137,9 +146,9 @@ describe("Post Endpoints", () => {
       }).send({
         name: "Saddle",
         quantity: 3,
+        type: "part",
         location: "Plant 3",
       });
       expect(res1.body).toBeTruthy();
   });
-
 });
