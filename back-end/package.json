@@ -8,7 +8,7 @@
     "server": "nodemon server",
     "client": "npm start --prefix ../client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "jest"
+    "test": "jest --runInBand --forceExit"
   },
   "jest": {
     "testRegex": "./test/.*.js$",
