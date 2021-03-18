@@ -31,8 +31,7 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 ### Docker
 * docker pull soen390team14/backend
 * docker pull soen390team14/frontend
-* docker run -d --name api-server -it -p 5000:5000 soen390team14/backend
-* docker run -d --link api-server -it -p 3000:3000 soen390team14/frontend
+* `docker run -d --name api-server -it -p 5000:5000 soen390team14/backend && docker run -d --link api-server -it -p 3000:3000 soen390team14/frontend`
 
 * https://hub.docker.com/repository/docker/soen390team14/backend
 * https://hub.docker.com/repository/docker/soen390team14/frontend
