@@ -21,13 +21,28 @@ describe("Post Endpoints", () => {
   });
 
   it("receiving sales ", async () => {
-    const res = await request(app).get("/api/sales");
+    const res = await request(app).get("/api/sales", {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
 
     expect(res.body).toBeTruthy();
   });
   it("receiving receivables ", async () => {
-    const res = await request(app).get("/api/sales/receivables");
-
+    const res = await request(app).get("/api/sales/receivables", {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    expect(res.body).toBeTruthy();
+  });
+  it("receiving receivables paid ", async () => {
+    const res = await request(app).get("/api/sales/receivablesP", {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
     expect(res.body).toBeTruthy();
   });
 
@@ -53,11 +68,6 @@ describe("Post Endpoints", () => {
     expect(res2.body).toBeTruthy();
   });
 
-  it("tests deletion", async () => {
-    const res2 = await request(app)
-      .post("/api/sales/deleteN", "test")
-      .set("x-auth-token", token);
 
-    expect(res2.body).toBeTruthy();
-  });
 });
+

@@ -21,7 +21,6 @@ router.get("/", auth, async (req, res) => {
 // Retrieve specific quality data by name
 router.post("/", auth, async (req, res) => {
     const { name } = req.body;
- 
     try {
       const quality = await Quality.find({ name })
       res.json(quality);
