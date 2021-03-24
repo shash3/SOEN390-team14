@@ -9,6 +9,7 @@
 /* eslint no-console: ["error", { allow: ["error"] }] */
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // reactstrap components
@@ -34,7 +35,6 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
-  ButtonGroup,
   Button,
   Modal,
   ModalHeader,
@@ -1209,31 +1209,29 @@ const Production = () => {
                         }}
                       />
                     </InputGroup>
-                    <ButtonGroup
-                      className="btn-group-sm"
-                      style={{ padding: '0px 0px 0px 100px' }}
-                    >
-                      <Button
-                        outline
-                        color="primary"
-                        onClick={() => {
-                          initTranferModal();
-                        }}
-                      >
-                        Transfer
-                      </Button>
-                      <Button
-                        outline
-                        color="primary"
-                        onClick={() => {
-                          // TODO: order from this tab or redirect to procurement tab
-                        }}
-                      >
-                        Order
-                      </Button>
-                    </ButtonGroup>
                   </FormGroup>
                 </Form>
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  style={{ paddingRight: '0px 0px 0px 100px' }}
+                  onClick={() => {
+                    initTranferModal();
+                  }}
+                >
+                  Transfer
+                </Button>
+                <Link
+                  to="/admin/finance-procurement"
+                >
+                  <Button
+                    ClassName="mt-4"
+                    color="primary"
+                    style={{ paddingRight: '0px 0px 0px 100px', marginTop: '25px' }}
+                  >
+                    Purchase
+                  </Button>
+                </Link>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -1402,20 +1400,15 @@ const Production = () => {
                         }}
                       />
                     </InputGroup>
-                    <ButtonGroup
-                      className="btn-group-sm"
-                      style={{ padding: '0px 0px 0px 100px' }}
-                    >
-                      <Button
-                        outline
-                        color="primary"
-                        onClick={() => { initAddModal(); }}
-                      >
-                        Add New Product Line
-                      </Button>
-                    </ButtonGroup>
                   </FormGroup>
                 </Form>
+                <Button
+                  className="mt-4"
+                  color="primary"
+                  onClick={() => { initAddModal(); }}
+                >
+                  Add New Product Line
+                </Button>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
