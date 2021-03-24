@@ -211,7 +211,7 @@ const ProductionScheduling = () => {
                         <td>
                           <Media className="align-items-center">
                             <Media>
-                              <span className="mb-0 text-sm">{m.item === '' ? '' : m.finish_time}</span>
+                              <span className="mb-0 text-sm">{m.item === '' ? '' : m.finish_time.toString()}</span>
                             </Media>
                           </Media>
                         </td>
@@ -231,6 +231,7 @@ const ProductionScheduling = () => {
 
                     <ButtonGroup className="px-3">
                       <Button
+                        hidden={m.item === ''}
                         className="mt-4"
                         color="primary"
                         onClick={() => removeItemFromMachine(m._id)}
