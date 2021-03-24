@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
 /* eslint no-console: ["error", { allow: ["error"] }] */
@@ -31,7 +33,91 @@ const ProductionScheduling = () => {
 
   const MINUTES_TO_FINISH = 5;
 
-  // Retrieve product line location from user
+  /* ---------------------------
+   * Functions To Refresh Production Machines
+   * ---------------------------
+   */
+
+  const [refreshMachine, setRefreshMachine] = useState(false);
+  /**
+   * Set a timer to refresh every few seconds.
+   */
+  useEffect(() => {
+    let refresh = true;
+    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 15);
+  }, []);
+
+  /**
+   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+   */
+  useEffect(async () => {
+    const returnUnavailableMachines = () => {
+      const reply = axios.post('/api/machine/unavailable',
+        {
+          location: userLocation,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).then((response) => response.data).catch((err) => console.error('Error', err));
+      return reply;
+    };
+
+    const addToQuality = async (name, type, location) => {
+      await axios.post('/api/quality/add',
+        {
+          name,
+          type,
+          location,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((error) => {
+        console.error(error);
+      });
+    };
+
+    const removeItemFromMachine = async (key) => {
+      await axios.put('/api/machine/remove',
+        {
+          _id: key,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((err) => console.error('Error', err));
+    };
+
+    const main = async () => {
+      let updated = 0;
+      const unavailMachines = await returnUnavailableMachines();
+      for (let index = 0; index < unavailMachines.length; index += 1) {
+        const machine = unavailMachines[index];
+        if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
+          await addToQuality(machine.item, machine.type, userLocation);
+          await removeItemFromMachine(machine._id);
+          updated += 1;
+        }
+      }
+      if (updated > 0) {
+        updateMachineView(!machineView);
+      }
+    };
+
+    main();
+  }, [refreshMachine]);
+
+  /**
+   * Functions for interacting with machines.
+   */
+
+  /**
+   * Get the machines at the user's location.
+   */
   const getMachines = async () => {
     const response = await axios.post('/api/machine/location',
       {
@@ -49,6 +135,9 @@ const ProductionScheduling = () => {
     }
   };
 
+  /**
+   * Add a new machine to the user's location.
+   */
   const addNewMachine = async () => {
     await axios.post('/api/machine/add',
       {
@@ -62,6 +151,11 @@ const ProductionScheduling = () => {
     updateMachineView(!machineView);
   };
 
+  /**
+   * Delete a machine from the user's location with the id.
+   *
+   * @param {Object} id the unique key of the machine
+   */
   const deleteMachine = async (id) => {
     await axios.post('/api/machine/delete',
       {
@@ -75,6 +169,14 @@ const ProductionScheduling = () => {
     updateMachineView(!machineView);
   };
 
+  /**
+   * Add a part or product to the machine to commence production.
+   * The item will complete being produced after a set number of minutes.
+   *
+   * @param {Object} key the unique key of the machine
+   * @param {String} item the name of the item to add
+   * @param {String} type the type of the item
+   */
   const addItemToMachine = async (key, item, type) => {
     const final = new Date();
     final.setMinutes(new Date().getMinutes() + MINUTES_TO_FINISH);
@@ -97,6 +199,11 @@ const ProductionScheduling = () => {
       .catch((err) => console.error('Error', err));
   };
 
+  /**
+   * Aborts the machine process and removes the item from the machine.
+   *
+   * @param {Object} key the unique key of the machine
+   */
   const removeItemFromMachine = async (key) => {
     const final = new Date();
     final.setMinutes(new Date().getMinutes() + 5);
@@ -118,7 +225,7 @@ const ProductionScheduling = () => {
 
   // Retrieve values only once.
   useEffect(() => {
-    // Retrieve product line location from user
+    // Retrieve machine location from user
     const getUserLoc = async () => {
       const response = await axios.get('/api/auth',
         {
@@ -137,7 +244,7 @@ const ProductionScheduling = () => {
     getUserLoc();
   }, []);
 
-  // Retrieve values only once.
+  // Retrieve machine data when the view is upated.
   useEffect(() => {
     getMachines();
   }, [userLocation, machineView]);
@@ -211,7 +318,7 @@ const ProductionScheduling = () => {
                         <td>
                           <Media className="align-items-center">
                             <Media>
-                              <span className="mb-0 text-sm">{m.item === '' ? '' : m.finish_time.toString()}</span>
+                              <span className="mb-0 text-sm">{m.item === '' ? '' : new Date(m.finish_time.toString()).toString()}</span>
                             </Media>
                           </Media>
                         </td>

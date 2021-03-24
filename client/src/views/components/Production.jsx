@@ -120,15 +120,20 @@ const Production = () => {
     setTransferModal(!transferModal);
   };
 
-  /**
-   * Refresh Production Machines
+  /* ---------------------------
+   * Functions To Refresh Production Machines
+   * ---------------------------
    */
 
   const [refreshMachine, setRefreshMachine] = useState(false);
+  /**
+   * Set a timer to refresh every few seconds.
+   */
   useEffect(() => {
     let refresh = true;
-    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 30);
+    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 15);
   }, []);
+
   /**
    * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
    */
