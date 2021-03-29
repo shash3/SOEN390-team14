@@ -180,6 +180,9 @@ const Production = () => {
     };
 
     const main = async () => {
+      if (userLoc === undefined) {
+        return;
+      }
       const machines = await returnUnavailableMachines();
       for (let index = 0; index < machines.length; index += 1) {
         const machine = machines[index];

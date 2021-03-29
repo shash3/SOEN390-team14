@@ -93,6 +93,9 @@ const ProductionScheduling = () => {
     };
 
     const main = async () => {
+      if (userLoc === undefined) {
+        return;
+      }
       let updated = 0;
       const unavailMachines = await returnUnavailableMachines();
       for (let index = 0; index < unavailMachines.length; index += 1) {
