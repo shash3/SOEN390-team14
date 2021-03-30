@@ -1,6 +1,5 @@
 module.exports = {
   extends: ['airbnb-base', 'prettier'],
-  eslintIgnore: [ "**.test.js"],
   overrides: [
     {
       files: ['*.jsx', '*.js'],

@@ -163,16 +163,16 @@ const QualityAssurance = () => {
     const itemQual = qualityLogJson[name];
 
     switch (quality) {
-      case 'Good':
-        itemQual.good += 1;
-        itemQual.total += 1;
-        break;
-      case 'Faulty':
-        itemQual.faulty += 1;
-        itemQual.total += 1;
-        break;
-      default:
-        break;
+    case 'Good':
+      itemQual.good += 1;
+      itemQual.total += 1;
+      break;
+    case 'Faulty':
+      itemQual.faulty += 1;
+      itemQual.total += 1;
+      break;
+    default:
+      break;
     }
     return qualityLogJson;
   };
