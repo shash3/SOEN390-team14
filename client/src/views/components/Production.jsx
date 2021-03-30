@@ -584,7 +584,7 @@ const Production = () => {
    * Adds a new material element to the adding product line modal in the last position with default values.
    */
   const addMaterial = () => {
-    setMaterialList([...materialList, { matName: materials.name, matQuantity: 1 }]);
+    setMaterialList([...materialList, { matName: materials[0].name, matQuantity: 1 }]);
 
     const inputs = unstableInputValidation;
     inputs.quantities = [...inputs.quantities, true];
@@ -618,6 +618,12 @@ const Production = () => {
         if (value.trim().toLowerCase() === prod.name.trim().toLowerCase()) {
           valid = false;
           message = 'Cannot have two products with the same name';
+        }
+      });
+      materials.forEach((mat) => {
+        if (value.trim().toLowerCase() === mat.name.trim().toLowerCase()) {
+          valid = false;
+          message = 'Cannot have a product with the same name as a raw material';
         }
       });
       unstableInputValidation[name] = valid;
@@ -689,7 +695,7 @@ const Production = () => {
     toggleAddModal();
     setNewProdName('');
     setNewProdType('final');
-    setMaterialList([{ matName: materials.name, matQuantity: 1 }]);
+    setMaterialList([{ matName: materials[0].name, matQuantity: 1 }]);
     setUnstableInputValidation({ prodName: false, quantities: [true] });
     setErrorMessages({ prodName: 'Cannot have an empty product name', quantities: [''] });
 
@@ -729,7 +735,7 @@ const Production = () => {
   const initTranferModal = () => {
     toggleTransferModal();
     setLocRetrieval(notCurLoc[0]);
-    setMaterialList([{ matName: materials.name, matQuantity: 1 }]);
+    setMaterialList([{ matName: materials[0].name, matQuantity: 1 }]);
     setUnstableInputValidation({ prodName: true, quantities: [true] });
     setErrorMessages({ prodName: '', quantities: [''] });
     setDisableTransferButton(false);
@@ -1092,10 +1098,11 @@ const Production = () => {
           <FormGroup>
             <Button className="btn-danger" disabled>
               Don&apos;t have enough of
+              {' '}
               <label className="text-indigo strong">{name}</label>
               {' '}
-              to
-              make
+              to make
+              {' '}
               {prodQuant}
               {' '}
               {prodName}
@@ -1279,7 +1286,7 @@ const Production = () => {
                       (invPage + 1) * NUM_OF_ITEMS_IN_A_PAGE,
                     )
                     .map((m) => (
-                      <tr key={m.id} value={m.name}>
+                      <tr key={m.name + m.location} value={m.name}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
@@ -1368,6 +1375,7 @@ const Production = () => {
                       )
                       .map((idx) => (
                         <PaginationItem
+                          key={idx}
                           className={idx === invPage ? 'active' : ''}
                         >
                           <PaginationLink
@@ -1468,7 +1476,7 @@ const Production = () => {
                       (prodPage + 1) * NUM_OF_ITEMS_IN_A_PAGE,
                     )
                     .map((m) => (
-                      <tr key={m.id} value={m.name}>
+                      <tr key={m.name} value={m.name}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
@@ -1532,6 +1540,7 @@ const Production = () => {
                       )
                       .map((idx) => (
                         <PaginationItem
+                          key={idx}
                           className={idx === prodPage ? 'active' : ''}
                         >
                           <PaginationLink
@@ -1579,6 +1588,7 @@ const Production = () => {
                 <InputGroup className="input-group-alternative">
                   <Input
                     invalid={!unstableInputValidation.prodName}
+                    autoComplete="off"
                     type="text"
                     name="prodName"
                     required
@@ -1614,7 +1624,7 @@ const Production = () => {
               </FormGroup>
               <FormGroup className="mb-3">
                 {materialList.map((x, i) => (
-                  <div className="box">
+                  <div key={`${x.matName + i}`} className="box">
                     <label>
                       <span
                         className="text-muted"
@@ -1653,7 +1663,7 @@ const Production = () => {
                         onChange={(e) => handleMaterialChange(e, i)}
                       >
                         {[...materials, ...product].map((m) => (
-                          <option>{m.name}</option>
+                          <option key={m.name}>{m.name}</option>
                         ))}
                       </Input>
                       <Input
@@ -1698,16 +1708,28 @@ const Production = () => {
             </Button>
           </ModalBody>
           <ModalFooter>
-            <Button
-              disabled={disabledAddNewProd}
-              color="primary"
-              onClick={() => {
-                addProduct();
-                toggleAddModal();
-              }}
+            <Tooltip
+              title="There must be no errors to be able to confirm"
+              arrow
+              placement="top-start"
+              enterDelay={750}
+              disableFocusListener={!disabledAddNewProd}
+              disableHoverListener={!disabledAddNewProd}
+              disableTouchListener={!disabledAddNewProd}
             >
-              Confirm
-            </Button>
+              <span>
+                <Button
+                  disabled={disabledAddNewProd}
+                  color="primary"
+                  onClick={() => {
+                    addProduct();
+                    toggleAddModal();
+                  }}
+                >
+                  Confirm
+                </Button>
+              </span>
+            </Tooltip>
             <Button color="secondary" onClick={toggleAddModal}>
               Cancel
             </Button>
@@ -1768,20 +1790,32 @@ const Production = () => {
             </Form>
           </ModalBody>
           <ModalFooter>
-            {createProdOutputHTML.map((m) => m)}
+            {createProdOutputHTML.map((m, i) => <div key={`html:${i + 1}`}>{m}</div>)}
             <FormGroup hidden={hideLoading}>
               <section {...containerProps}>{indicatorEl}</section>
             </FormGroup>
-            <Button
-              hidden={hideConfirmBtns}
-              disabled={disabledCreateNewProd}
-              color="primary"
-              onClick={() => {
-                createProduct();
-              }}
+            <Tooltip
+              title="There must be no errors to be able to confirm"
+              arrow
+              placement="top-start"
+              enterDelay={750}
+              disableFocusListener={!disabledCreateNewProd}
+              disableHoverListener={!disabledCreateNewProd}
+              disableTouchListener={!disabledCreateNewProd}
             >
-              Confirm
-            </Button>
+              <span>
+                <Button
+                  hidden={hideConfirmBtns}
+                  disabled={disabledCreateNewProd}
+                  color="primary"
+                  onClick={() => {
+                    createProduct();
+                  }}
+                >
+                  Confirm
+                </Button>
+              </span>
+            </Tooltip>
             <Button
               hidden={hideConfirmBtns}
               color="secondary"
@@ -1823,14 +1857,14 @@ const Production = () => {
                     }}
                   >
                     {[...notCurLoc].map((m) => (
-                      <option>{m}</option>
+                      <option key={`plant:${m}`}>{m}</option>
                     ))}
                   </Input>
                 </InputGroup>
               </FormGroup>
               <FormGroup className="mb-3">
                 {materialList.map((x, i) => (
-                  <div className="box">
+                  <div key={`${x.matName + i}`} className="box">
                     <label>
                       <span
                         className="text-muted"
@@ -1869,7 +1903,7 @@ const Production = () => {
                         onChange={(e) => handleMaterialChange(e, i)}
                       >
                         {[...materials, ...product].map((m) => (
-                          <option>{m.name}</option>
+                          <option key={m.name}>{m.name}</option>
                         ))}
                       </Input>
                       <Input
@@ -1914,21 +1948,33 @@ const Production = () => {
             </Button>
           </ModalBody>
           <ModalFooter>
-            {createTransferOutputHTML.map((m) => m)}
+            {createTransferOutputHTML.map((m, i) => <div key={`html:${i + 1}`}>{m}</div>)}
             <FormGroup hidden={hideLoading}>
               <section {...containerProps}>{indicatorEl}</section>
             </FormGroup>
-            <Button
-              hidden={hideConfirmBtns}
-              disabled={disabledTransferButton}
-              color="primary"
-              onClick={() => {
-                transferProducts();
-                // TODO send info to Transpo tab
-              }}
+            <Tooltip
+              title="There must be no errors to be able to confirm"
+              arrow
+              placement="top-start"
+              enterDelay={750}
+              disableFocusListener={!disabledTransferButton}
+              disableHoverListener={!disabledTransferButton}
+              disableTouchListener={!disabledTransferButton}
             >
-              Confirm
-            </Button>
+              <span>
+                <Button
+                  hidden={hideConfirmBtns}
+                  disabled={disabledTransferButton}
+                  color="primary"
+                  onClick={() => {
+                    transferProducts();
+                    // TODO send info to Transpo tab
+                  }}
+                >
+                  Confirm
+                </Button>
+              </span>
+            </Tooltip>
             <Button
               hidden={hideConfirmBtns}
               color="secondary"
