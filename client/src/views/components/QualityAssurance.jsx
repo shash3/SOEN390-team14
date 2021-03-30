@@ -526,8 +526,8 @@ const QualityAssurance = () => {
                 </thead>
                 <tbody>
                   {searchQualityData.slice(qualPage * NUM_OF_ITEMS_IN_A_PAGE,
-                    (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
-                      <tr key={m.id} value={m.name}>
+                    (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m, i) => (
+                      <tr key={m.name + i.toString()} value={m.name}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
@@ -608,7 +608,7 @@ const QualityAssurance = () => {
               <CardFooter className="py-4">
                 <ButtonGroup className="mb-2">
                   <Tooltip
-                    title="Apply the changes made to quality"
+                    title="Apply the changes made to the quality of all items"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -624,7 +624,7 @@ const QualityAssurance = () => {
                   </Tooltip>
                   <div className="mx-2" />
                   <Tooltip
-                    title="Cancel the changes made to quality"
+                    title="Cancel the changes made to the quality of all items"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -673,6 +673,7 @@ const QualityAssurance = () => {
                       )
                       .map((idx) => (
                         <PaginationItem
+                          key={idx}
                           className={idx === qualPage ? 'active' : ''}
                         >
                           <PaginationLink
