@@ -48,7 +48,9 @@ The project is a simplified ERP website for our client who is the owner of a Bik
   - Password: 12345678
 
 ### Name Convention
-* As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide.
+* As a reference style guide for JavaScript, we are refering to the Google JavaScript Style Guide. To enforce the coding covention, we have implemented Prettier and Eslint on the whole project. 
+  * Prettier will automatically format the code on save according to the set of rules that we have given it. 
+  * Eslint will ensure that our code quality remains high.
 
   #### Enforcing Convention
   * Eslint has been installed.
