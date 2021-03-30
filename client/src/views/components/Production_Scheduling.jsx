@@ -20,6 +20,7 @@ import {
 } from 'reactstrap';
 
 // core components
+import Tooltip from '@material-ui/core/Tooltip';
 import ProductionHeader from '../../components/Headers/productionHeader';
 
 const ProductionScheduling = () => {
@@ -98,9 +99,6 @@ const ProductionScheduling = () => {
   };
 
   const removeItemFromMachine = async (key) => {
-    const final = new Date();
-    final.setMinutes(new Date().getMinutes() + 5);
-
     await axios.put('/api/machine/remove',
       {
         _id: key,
@@ -152,14 +150,20 @@ const ProductionScheduling = () => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Form>
-
           <ButtonGroup className="my-3">
-            <Button
-              color="secondary"
-              onClick={() => addNewMachine()}
+            <Tooltip
+              title="Create a new machine at your location"
+              arrow
+              placement="top-start"
+              enterDelay={750}
             >
-              Create New Machine
-            </Button>
+              <Button
+                color="secondary"
+                onClick={() => addNewMachine()}
+              >
+                Create New Machine
+              </Button>
+            </Tooltip>
           </ButtonGroup>
         </Form>
 
@@ -173,18 +177,24 @@ const ProductionScheduling = () => {
                       Machine #
                       {i + 1}
                     </h2>
-                    <Badge color="" className="badge-dot mr-4">
+                    <Badge color="" className="badge-dot mr-6">
                       <i className={m.item === '' ? 'bg-success' : 'bg-danger'} />
                       {m.item === '' ? 'Available' : 'Unavailable'}
                     </Badge>
-                    <Button
-                      className="ml-6"
-                      color="danger"
-                      onClick={() => deleteMachine(m._id)}
-                      hidden={m.item !== ''}
+                    <Tooltip
+                      title="Remove this machine at your location"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
                     >
-                      Destroy Machine
-                    </Button>
+                      <Button
+                        color="danger"
+                        onClick={() => deleteMachine(m._id)}
+                        hidden={m.item !== ''}
+                      >
+                        Destroy Machine
+                      </Button>
+                    </Tooltip>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
@@ -230,13 +240,20 @@ const ProductionScheduling = () => {
                     </ButtonGroup>
 
                     <ButtonGroup className="px-3">
-                      <Button
-                        className="mt-4"
-                        color="primary"
-                        onClick={() => removeItemFromMachine(m._id)}
+                      <Tooltip
+                        title="Remove item from this machine. This will destroy all the materials needed to created this item"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
                       >
-                        Abort Process
-                      </Button>
+                        <Button
+                          className="mt-4"
+                          color="primary"
+                          onClick={() => removeItemFromMachine(m._id)}
+                        >
+                          Abort Process
+                        </Button>
+                      </Tooltip>
                     </ButtonGroup>
                   </CardFooter>
                 </Card>
