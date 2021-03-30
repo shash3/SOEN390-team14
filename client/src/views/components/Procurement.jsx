@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -28,7 +26,7 @@ import {
 } from 'reactstrap';
 
 // core components
-import FinanceHeader from '../../components/Headers/FinanceHeader';
+import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 
 const Procurement = () => {
   const [procurement, setProcurement] = useState([]);

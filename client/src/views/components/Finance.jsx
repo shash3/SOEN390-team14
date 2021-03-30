@@ -9,7 +9,7 @@ import {
   Col,
 } from 'reactstrap';
 // core components
-import FinanceHeader from '../../components/Headers/FinanceHeader';
+import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 
 const Finance = () => (
   // Useless function

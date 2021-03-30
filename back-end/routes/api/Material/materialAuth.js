@@ -1,11 +1,8 @@
 const express = require("express");
+
 const router = express.Router();
-const auth = require("../../../middleware/auth");
 const Material = require("../../../models/Material");
-const { check, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
+const auth = require("../../../middleware/auth");
 
 // Retrieve all materials
 router.get("/", auth, async (req, res) => {
@@ -20,21 +17,20 @@ router.get("/", auth, async (req, res) => {
 
 // Retrieve specific materials by name
 router.post("/", auth, async (req, res) => {
-    const { name } = req.body;
- 
-    try {
-      const material = await Material.find({ name })
-      res.json(material);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  });
+  const { name } = req.body;
+  try {
+    const material = await Material.find({ name })
+    res.json(material);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // add new material
 router.post("/add", async (req, res) => {
   const { name, type } = req.body;
-  material = new Material({
+  const material = new Material({
     name,
     type,
   });

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 import React from 'react';
@@ -9,8 +8,8 @@ import {
 import { Container, Row, Col } from 'reactstrap';
 
 // core components
-import AuthNavbar from '../components/Navbars/AuthNavbar';
-import AuthFooter from '../components/Footers/AuthFooter';
+import AuthNavbar from '../components/Navbars/AuthNavbar.jsx';
+import AuthFooter from '../components/Footers/AuthFooter.jsx';
 import routes from '../routes';
 
 const Auth = () => {

@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -9,8 +7,8 @@ import {
 import './assets/plugins/nucleo/css/nucleo.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './assets/scss/argon-dashboard-react.scss';
-import AdminLayout from './layouts/Admin';
-import AuthLayout from './layouts/Auth';
+import AdminLayout from './layouts/Admin.jsx';
+import AuthLayout from './layouts/Auth.jsx';
 
 // verify user is logged in for private route
 const isLogin = () => {

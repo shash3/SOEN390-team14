@@ -1,7 +1,8 @@
 const express = require("express");
+
 const router = express.Router();
-const auth = require("../../../middleware/auth");
 const Quality = require("../../../models/Quality");
+const auth = require("../../../middleware/auth");
 
 // Retrieve all quality data
 router.get("/", auth, async (req, res) => {
@@ -16,15 +17,15 @@ router.get("/", auth, async (req, res) => {
 
 // Retrieve specific quality data by name
 router.post("/", auth, async (req, res) => {
-    const { name } = req.body;
-    try {
-      const quality = await Quality.find({ name })
-      res.json(quality);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  });
+  const { name } = req.body;
+  try {
+    const quality = await Quality.find({ name })
+    res.json(quality);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // Retrieve specific quality data by location
 router.post("/location", auth, async (req, res) => {
@@ -41,10 +42,10 @@ router.post("/location", auth, async (req, res) => {
 // add quality data
 router.post("/add", async (req, res) => {
   const { name, type, location } = req.body;
-  quality = new Quality({
-    name:name,
-    type: type,
-    location:location,
+  const quality = new Quality({
+    name,
+    type,
+    location,
     quality:"None",
   });
   await quality.save();

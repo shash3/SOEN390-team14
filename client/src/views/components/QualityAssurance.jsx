@@ -1,11 +1,7 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
-
-/* eslint-disable no-undef */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
-
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -37,7 +33,7 @@ import {
 } from 'reactstrap';
 // core components
 import Tooltip from '@material-ui/core/Tooltip';
-import Header from '../../components/Headers/Header';
+import Header from '../../components/Headers/Header.jsx';
 
 const QualityAssurance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -169,16 +165,16 @@ const QualityAssurance = () => {
     const itemQual = qualityLogJson[name];
 
     switch (quality) {
-      case 'Good':
-        itemQual.good += 1;
-        itemQual.total += 1;
-        break;
-      case 'Faulty':
-        itemQual.faulty += 1;
-        itemQual.total += 1;
-        break;
-      default:
-        break;
+    case 'Good':
+      itemQual.good += 1;
+      itemQual.total += 1;
+      break;
+    case 'Faulty':
+      itemQual.faulty += 1;
+      itemQual.total += 1;
+      break;
+    default:
+      break;
     }
     return qualityLogJson;
   };
@@ -409,17 +405,17 @@ const QualityAssurance = () => {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product.quality !== 'None') {
         switch (product.quality) {
-          case 'Good':
-            await addProductToInventory(product);
-            removeQualityProduct(product._id);
-            qualityChanges += 1;
-            break;
-          case 'Faulty':
-            removeQualityProduct(product._id);
-            qualityChanges += 1;
-            break;
-          default:
-            break;
+        case 'Good':
+          await addProductToInventory(product);
+          removeQualityProduct(product._id);
+          qualityChanges += 1;
+          break;
+        case 'Faulty':
+          removeQualityProduct(product._id);
+          qualityChanges += 1;
+          break;
+        default:
+          break;
         }
       }
       qualityLogJson = await addQualityToLog(qualityLogJson, product.name, product.quality);
@@ -527,81 +523,81 @@ const QualityAssurance = () => {
                 <tbody>
                   {searchQualityData.slice(qualPage * NUM_OF_ITEMS_IN_A_PAGE,
                     (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
-                      <tr key={m.id} value={m.name}>
-                        <th scope="row">
-                          <Media className="align-items-center">
-                            <Media>
-                              <span className="mb-0 text-sm">{m.name}</span>
-                            </Media>
+                    <tr key={m.id} value={m.name}>
+                      <th scope="row">
+                        <Media className="align-items-center">
+                          <Media>
+                            <span className="mb-0 text-sm">{m.name}</span>
                           </Media>
-                        </th>
-                        <td>
-                          <Badge color="" className="badge-dot mr-4">
-                            <i className="bg-success" />
-                            {m.location}
-                          </Badge>
-                        </td>
-                        <td>{m.quality}</td>
-                        <td className="text-right">
-                          <UncontrolledDropdown>
+                        </Media>
+                      </th>
+                      <td>
+                        <Badge color="" className="badge-dot mr-4">
+                          <i className="bg-success" />
+                          {m.location}
+                        </Badge>
+                      </td>
+                      <td>{m.quality}</td>
+                      <td className="text-right">
+                        <UncontrolledDropdown>
+                          <Tooltip
+                            title={`Change ${m.name} quality`}
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
+                          >
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
+                          <DropdownMenu className="dropdown-menu-arrow" right>
                             <Tooltip
-                              title={`Change ${m.name} quality`}
+                              title={`Change ${m.name} quality to None`}
                               arrow
                               placement="top-start"
                               enterDelay={750}
                             >
-                              <DropdownToggle
-                                className="btn-icon-only text-light"
-                                href="#pablo"
-                                role="button"
-                                size="sm"
-                                color=""
-                                onClick={(e) => e.preventDefault()}
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'None')}
                               >
-                                <i className="fas fa-ellipsis-v" />
-                              </DropdownToggle>
-                            </Tooltip>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              <Tooltip
-                                title={`Change ${m.name} quality to None`}
-                                arrow
-                                placement="top-start"
-                                enterDelay={750}
-                              >
-                                <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'None')}
-                                >
                                   None
-                                </DropdownItem>
-                              </Tooltip>
-                              <Tooltip
-                                title={`Change ${m.name} quality to Good`}
-                                arrow
-                                placement="top-start"
-                                enterDelay={750}
+                              </DropdownItem>
+                            </Tooltip>
+                            <Tooltip
+                              title={`Change ${m.name} quality to Good`}
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                            >
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'Good')}
                               >
-                                <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'Good')}
-                                >
                                   Good
-                                </DropdownItem>
-                              </Tooltip>
-                              <Tooltip
-                                title={`Change ${m.name} quality to Faulty`}
-                                arrow
-                                placement="top-start"
-                                enterDelay={750}
+                              </DropdownItem>
+                            </Tooltip>
+                            <Tooltip
+                              title={`Change ${m.name} quality to Faulty`}
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                            >
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'Faulty')}
                               >
-                                <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'Faulty')}
-                                >
                                   Faulty
-                                </DropdownItem>
-                              </Tooltip>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
+                              </DropdownItem>
+                            </Tooltip>
+                          </DropdownMenu>
+                        </UncontrolledDropdown>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </Table>

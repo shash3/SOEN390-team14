@@ -1,8 +1,3 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React from 'react';
 import {
@@ -11,23 +6,23 @@ import {
 // reactstrap components
 import { Container } from 'reactstrap';
 // core components
-import AdminNavbar from '../components/Navbars/AdminNavbar';
-import AdminFooter from '../components/Footers/AdminFooter';
-import Sidebar from '../components/Sidebar/Sidebar';
-import Index from '../views/Index';
-import Profile from '../views/components/Profile';
-import Transportation from '../views/components/Transportation';
-import Register from '../views/components/Register';
-import Login from '../views/components/Login';
-import Finance from '../views/components/Finance';
-import Production from '../views/components/Production';
-import QualityAssurance from '../views/components/QualityAssurance';
-import ProductionScheduling from '../views/components/Production_Scheduling';
-import Help from '../views/components/Help';
-import AccountPayable from '../views/components/AccountPayable';
-import AccountReceivable from '../views/components/AccountReceivable';
-import Sales from '../views/components/Sales';
-import Procurement from '../views/components/Procurement';
+import AdminNavbar from '../components/Navbars/AdminNavbar.jsx';
+import AdminFooter from '../components/Footers/AdminFooter.jsx';
+import Sidebar from '../components/Sidebar/Sidebar.jsx';
+import Index from '../views/Index.jsx';
+import Profile from '../views/components/Profile.jsx';
+import Transportation from '../views/components/Transportation.jsx';
+import Register from '../views/components/Register.jsx';
+import Login from '../views/components/Login.jsx';
+import Finance from '../views/components/Finance.jsx';
+import Production from '../views/components/Production.jsx';
+import QualityAssurance from '../views/components/QualityAssurance.jsx';
+import ProductionScheduling from '../views/components/Production_Scheduling.jsx';
+import Help from '../views/components/Help.jsx';
+import AccountPayable from '../views/components/AccountPayable.jsx';
+import AccountReceivable from '../views/components/AccountReceivable.jsx';
+import Sales from '../views/components/Sales.jsx';
+import Procurement from '../views/components/Procurement.jsx';
 
 const logoImg = require('../assets/img/brand/logo.png');
 
@@ -196,10 +191,10 @@ const Admin = (props) => {
             />
           )}
           {permission === 'finance' && (
-          <Route
-            path="/admin/finance-payable"
-            component={AccountPayable}
-          />
+            <Route
+              path="/admin/finance-payable"
+              component={AccountPayable}
+            />
           )}
           {permission === 'admin' && (
             <Route
@@ -208,10 +203,10 @@ const Admin = (props) => {
             />
           )}
           {permission === 'finance' && (
-          <Route
-            path="/admin/finance-receivable"
-            component={AccountReceivable}
-          />
+            <Route
+              path="/admin/finance-receivable"
+              component={AccountReceivable}
+            />
           )}
           {permission === 'admin' && (
             <Route
@@ -232,10 +227,10 @@ const Admin = (props) => {
             />
           )}
           {permission === 'finance' && (
-          <Route
-            path="/admin/finance-procurement"
-            component={Procurement}
-          />
+            <Route
+              path="/admin/finance-procurement"
+              component={Procurement}
+            />
           )}
           {permission === 'admin' && (
             <Route
