@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
-
+const path = require('path');
 const app = express();
 
 // Connect Database
@@ -37,6 +37,16 @@ app.use('/api/quality', require('./routes/api/Quality/qualityAuth'));
 app.use('/api/locations', require('./routes/api/Locations/locationAuth'));
 
 app.use('/api/machine', require('./routes/api/Machines/machineAuth'));
+
+//serve static assets react if production
+if(process.env.NODE_ENV === 'production'){
+  //set static folder
+  app.use(express.static('client/build'))
+
+  app.get('*', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => console.log('Server started'));
