@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
@@ -31,6 +32,7 @@ import {
   Button,
 } from 'reactstrap';
 // core components
+import Tooltip from '@material-ui/core/Tooltip';
 import Header from '../../components/Headers/Header.jsx';
 
 const QualityAssurance = () => {
@@ -493,11 +495,18 @@ const QualityAssurance = () => {
                           <i className="fas fa-search" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input
-                        placeholder="Search"
-                        type="text"
-                        onChange={(e) => { setQualityFormSearch(e.target.value); setQualPage(0); }}
-                      />
+                      <Tooltip
+                        title="Search item name in quality table"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                      >
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          onChange={(e) => { setQualityFormSearch(e.target.value); setQualPage(0); }}
+                        />
+                      </Tooltip>
                     </InputGroup>
                   </FormGroup>
                 </Form>
@@ -531,32 +540,60 @@ const QualityAssurance = () => {
                       <td>{m.quality}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                            title={`Change ${m.name} quality`}
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
-                            <DropdownItem
-                              onClick={() => changeProductQuality(m, 'None')}
+                            <Tooltip
+                              title={`Change ${m.name} quality to None`}
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                             >
-                                None
-                            </DropdownItem>
-                            <DropdownItem
-                              onClick={() => changeProductQuality(m, 'Good')}
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'None')}
+                              >
+                                  None
+                              </DropdownItem>
+                            </Tooltip>
+                            <Tooltip
+                              title={`Change ${m.name} quality to Good`}
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                             >
-                                Good
-                            </DropdownItem>
-                            <DropdownItem
-                              onClick={() => changeProductQuality(m, 'Faulty')}
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'Good')}
+                              >
+                                  Good
+                              </DropdownItem>
+                            </Tooltip>
+                            <Tooltip
+                              title={`Change ${m.name} quality to Faulty`}
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                             >
-                                Faulty
-                            </DropdownItem>
+                              <DropdownItem
+                                onClick={() => changeProductQuality(m, 'Faulty')}
+                              >
+                                  Faulty
+                              </DropdownItem>
+                            </Tooltip>
                           </DropdownMenu>
                         </UncontrolledDropdown>
                       </td>
@@ -566,23 +603,37 @@ const QualityAssurance = () => {
               </Table>
               <CardFooter className="py-4">
                 <ButtonGroup className="mb-2">
-                  <Button
-                    className="btn-success"
-                    onClick={() => {
-                      updateQualityTable();
-                    }}
+                  <Tooltip
+                    title="Apply the changes made to quality"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                   >
-                    Apply Changes
-                  </Button>
+                    <Button
+                      className="btn-success"
+                      onClick={() => {
+                        updateQualityTable();
+                      }}
+                    >
+                      Apply
+                    </Button>
+                  </Tooltip>
                   <div className="mx-2" />
-                  <Button
-                    className="btn-warning"
-                    onClick={() => {
-                      cancelChanges();
-                    }}
+                  <Tooltip
+                    title="Cancel the changes made to quality"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                   >
-                    Cancel Changes
-                  </Button>
+                    <Button
+                      className="btn-warning"
+                      onClick={() => {
+                        cancelChanges();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Tooltip>
                 </ButtonGroup>
                 {qualityMessages}
                 <nav aria-label="...">
