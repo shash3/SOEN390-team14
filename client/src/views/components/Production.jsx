@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
