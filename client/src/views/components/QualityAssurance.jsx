@@ -50,6 +50,133 @@ const QualityAssurance = () => {
 
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
 
+  /* ---------------------------
+   * Functions To Refresh Production Machines
+   * ---------------------------
+   */
+
+  const [refreshMachine, setRefreshMachine] = useState(false);
+  /**
+   * Set a timer to refresh every few seconds.
+   */
+  useEffect(() => {
+    let refresh = true;
+    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 15);
+  }, []);
+
+  /**
+   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+   */
+  useEffect(async () => {
+    const returnUnavailableMachines = () => {
+      const reply = axios.post('/api/machine/unavailable',
+        {
+          location: userLoc,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).then((response) => response.data).catch((err) => console.error('Error', err));
+      return reply;
+    };
+
+    const addToQuality = async (name, type, location) => {
+      await axios.post('/api/quality/add',
+        {
+          name,
+          type,
+          location,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((error) => {
+        console.error(error);
+      });
+    };
+
+    const removeItemFromMachine = async (key) => {
+      await axios.put('/api/machine/remove',
+        {
+          _id: key,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }).catch((err) => console.error('Error', err));
+    };
+
+    const main = async () => {
+      if (userLoc === undefined) {
+        return;
+      }
+      const machines = await returnUnavailableMachines();
+      for (let index = 0; index < machines.length; index += 1) {
+        const machine = machines[index];
+        if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
+          await addToQuality(machine.item, machine.type, userLoc);
+          await removeItemFromMachine(machine._id);
+        }
+      }
+    };
+
+    main();
+  }, [refreshMachine]);
+
+  /* ------------------------
+   * Functions that deal with logging
+   * ------------------------
+   */
+
+  const readQualityLog = async () => {
+    const qualityReply = await axios.get('/api/quality/json', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).catch((err) => console.error('Error', err));
+    return qualityReply.data;
+  };
+
+  const writeQualityLog = async (qualityJson) => {
+    await axios.post('/api/quality/json', {
+      data: qualityJson,
+    },
+    {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).catch((error) => { console.error(error); });
+  };
+
+  const addQualityToLog = async (qualityLog, name, quality) => {
+    const qualityLogJson = qualityLog;
+    if (qualityLogJson[name] === undefined) {
+      qualityLogJson[name] = {
+        good: 0,
+        faulty: 0,
+        total: 0,
+      };
+    }
+    const itemQual = qualityLogJson[name];
+
+    switch (quality) {
+      case 'Good':
+        itemQual.good += 1;
+        itemQual.total += 1;
+        break;
+      case 'Faulty':
+        itemQual.faulty += 1;
+        itemQual.total += 1;
+        break;
+      default:
+        break;
+    }
+    return qualityLogJson;
+  };
+
   /* ------------------------
    * Function that interact with database backend
    * ------------------------
@@ -269,10 +396,12 @@ const QualityAssurance = () => {
    * If an item is good then it is added to the inventory database.
    */
   const updateQualityTable = async () => {
+    let qualityLogJson = await readQualityLog();
+
     let qualityChanges = 0;
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
       const product = dirtyQualityData[index];
-      if (updatedQualityIndicies[index] && product.Quality !== 'None') {
+      if (updatedQualityIndicies[index] && product.quality !== 'None') {
         switch (product.quality) {
         case 'Good':
           await addProductToInventory(product);
@@ -287,6 +416,7 @@ const QualityAssurance = () => {
           break;
         }
       }
+      qualityLogJson = await addQualityToLog(qualityLogJson, product.name, product.quality);
     // End of for loop
     }
 
@@ -294,6 +424,7 @@ const QualityAssurance = () => {
     getQualityData();
     setUpdateSearch(!updateSearch);
     updateQualityMessages(qualityChanges);
+    writeQualityLog(qualityLogJson);
   };
 
   /**
