@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { } from 'react';
 
 // reactstrap components
@@ -14,7 +11,7 @@ import {
 } from 'reactstrap';
 
 // core components
-import CardlessHeader from '../../components/Headers/CardlessHeader';
+import CardlessHeader from '../../components/Headers/CardlessHeader.jsx';
 
 const Help = () => (
   <>

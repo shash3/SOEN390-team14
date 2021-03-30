@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -20,7 +18,7 @@ import {
 } from 'reactstrap';
 
 // core components
-import ProductionHeader from '../../components/Headers/productionHeader';
+import ProductionHeader from '../../components/Headers/productionHeader.jsx';
 
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));

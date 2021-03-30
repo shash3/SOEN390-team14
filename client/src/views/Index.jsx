@@ -1,4 +1,3 @@
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState } from 'react';
 // node.js library that concatenates classes (strings)
 import classnames from 'classnames';
@@ -23,7 +22,7 @@ import {
 } from 'reactstrap';
 
 // core components
-import Header from '../components/Headers/Header';
+import Header from '../components/Headers/Header.jsx';
 import {
   chartOptions,
   parseOptions,

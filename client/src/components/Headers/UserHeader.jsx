@@ -29,11 +29,11 @@ const UserHeader = (props) => {
               <h1 className="display-2 text-white" style={{ width: '500px' }}>
                 {permission === 'admin' && <>ADMIN CONTROLS</>}
                 {permission !== 'admin' && (
-                <>
-                  {' '}
+                  <>
+                    {' '}
                   Welcome
-                  {props.user.name}
-                </>
+                    {props.user.name}
+                  </>
                 )}
               </h1>
               <p className="text-white mt-0 mb-5" style={{ width: '500px' }}>

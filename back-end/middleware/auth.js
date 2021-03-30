@@ -1,8 +1,10 @@
+/* eslint-disable func-names */
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
 // Verify token middleware
-module.exports = function (req, res, next) {
+// eslint-disable-next-line consistent-return
+module.exports = function(req, res, next) {
   // Retrieve token
   const token = req.header("x-auth-token");
 

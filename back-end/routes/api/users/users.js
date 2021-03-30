@@ -1,4 +1,6 @@
+/* eslint-disable consistent-return */
 const express = require("express");
+
 const router = express.Router();
 const gravatar = require("gravatar");
 const { check, validationResult } = require("express-validator");
@@ -53,7 +55,7 @@ router.post(
 
       await user.save();
 
-      //send email on signup
+      // send email on signup
       sendSignupEmail(email,name);
 
       // Return jsonwebtoken
@@ -138,6 +140,6 @@ router.post("/admin",
       console.error(err.message);
       res.status(500).send("Server Error");
     }
-});
+  });
 
 module.exports = router;

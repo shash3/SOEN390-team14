@@ -1,13 +1,7 @@
-/* eslint-disable consistent-return */
-/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable max-len */
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -46,7 +40,7 @@ import {
 // core components
 import { inArray } from 'jquery';
 import { useLoading, Oval } from '@agney/react-loading';
-import ProductionHeader from '../../components/Headers/productionHeader';
+import ProductionHeader from '../../components/Headers/productionHeader.jsx';
 
 const Production = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));

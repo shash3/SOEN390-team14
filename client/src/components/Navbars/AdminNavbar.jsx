@@ -1,7 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect } from 'react-router-dom';
