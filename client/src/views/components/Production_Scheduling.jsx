@@ -278,7 +278,7 @@ const ProductionScheduling = () => {
         </Form>
 
         {machines.map((m, i) => (
-          <div>
+          <div key={`Machine #${i + 1}`}>
             <Row>
               <div className="col">
                 <Card className="shadow">
@@ -313,7 +313,7 @@ const ProductionScheduling = () => {
                         <th scope="col">{m.item === '' ? '' : 'Product Name'}</th>
                         <th scope="col">{m.item === '' ? '' : 'Date Finished'}</th>
                       </tr>
-                      <tr key={`Machine #${i + 1}`}>
+                      <tr>
                         <td>
                           <Media className="align-items-center">
                             <Media>
@@ -348,10 +348,9 @@ const ProductionScheduling = () => {
                         Add Saddle (testing)
                       </Button>
                     </ButtonGroup>
-
                     <ButtonGroup className="px-3">
                       <Tooltip
-                        title="Remove item from this machine. This will destroy all the materials needed to created this item"
+                        title="Remove item from this machine. This will destroy all the materials needed to create this item"
                         arrow
                         placement="top-start"
                         enterDelay={750}
@@ -375,7 +374,6 @@ const ProductionScheduling = () => {
           </div>
         ))}
       </Container>
-
     </>
   );
 };
