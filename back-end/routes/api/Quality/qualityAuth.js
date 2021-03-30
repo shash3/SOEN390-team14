@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../../middleware/auth");
 const Quality = require("../../../models/Quality");
-const { check, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
 
 // Retrieve all quality data
 router.get("/", auth, async (req, res) => {
@@ -62,6 +58,37 @@ router.post("/delete", auth, async (req, res) => {
     await Quality.deleteOne({ _id });
     const quality = await Quality.find();
     res.json(quality);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+const fs = require('fs');
+const qualityTrackFile = './logs/qualityTracks.json';
+
+// Get the log file for quality
+router.get("/json", auth, async (req, res) => {
+  try {
+    fs.readFile(qualityTrackFile, 'utf8', (err, data) => {
+      if (data === undefined) {
+        data = {};
+      }
+      res.send(JSON.parse(data));
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Write the log file for quality
+router.post('/json', auth, (req, res) => { 
+  const { data } = req.body;
+  const dataStr = JSON.stringify(data, null, 2);
+  try {
+    fs.writeFile(qualityTrackFile, dataStr, 'utf8', (err) => {
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
