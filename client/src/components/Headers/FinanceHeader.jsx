@@ -19,7 +19,7 @@ const FinanceHeader = () => (
                   <Row>
                     <div className="col">
                       <span className="h2 font-weight-bold mb-0">
-                        <Link to="/admin/finance-payable" activeClassName="active">
+                        <Link to="/admin/finance-payable" activeclassname="active">
                           Accounts Payable
                         </Link>
                       </span>
@@ -39,7 +39,7 @@ const FinanceHeader = () => (
                   <Row>
                     <div className="col">
                       <span className="h2 font-weight-bold mb-0">
-                        <Link to="/admin/finance-receivable" activeClassName="active">
+                        <Link to="/admin/finance-receivable" activeclassname="active">
                           Accounts Receivable
                         </Link>
                       </span>
@@ -59,7 +59,7 @@ const FinanceHeader = () => (
                   <Row>
                     <div className="col">
                       <span className="h2 font-weight-bold mb-0">
-                        <Link to="/admin/finance-sales" activeClassName="active">
+                        <Link to="/admin/finance-sales" activeclassname="active">
                           Sales
                         </Link>
                       </span>
@@ -79,7 +79,7 @@ const FinanceHeader = () => (
                   <Row>
                     <div className="col">
                       <span className="h2 font-weight-bold mb-0">
-                        <Link to="/admin/finance-procurement" activeClassName="active">
+                        <Link to="/admin/finance-procurement" activeclassname="active">
                           Procurement
                         </Link>
                       </span>

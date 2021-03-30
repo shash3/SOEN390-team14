@@ -19,7 +19,7 @@ const Header = () => (
                   <Row>
                     <div className="col">
                       <span className="h2 font-weight-bold mb-0">
-                        <Link to="/admin/production" activeClassName="active">
+                        <Link to="/admin/production" activeclassname="active">
                           MAIN
                         </Link>
                       </span>
@@ -42,7 +42,7 @@ const Header = () => (
                         {' '}
                         <Link
                           to="/admin/production-scheduling"
-                          activeClassName="active"
+                          activeclassname="active"
                         >
                           SCHEDULING
                         </Link>
