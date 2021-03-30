@@ -46,6 +46,7 @@ import {
 // core components
 import { inArray } from 'jquery';
 import { useLoading, Oval } from '@agney/react-loading';
+import Tooltip from '@material-ui/core/Tooltip';
 import ProductionHeader from '../../components/Headers/productionHeader';
 
 const Production = () => {
@@ -77,7 +78,7 @@ const Production = () => {
   const [disabledAddNewProd, setDisableAddNewProd] = useState(true);
 
   // Shared between new product line & transfer product
-  const [materialList, setMaterialList] = useState([{ matName: 'Leather', matQuantity: 1 }]);
+  const [materialList, setMaterialList] = useState([{ matName: '', matQuantity: 1 }]);
   const [unstableInputValidation, setUnstableInputValidation] = useState({ prodName: false, quantities: [true] });
   const [errorMessages, setErrorMessages] = useState({ prodName: 'Cannot have an empty product name', quantities: [''] });
 
@@ -575,7 +576,7 @@ const Production = () => {
    * Adds a new material element to the adding product line modal in the last position with default values.
    */
   const addMaterial = () => {
-    setMaterialList([...materialList, { matName: 'Leather', matQuantity: 1 }]);
+    setMaterialList([...materialList, { matName: materials.name, matQuantity: 1 }]);
 
     const inputs = unstableInputValidation;
     inputs.quantities = [...inputs.quantities, true];
@@ -680,7 +681,7 @@ const Production = () => {
     toggleAddModal();
     setNewProdName('');
     setNewProdType('final');
-    setMaterialList([{ matName: 'Leather', matQuantity: 1 }]);
+    setMaterialList([{ matName: materials.name, matQuantity: 1 }]);
     setUnstableInputValidation({ prodName: false, quantities: [true] });
     setErrorMessages({ prodName: 'Cannot have an empty product name', quantities: [''] });
 
@@ -720,7 +721,7 @@ const Production = () => {
   const initTranferModal = () => {
     toggleTransferModal();
     setLocRetrieval(notCurLoc[0]);
-    setMaterialList([{ matName: 'Leather', matQuantity: 1 }]);
+    setMaterialList([{ matName: materials.name, matQuantity: 1 }]);
     setUnstableInputValidation({ prodName: true, quantities: [true] });
     setErrorMessages({ prodName: '', quantities: [''] });
     setDisableTransferButton(false);
@@ -1200,38 +1201,59 @@ const Production = () => {
                           <i className="fas fa-search" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input
-                        placeholder="Search"
-                        type="text"
-                        onChange={(e) => {
-                          onInvSearchChange(e);
-                          setInvPage(0);
-                        }}
-                      />
+                      <Tooltip
+                        title="Search item name in inventory table"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                      >
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          onChange={(e) => {
+                            onInvSearchChange(e);
+                            setInvPage(0);
+                          }}
+                        />
+                      </Tooltip>
                     </InputGroup>
                   </FormGroup>
                 </Form>
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  style={{ paddingRight: '0px 0px 0px 100px' }}
-                  onClick={() => {
-                    initTranferModal();
-                  }}
-                >
-                  Transfer
-                </Button>
-                <Link
-                  to="/admin/finance-procurement"
+                <Tooltip
+                  title="Create a request to transfer products to your current location from another location"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
-                    ClassName="mt-4"
+                    className="mt-4"
                     color="primary"
-                    style={{ paddingRight: '0px 0px 0px 100px', marginTop: '25px' }}
+                    style={{ paddingRight: '0px 0px 0px 100px' }}
+                    onClick={() => {
+                      initTranferModal();
+                    }}
                   >
-                    Purchase
+                    Transfer
                   </Button>
-                </Link>
+                </Tooltip>
+                <Tooltip
+                  title="Create a request to purchase products to your current location"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
+                >
+                  <Link
+                    to="/admin/finance-procurement"
+                  >
+                    <Button
+                      className="mt-4"
+                      color="primary"
+                      style={{ paddingRight: '0px 0px 0px 100px', marginTop: '25px' }}
+                    >
+                      Purchase
+                    </Button>
+                  </Link>
+                </Tooltip>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -1391,24 +1413,38 @@ const Production = () => {
                           <i className="fas fa-search" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input
-                        placeholder="Search"
-                        type="text"
-                        onChange={(e) => {
-                          onProdSearchChange(e);
-                          setProdPage(0);
-                        }}
-                      />
+                      <Tooltip
+                        title="Search item name in product line table"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                      >
+                        <Input
+                          placeholder="Search"
+                          type="text"
+                          onChange={(e) => {
+                            onProdSearchChange(e);
+                            setProdPage(0);
+                          }}
+                        />
+                      </Tooltip>
                     </InputGroup>
                   </FormGroup>
                 </Form>
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  onClick={() => { initAddModal(); }}
+                <Tooltip
+                  title="Create a new product line from a list of materials"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
-                  Add New Product Line
-                </Button>
+                  <Button
+                    className="mt-4"
+                    color="primary"
+                    onClick={() => { initAddModal(); }}
+                  >
+                    Add New Product Line
+                  </Button>
+                </Tooltip>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
@@ -1433,13 +1469,20 @@ const Production = () => {
                           </Media>
                         </th>
                         <td className="text-right">
-                          <Button
-                            onClick={() => {
-                              initCreateModal(m.name, m.type);
-                            }}
+                          <Tooltip
+                            title={`Create the product ${m.name}`}
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
-                            Create
-                          </Button>
+                            <Button
+                              onClick={() => {
+                                initCreateModal(m.name, m.type);
+                              }}
+                            >
+                              Create
+                            </Button>
+                          </Tooltip>
                         </td>
                       </tr>
                     ))}
