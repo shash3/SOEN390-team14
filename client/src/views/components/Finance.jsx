@@ -6,33 +6,24 @@ import {
   CardHeader,
   Container,
   Row,
-  Col, CardBody,
+  Col, CardBody, DropdownMenu, ButtonDropdown, DropdownToggle, UncontrolledDropdown, DropdownItem,
 } from 'reactstrap';
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
+import Chart from 'chart.js';
 import {Bar} from "react-chartjs-2";
-
+import {
+  chartOptions,
+  parseOptions,
+  chartAnnualProfits,
+  chartAnnualSales,
+} from '../../variables/charts';
 
 const Finance = () => {
 
-  const [chartData, setChartData] = useState({})
-
-  const chart = () => {
-    setChartData({
-      labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
-      datasets : [
-        {
-          label:'Profits',
-          data:[10],
-          backgroundColor: ["#ffc107"],
-        }
-      ]
-    });
-  };
-
-  useEffect(()=>{
-    chart()
-  },[])
+  if (Chart) {
+    parseOptions(Chart, chartOptions());
+  }
 
   return (
       <>
@@ -54,14 +45,39 @@ const Finance = () => {
                         <h1 className=" mb-0">Annual Goals and Statistics</h1>
                       </CardHeader>
                       <CardBody>
-                        <Bar data={chartData} options={{
-                          responsive: true,
-                          legend: { display: false },
-                          title: {
-                            display: true,
-                            text: 'Profits 2021'
-                          }
-                        }}/>
+                        <div className="text-right">
+                          <UncontrolledDropdown className="mb-4 mt-3">
+                            <DropdownToggle
+                                color="default"
+                                href="#graphToggle"
+                                role="button"
+                            >
+                              Toggle Graph
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow">
+                              <DropdownItem
+                                  href="#graphToggle"
+                              >
+                                Sales
+                              </DropdownItem>
+                              <DropdownItem
+                                  href="#graphToggle"
+                              >
+                                Profits
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </div>
+                        <div className="chart">
+                          <Bar data={chartAnnualProfits.data}
+                               options={chartAnnualProfits.options}
+                          />
+                        </div>
+                        <div className="chart">
+                          <Bar data={chartAnnualSales.data}
+                               options={chartAnnualSales.options}
+                          />
+                        </div>
                       </CardBody>
                     </Card>
                   </Col>

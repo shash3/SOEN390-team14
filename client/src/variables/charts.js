@@ -390,9 +390,104 @@ const chartExample2 = {
   },
 };
 
+const chartAnnualProfits = {
+  options: {
+    title:{
+      display: true,
+      text: 'Annual Profits'
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            callback(value) {
+              if (!(value % 10)) {
+                // return '$' + value + 'k'
+                return value;
+              }
+            },
+          },
+        },
+      ],
+    },
+    tooltips: {
+      callbacks: {
+        label(item, data) {
+          const label = data.datasets[item.datasetIndex].label || '';
+          const { yLabel } = item;
+          let content = '';
+          if (data.datasets.length > 1) {
+            content += label;
+          }
+          content += yLabel;
+          return content;
+        },
+      },
+    },
+  },
+  data : {
+    labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    datasets : [
+      {
+        label:'Profits',
+        data:[20,12,8,6,30,9,11,2,1,18,4,7],
+      },
+    ],
+  },
+};
+
+const chartAnnualSales = {
+  options: {
+    title:{
+      display: true,
+      text: 'Annual Sales'
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            callback(value) {
+              if (!(value % 10)) {
+                // return '$' + value + 'k'
+                return value;
+              }
+            },
+          },
+        },
+      ],
+    },
+    tooltips: {
+      callbacks: {
+        label(item, data) {
+          const label = data.datasets[item.datasetIndex].label || '';
+          const { yLabel } = item;
+          let content = '';
+          if (data.datasets.length > 1) {
+            content += label;
+          }
+          content += yLabel;
+          return content;
+        },
+      },
+    },
+  },
+  data : {
+    labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+    datasets : [
+      {
+        label:'Sales',
+        data:[100,200,300,400,500,600,500,400,300,200,100,200],
+      },
+    ],
+  },
+};
+
 module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
   chartExample1, // used inside src/views/Index.js
   chartExample2, // used inside src/views/Index.js
+  chartAnnualProfits,
+  chartAnnualSales,
 };
+
