@@ -93,11 +93,12 @@ const Sales = () => {
   const addSale = async () => {
     if (
       name === ''
-      || quantity === 0
+      || quantity <= 0
       || location === ''
-      || value === 0
+      || value <= 0
       || date === ''
       || purchaser === ''
+    
 
     ) {
       // eslint-disable-next-line no-alert
