@@ -6,7 +6,7 @@ import {
   CardHeader,
   Container,
   Row,
-  Col, CardBody, DropdownMenu, ButtonDropdown, DropdownToggle, UncontrolledDropdown, DropdownItem,
+  Button, Col, CardBody,
 } from 'reactstrap';
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
@@ -24,6 +24,30 @@ const Finance = () => {
   if (Chart) {
     parseOptions(Chart, chartOptions());
   }
+
+  // Change Between Tables
+  const [viewSales, setViewSales] = useState(false);
+
+  function closeViewSales() {
+    setViewSales(!viewSales);
+  };
+
+  const [graphData, setGraphData] = useState(chartAnnualProfits.data);
+  const [graphOptions, setGraphOptions] = useState(chartAnnualProfits.options);
+
+  useEffect(()=> {
+    if(viewSales){
+      setGraphData(chartAnnualSales.data);
+      setGraphOptions(chartAnnualSales.options);
+    }
+    else
+    {
+      setGraphData(chartAnnualProfits.data);
+      setGraphOptions(chartAnnualProfits.options);
+    }
+  },
+  [viewSales]
+  );
 
   return (
       <>
@@ -45,39 +69,20 @@ const Finance = () => {
                         <h1 className=" mb-0">Annual Goals and Statistics</h1>
                       </CardHeader>
                       <CardBody>
-                        <div className="text-right">
-                          <UncontrolledDropdown className="mb-4 mt-3">
-                            <DropdownToggle
-                                color="default"
-                                href="#graphToggle"
-                                role="button"
-                            >
-                              Toggle Graph
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow">
-                              <DropdownItem
-                                  href="#graphToggle"
-                              >
-                                Sales
-                              </DropdownItem>
-                              <DropdownItem
-                                  href="#graphToggle"
-                              >
-                                Profits
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </div>
-                        <div className="chart">
-                          <Bar data={chartAnnualProfits.data}
-                               options={chartAnnualProfits.options}
-                          />
-                        </div>
-                        <div className="chart">
-                          <Bar data={chartAnnualSales.data}
-                               options={chartAnnualSales.options}
-                          />
-                        </div>
+                        <Button
+                            className="mt-4"
+                            color="default"
+                            onClick={() => {
+                              closeViewSales();
+                            }}
+                        >
+                          Toggle Graph
+                        </Button>
+                              <div className="chart">
+                                <Bar data={graphData}
+                                     options={graphOptions}
+                                />
+                              </div>
                       </CardBody>
                     </Card>
                   </Col>
