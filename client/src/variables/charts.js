@@ -392,10 +392,6 @@ const chartExample2 = {
 
 const chartAnnualProfits = {
   options: {
-    title:{
-      display: true,
-      text: 'Annual Profits'
-    },
     scales: {
       yAxes: [
         {
@@ -438,10 +434,6 @@ const chartAnnualProfits = {
 
 const chartAnnualSales = {
   options: {
-    title:{
-      display: true,
-      text: 'Annual Sales'
-    },
     scales: {
       yAxes: [
         {

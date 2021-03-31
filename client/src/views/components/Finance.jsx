@@ -32,6 +32,7 @@ const Finance = () => {
     setViewSales(!viewSales);
   };
 
+  const [graphTitle, setGraphTitle] = useState("Annual Profits")
   const [graphData, setGraphData] = useState(chartAnnualProfits.data);
   const [graphOptions, setGraphOptions] = useState(chartAnnualProfits.options);
 
@@ -39,11 +40,13 @@ const Finance = () => {
     if(viewSales){
       setGraphData(chartAnnualSales.data);
       setGraphOptions(chartAnnualSales.options);
+      setGraphTitle("Annual Sales");
     }
     else
     {
       setGraphData(chartAnnualProfits.data);
       setGraphOptions(chartAnnualProfits.options);
+      setGraphTitle("Annual Profits");
     }
   },
   [viewSales]
@@ -66,11 +69,11 @@ const Finance = () => {
                   <Col className="">
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
-                        <h1 className=" mb-0">Annual Goals and Statistics</h1>
+                        <h1 className=" mb-0">{graphTitle}</h1>
                       </CardHeader>
                       <CardBody>
                         <Button
-                            className="mt-4"
+                            className="mt-4 mb-3"
                             color="default"
                             onClick={() => {
                               closeViewSales();
@@ -78,7 +81,7 @@ const Finance = () => {
                         >
                           Toggle Graph
                         </Button>
-                              <div className="chart">
+                              <div className="chart mb-3">
                                 <Bar data={graphData}
                                      options={graphOptions}
                                 />
@@ -91,7 +94,7 @@ const Finance = () => {
                   <Col className="">
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
-                        <h1 className=" mb-0">Monthly Planning</h1>
+                        <h1 className="mb-0">Monthly Planning</h1>
                         <p>Expected Sales  "Entered"</p>
                         <p>Expected Procurement Costs  "Entered"</p>
                         <p>Expected operating costs "Entered"</p>
