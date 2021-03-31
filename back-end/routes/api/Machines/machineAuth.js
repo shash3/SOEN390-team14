@@ -92,7 +92,7 @@ router.post("/delete", async (req,res) => {
 router.put("/add", async (req, res) => {
   const { _id, item, type, finishTime } = req.body;
   try{
-    machine = await Machine.find({_id}).updateOne({item, type, finishTime});
+    machine = await Machine.find({_id}).updateOne({item, type, finish_time:finishTime});
     res.json('updated');
   } catch(err){
     console.log(err.message);

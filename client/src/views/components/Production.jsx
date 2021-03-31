@@ -479,7 +479,7 @@ const Production = () => {
         _id: machineKey,
         item,
         type,
-        finish_time: final.toISOString(),
+        finishTime: final.toISOString(),
       },
       {
         headers: {

@@ -189,7 +189,7 @@ const ProductionScheduling = () => {
         _id: key,
         item,
         type,
-        finish_time: final.toISOString(),
+        finishTime: final.toISOString(),
       },
       {
         headers: {
