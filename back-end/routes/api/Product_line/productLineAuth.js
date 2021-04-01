@@ -18,9 +18,20 @@ router.get("/", auth, async (req, res) => {
 // Retrieve specific product lines by name
 router.post("/", auth, async (req, res) => {
   const { name } = req.body;
- 
   try {
     const product = await ProductLine.find({ name })
+    res.json(product);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Retrieve specific product lines by type
+router.post("/type", auth, async (req, res) => {
+  const { type } = req.body;
+  try {
+    const product = await ProductLine.find({ type })
     res.json(product);
   } catch (err) {
     console.error(err.message);
