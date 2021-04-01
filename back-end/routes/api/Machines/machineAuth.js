@@ -2,6 +2,7 @@
 const express = require("express");
 
 const router = express.Router();
+const fs = require('fs');
 const Machine = require("../../../models/Machine");
 const auth = require("../../../middleware/auth");
 
@@ -83,7 +84,7 @@ router.post("/delete", async (req,res) => {
     await Machine.deleteOne({_id});
     res.json('deleted');
   } catch(err){
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
@@ -95,7 +96,7 @@ router.put("/add", async (req, res) => {
     machine = await Machine.find({_id}).updateOne({item, type, finish_time:finishTime});
     res.json('updated');
   } catch(err){
-    console.log(err.message);
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
@@ -107,7 +108,37 @@ router.put("/remove", async (req, res) => {
     machine = await Machine.find({_id}).updateOne({item:"",type:""});
     res.json('updated');
   } catch(err){
-    console.log(err.message);
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+
+const machineTrackFile = './logs/machineOperations.json';
+// Get the log file for machine
+router.get("/json", auth, async (req, res) => {
+  try {
+    fs.readFile(machineTrackFile, 'utf8', (err, data) => {
+      let jsonData = data;
+      if (jsonData === undefined) {
+        jsonData = '{}';
+      }
+      res.send(JSON.parse(jsonData));
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// Write the log file for machine
+router.post('/json', auth, (req, res) => {
+  const { data } = req.body;
+  const dataStr = JSON.stringify(data, null, 2);
+  try {
+    fs.writeFile(machineTrackFile, dataStr, 'utf8', () => {});
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
