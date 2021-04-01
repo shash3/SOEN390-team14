@@ -1,35 +1,35 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   location: {
     type: String,
-    default: "none"
+    default: 'none',
   },
   permission: {
     type: String,
-    default: "none"
+    default: 'none',
   },
   avatar: {
-    type: String
+    type: String,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
-});
+    default: Date.now,
+  },
+})
 
 // eslint-disable-next-line no-undef
-module.exports = Users = mongoose.model('user', UserSchema);
+module.exports = Users = mongoose.model('user', UserSchema)

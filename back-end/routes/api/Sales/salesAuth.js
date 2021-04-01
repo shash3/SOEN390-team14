@@ -12,7 +12,7 @@ router.get('/', auth, async (req, res) => {
     console.error(err.message)
     res.status(500).send('Server Error')
   }
-});
+})
 
 router.get('/receivables', auth, async (req, res) => {
   try {
@@ -22,7 +22,7 @@ router.get('/receivables', auth, async (req, res) => {
     console.error(err.message)
     res.status(500).send('Server Error')
   }
-});
+})
 
 router.get('/receivablesP', auth, async (req, res) => {
   try {
@@ -32,19 +32,19 @@ router.get('/receivablesP', auth, async (req, res) => {
     console.error(err.message)
     res.status(500).send('Server Error')
   }
-});
+})
 
 router.post('/delete', auth, async (req, res) => {
   const { _id } = req.body
   await Sales.deleteOne({ _id })
   res.send(true)
-});
+})
 
 router.post('/setPaid', auth, async (req, res) => {
   const { _id } = req.body
   await Sales.updateOne({ _id }, { $set: { paid: true } })
   res.send(true)
-});
+})
 
 router.post('/add', auth, async (req, res) => {
   const { name, quantity, purchaser, location, value, date } = req.body
@@ -56,9 +56,9 @@ router.post('/add', auth, async (req, res) => {
     value,
     date,
     paid: false,
-  });
+  })
   await sales.save()
   res.send(true)
-});
+})
 
 module.exports = router

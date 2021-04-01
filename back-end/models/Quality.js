@@ -1,23 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const QualitySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
-  type:{
+  type: {
     type: String,
-    required: true
+    required: true,
   },
   location: {
     type: String,
-    required: true
+    required: true,
   },
   quality: {
     type: String,
-    required: true
+    required: true,
   },
-});
+})
 
 // eslint-disable-next-line no-undef
-module.exports = Quality = mongoose.model('quality', QualitySchema);
+module.exports = Quality = mongoose.model('quality', QualitySchema)
