@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable max-len */
 /* eslint-disable no-await-in-loop */
@@ -10,6 +12,7 @@ import {
   Badge,
   Card,
   CardHeader,
+  CardBody,
   CardFooter,
   Media,
   Table,
@@ -17,11 +20,14 @@ import {
   Row,
   ButtonGroup,
   Button,
+  Input,
   Form,
+  Label,
 } from 'reactstrap';
 
 // core components
 import Tooltip from '@material-ui/core/Tooltip';
+import { Bar } from "react-chartjs-2";
 import ProductionHeader from '../../components/Headers/productionHeader.jsx';
 
 const ProductionScheduling = () => {
@@ -30,6 +36,12 @@ const ProductionScheduling = () => {
   const [userLocation, setUserLocation] = useState('');
   const [machines, setMachines] = useState([]);
   const [machineView, updateMachineView] = useState(false);
+
+  const [displayYearGraph, setDisplayYearGraph] = useState(true);
+  const [planningYears, setPlanningYears] = useState([]);
+  const [graphYear, setGraphYear] = useState(new Date().getUTCFullYear());
+  const [graphMonth, setGraphMonth] = useState('');
+  const [graphData, setGraphData] = useState({});
 
   const MINUTES_TO_FINISH = 5;
 
@@ -84,22 +96,44 @@ const ProductionScheduling = () => {
       }).catch((error) => { console.error(error); });
     };
 
-    const updateMachineLog = async (key, item) => {
+    const updateMachineLog = async (machineKey, item, date, location) => {
       const machinesLog = await readMachineLog();
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
 
-      if (machinesLog[key] === undefined) {
-        machinesLog[key] = {
+      const year = date.getUTCFullYear();
+      const month = monthNames[date.getUTCMonth()];
+      
+      if (machinesLog[year] === undefined) {
+        machinesLog[year] = {};
+      }
+      const machineYear = machinesLog[year];
+      
+      if (machineYear[month] === undefined) {
+        machineYear[month] = {};
+      }
+      const machineMonth = machineYear[month];
+
+      if (machineMonth[location] === undefined) {
+        machineMonth[location] = {};
+      }
+      const machineLocation = machineMonth[location];
+
+      if (machineLocation[machineKey] === undefined) {
+        machineLocation[machineKey] = {
           'items': {},
           'minutesLogged' : 0,
         };
       }
-      const machineItems = machinesLog[key].items;
+      const machineItems = machineLocation[machineKey].items;
+
       if (machineItems[item] === undefined) {
         machineItems[item] = 0;
       } 
 
       machineItems[item] += 1;
-      machinesLog[key].minutesLogged += 5;
+      machineLocation[machineKey].minutesLogged += 5;
 
       writeMachineLog(machinesLog);
     };
@@ -141,7 +175,7 @@ const ProductionScheduling = () => {
       for (let index = 0; index < unavailMachines.length; index += 1) {
         const machine = unavailMachines[index];
         if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-          await updateMachineLog(machine._id, machine.item);
+          await updateMachineLog(machine._id, machine.item, new Date(), userLocation);
           await addToQuality(machine.item, machine.type, userLocation);
           await removeItemFromMachine(machine._id);
           updated += 1;
@@ -155,8 +189,9 @@ const ProductionScheduling = () => {
     main();
   }, [refreshMachine]);
 
-  /**
+  /* -----------------------
    * Functions for interacting with machines.
+   * -----------------------
    */
 
   /**
@@ -290,6 +325,173 @@ const ProductionScheduling = () => {
     getMachines();
   }, [userLocation, machineView]);
 
+
+  
+  /* -------------------------
+   * Functions for planning scheduling.
+   * -------------------------
+   */
+
+  const readMachineLog = async () => {
+    const reply = await axios.get('/api/machine/json', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).catch((err) => console.error('Error', err));
+    return reply.data;
+  };
+
+  const rand = () => Math.floor(Math.random() * 255);
+
+  /**
+   * Gets all the years that have a planned schedule.
+   * 
+   * @returns all the years with a planned schedule
+   */
+  const getPlanningYears = () => {
+    const years = [2020, 2021];
+    return years;
+  }
+
+  /**
+   * Get the yearly data of the production plant.
+   * 
+   * @param {BigInteger} year the year to get data of
+   * @param {String} location the location to get data of
+   * @returns 
+   */
+  const getYearlyData = async (year, location) => {
+    const yearlyData = [rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand(), rand()];
+    return yearlyData;
+  };
+
+  const getYearlyScheduling = async (year, location) => {
+    const labels = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const yearlyData = await getYearlyData(year, location);
+    const datasets = [
+      {
+        label: 'Bikes Created',
+        backgroundColor: `rgb(${rand()}, ${rand()}, ${rand()})`,
+        data: yearlyData,
+      },
+      {
+        type: 'line',
+        label: 'Trend Line',
+        borderColor: `rgb(${rand()}, ${rand()}, ${rand()})`,
+        borderWidth: 2,
+        fill: false,
+        data: yearlyData,
+      }
+    ];
+
+    return {
+      labels,
+      datasets
+    };
+  };
+  
+  const getMonthlyLabel = async (year, month, location) => {
+    const plan = '';
+    return ['Saddle', 'Leather', 'Bike'];
+  }
+
+  const getMonthlyPlanned = async (label, year, month, location) => {
+    const plan = '';
+    const quantitiesPlanned = []
+    label.forEach(item => {
+      try {
+        quantitiesPlanned.push(10);
+      } catch (error) {
+        if (error.name === 'TypeError' && error.message.includes('undefined')){
+          quantitiesPlanned.push(0);
+        }
+      }
+    });
+    return quantitiesPlanned;
+  };
+
+  const getMonthlyCreated = async (label, year, month, location) => {
+    const machinesLog = await readMachineLog();
+    try {
+      const machineOperations = machinesLog[year][month][location];
+      const quantitiesCreated = []
+      for (let index = 0; index < label.length; index += 1) {
+        const item = label[index];
+        try {
+          let totalQuant = 0;
+          for (const machineKey in machineOperations) {
+            const quantity = machineOperations[machineKey].items[item];
+            totalQuant += (quantity === undefined ? 0 : quantity);
+          }
+          quantitiesCreated.push(totalQuant);
+        } catch (error) {
+          if (error.name === 'TypeError' && error.message.includes('undefined')){
+            quantitiesCreated.push(0);
+          }
+        }
+      };
+      return quantitiesCreated;
+    } catch (error) {
+      if (error.name === 'TypeError' && error.message.includes('undefined')){
+        return [0];
+      }
+      throw error;
+    }
+  };
+
+  const getMonthlyScheduling = async (year, month, location) => {
+    const monthlyLabel = await getMonthlyLabel(year, month, location);
+    const monthlyPlannedData = await getMonthlyPlanned(monthlyLabel, year, month, location);
+    const monthlyCreatedData = await getMonthlyCreated(monthlyLabel, year, month, location);
+    const datasets = [
+      {
+        label: 'Planned',
+        backgroundColor: `rgb(${rand()}, ${rand()}, ${rand()})`,
+        data: monthlyPlannedData,
+      },
+      {
+        label: 'Created',
+        backgroundColor: `rgb(${rand()}, ${rand()}, ${rand()})`,
+        data: monthlyCreatedData,
+      }
+    ];
+
+    return {
+      labels: monthlyLabel,
+      datasets
+    };
+  }
+
+
+  const selectedElementOnGraph = element => {
+    if (!element.length) {
+      return;
+    }
+
+    const { _datasetIndex: datasetIndex, _index: index } = element[0]
+    const datasetName = graphData.datasets[datasetIndex].label;
+    if (datasetName === 'Trend Line') {
+      return;
+    }
+    if (datasetName === 'Bikes Created') {
+      const month = graphData.labels[index];
+      setGraphMonth(month);
+      setDisplayYearGraph(!displayYearGraph);
+    }
+  };
+  
+  useEffect(() => {
+    setPlanningYears(getPlanningYears());
+  }, []);
+  
+  useEffect(async () => {
+    if (displayYearGraph){
+      setGraphData(await getYearlyScheduling(graphYear, userLocation));
+    } else {
+      setGraphData(await getMonthlyScheduling(graphYear, graphMonth, userLocation))
+    }
+  }, [graphYear, displayYearGraph]);
+
   /* -------------------------
    * Returns the HTML code for the productino tab.
    * -------------------------
@@ -299,6 +501,60 @@ const ProductionScheduling = () => {
       <ProductionHeader />
       {/* Page content */}
       <Container className="mt--7" fluid>
+        <Form>
+          <Card className="shadow">
+            <CardHeader className="bg-transparent text-center">
+              <h1 className=" mb-0">Machine Planning For Location: {userLocation}</h1>
+            </CardHeader>
+            <CardBody>
+              { displayYearGraph ?
+                <div>
+                  <Label>
+                    Select a year
+                  </Label>
+                  <Input
+                    type="select"
+                    name="year"
+                    value={graphYear}
+                    onChange={(e) => setGraphYear(e.target.value)}
+                  >
+                    {planningYears.map((year) => (
+                      <option key={year}>{year}</option>
+                    ))}
+                  </Input>
+                </div>
+                :
+                <div>
+                  <Tooltip
+                    title="Return to yearly scheduling"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      color="secondary"
+                      onClick={() => setDisplayYearGraph(!displayYearGraph)}
+                    >
+                      &lt; Back
+                    </Button>
+                  </Tooltip>
+                  <Label
+                    className="ml-2"
+                  >
+                    Schedule for {graphMonth}, {graphYear}
+                  </Label>
+                </div>
+                
+              }
+              <Bar
+                data={graphData}
+                options={{}}
+                getElementAtEvent={(e) => {selectedElementOnGraph(e)}}
+              />
+            </CardBody>
+          </Card>
+        </Form>
+        
         <Form>
           <ButtonGroup className="my-3">
             <Tooltip

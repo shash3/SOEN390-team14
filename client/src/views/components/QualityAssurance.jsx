@@ -52,6 +52,7 @@ const QualityAssurance = () => {
 
   const NUM_OF_ITEMS_IN_A_PAGE = 15;
 
+
   /* ---------------------------
    * Functions To Refresh Production Machines
    * ---------------------------
@@ -103,22 +104,44 @@ const QualityAssurance = () => {
       }).catch((error) => { console.error(error); });
     };
 
-    const updateMachineLog = async (key, item) => {
+    const updateMachineLog = async (machineKey, item, date, location) => {
       const machinesLog = await readMachineLog();
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
 
-      if (machinesLog[key] === undefined) {
-        machinesLog[key] = {
+      const year = date.getUTCFullYear();
+      const month = monthNames[date.getUTCMonth()];
+      
+      if (machinesLog[year] === undefined) {
+        machinesLog[year] = {};
+      }
+      const machineYear = machinesLog[year];
+      
+      if (machineYear[month] === undefined) {
+        machineYear[month] = {};
+      }
+      const machineMonth = machineYear[month];
+
+      if (machineMonth[location] === undefined) {
+        machineMonth[location] = {};
+      }
+      const machineLocation = machineMonth[location];
+
+      if (machineLocation[machineKey] === undefined) {
+        machineLocation[machineKey] = {
           'items': {},
           'minutesLogged' : 0,
         };
       }
-      const machineItems = machinesLog[key].items;
+      const machineItems = machineLocation[machineKey].items;
+
       if (machineItems[item] === undefined) {
         machineItems[item] = 0;
       } 
 
       machineItems[item] += 1;
-      machinesLog[key].minutesLogged += 5;
+      machineLocation[machineKey].minutesLogged += 5;
 
       writeMachineLog(machinesLog);
     };
@@ -160,7 +183,7 @@ const QualityAssurance = () => {
       for (let index = 0; index < unavailMachines.length; index += 1) {
         const machine = unavailMachines[index];
         if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-          await updateMachineLog(machine._id, machine.item);
+          await updateMachineLog(machine._id, machine.item, new Date(), userLocation);
           await addToQuality(machine.item, machine.type, userLocation);
           await removeItemFromMachine(machine._id);
           updated += 1;
