@@ -73,7 +73,7 @@ const QualityAssurance = () => {
     const returnUnavailableMachines = () => {
       const reply = axios.post('/api/machine/unavailable',
         {
-          location: userLoc,
+          location: userLocation,
         },
         {
           headers: {
@@ -81,6 +81,46 @@ const QualityAssurance = () => {
           },
         }).then((response) => response.data).catch((err) => console.error('Error', err));
       return reply;
+    };
+
+    const readMachineLog = async () => {
+      const reply = await axios.get('/api/machine/json', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).catch((err) => console.error('Error', err));
+      return reply.data;
+    };
+  
+    const writeMachineLog = async (qualityJson) => {
+      await axios.post('/api/machine/json', {
+        data: qualityJson,
+      },
+      {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).catch((error) => { console.error(error); });
+    };
+
+    const updateMachineLog = async (key, item) => {
+      const machinesLog = await readMachineLog();
+
+      if (machinesLog[key] === undefined) {
+        machinesLog[key] = {
+          'items': {},
+          'minutesLogged' : 0,
+        };
+      }
+      const machineItems = machinesLog[key].items;
+      if (machineItems[item] === undefined) {
+        machineItems[item] = 0;
+      } 
+
+      machineItems[item] += 1;
+      machinesLog[key].minutesLogged += 5;
+
+      writeMachineLog(machinesLog);
     };
 
     const addToQuality = async (name, type, location) => {
@@ -112,16 +152,22 @@ const QualityAssurance = () => {
     };
 
     const main = async () => {
-      if (userLoc === undefined) {
+      if (userLocation === undefined) {
         return;
       }
-      const machines = await returnUnavailableMachines();
-      for (let index = 0; index < machines.length; index += 1) {
-        const machine = machines[index];
+      let updated = 0;
+      const unavailMachines = await returnUnavailableMachines();
+      for (let index = 0; index < unavailMachines.length; index += 1) {
+        const machine = unavailMachines[index];
         if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-          await addToQuality(machine.item, machine.type, userLoc);
+          await updateMachineLog(machine._id, machine.item);
+          await addToQuality(machine.item, machine.type, userLocation);
           await removeItemFromMachine(machine._id);
+          updated += 1;
         }
+      }
+      if (updated > 0) {
+        updateMachineView(!machineView);
       }
     };
 

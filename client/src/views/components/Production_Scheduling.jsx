@@ -64,6 +64,46 @@ const ProductionScheduling = () => {
       return reply;
     };
 
+    const readMachineLog = async () => {
+      const reply = await axios.get('/api/machine/json', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).catch((err) => console.error('Error', err));
+      return reply.data;
+    };
+  
+    const writeMachineLog = async (qualityJson) => {
+      await axios.post('/api/machine/json', {
+        data: qualityJson,
+      },
+      {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).catch((error) => { console.error(error); });
+    };
+
+    const updateMachineLog = async (key, item) => {
+      const machinesLog = await readMachineLog();
+
+      if (machinesLog[key] === undefined) {
+        machinesLog[key] = {
+          'items': {},
+          'minutesLogged' : 0,
+        };
+      }
+      const machineItems = machinesLog[key].items;
+      if (machineItems[item] === undefined) {
+        machineItems[item] = 0;
+      } 
+
+      machineItems[item] += 1;
+      machinesLog[key].minutesLogged += 5;
+
+      writeMachineLog(machinesLog);
+    };
+
     const addToQuality = async (name, type, location) => {
       await axios.post('/api/quality/add',
         {
@@ -101,6 +141,7 @@ const ProductionScheduling = () => {
       for (let index = 0; index < unavailMachines.length; index += 1) {
         const machine = unavailMachines[index];
         if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
+          await updateMachineLog(machine._id, machine.item);
           await addToQuality(machine.item, machine.type, userLocation);
           await removeItemFromMachine(machine._id);
           updated += 1;
