@@ -1,8 +1,7 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable max-len */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -23,7 +22,7 @@ import {
 
 // core components
 import Tooltip from '@material-ui/core/Tooltip';
-import ProductionHeader from '../../components/Headers/productionHeader';
+import ProductionHeader from '../../components/Headers/productionHeader.jsx';
 
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));

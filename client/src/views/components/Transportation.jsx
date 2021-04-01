@@ -1,9 +1,5 @@
-/* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 // reactstrap components
@@ -35,7 +31,7 @@ import {
   Modal,
 } from 'reactstrap';
 // core components
-import Header from '../../components/Headers/CardlessHeader';
+import Header from '../../components/Headers/CardlessHeader.jsx';
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));

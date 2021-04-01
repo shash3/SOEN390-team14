@@ -1,7 +1,4 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable global-require */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { NavLink as NavLinkRRD, Link } from 'react-router-dom';
 // nodejs library to set properties for components

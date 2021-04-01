@@ -1,11 +1,12 @@
 const express = require("express");
+
 const router = express.Router();
-const auth = require("../../../middleware/auth");
-const User = require("../../../models/User");
 const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const User = require("../../../models/User");
+const auth = require("../../../middleware/auth");
 
 // Retrieve user information by token
 router.get("/", auth, async (req, res) => {
@@ -34,7 +35,8 @@ router.post("/name", auth, async (req, res) => {
 router.put("/permission", auth, async (req, res) => {
   const { email, permission } = req.body;
   try {
-    const user1 = await User.find({email: email}).updateOne({permission: permission});
+    // eslint-disable-next-line no-unused-vars
+    const user1 = await User.find({email}).updateOne({permission});
     res.json("changed")
   } catch (err) {
     console.error(err.message);
@@ -61,17 +63,19 @@ router.post(
     check("email", "Please include a valid email").isEmail(),
     check("password", "Password is required").exists(),
   ],
+  // eslint-disable-next-line consistent-return
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
     const { email, password } = req.body;
-    const user = await User.findOne({ email: email }).select("permission");
-    const permission = user.permission;
+    const user = await User.findOne({ email }).select("permission");
+    const {permission} = user;
     try {
       // Verify email
-      let user = await User.findOne({ email });
+      // eslint-disable-next-line no-shadow
+      const user = await User.findOne({ email });
 
       if (!user) {
         return res.status(400).json({ errors: [{ msg: "Invalid login" }] });

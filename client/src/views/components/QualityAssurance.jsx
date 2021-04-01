@@ -1,11 +1,7 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
-
-/* eslint-disable no-undef */
 /* eslint-disable no-await-in-loop */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
-
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -37,7 +33,7 @@ import {
 } from 'reactstrap';
 // core components
 import Tooltip from '@material-ui/core/Tooltip';
-import Header from '../../components/Headers/Header';
+import Header from '../../components/Headers/Header.jsx';
 
 const QualityAssurance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -194,16 +190,16 @@ const QualityAssurance = () => {
     const itemQual = qualityLogJson[name];
 
     switch (quality) {
-      case 'Good':
-        itemQual.good += 1;
-        itemQual.total += 1;
-        break;
-      case 'Faulty':
-        itemQual.faulty += 1;
-        itemQual.total += 1;
-        break;
-      default:
-        break;
+    case 'Good':
+      itemQual.good += 1;
+      itemQual.total += 1;
+      break;
+    case 'Faulty':
+      itemQual.faulty += 1;
+      itemQual.total += 1;
+      break;
+    default:
+      break;
     }
     return qualityLogJson;
   };
@@ -462,17 +458,17 @@ const QualityAssurance = () => {
       const product = dirtyQualityData[index];
       if (updatedQualityIndicies[index] && product.quality !== 'None') {
         switch (product.quality) {
-          case 'Good':
-            await addProductToInventory(product);
-            removeQualityProduct(product._id);
-            qualityChanges += 1;
-            break;
-          case 'Faulty':
-            removeQualityProduct(product._id);
-            qualityChanges += 1;
-            break;
-          default:
-            break;
+        case 'Good':
+          await addProductToInventory(product);
+          removeQualityProduct(product._id);
+          qualityChanges += 1;
+          break;
+        case 'Faulty':
+          removeQualityProduct(product._id);
+          qualityChanges += 1;
+          break;
+        default:
+          break;
         }
       }
       qualityLogJson = await addQualityToLog(
@@ -635,7 +631,7 @@ const QualityAssurance = () => {
                                 <DropdownItem
                                   onClick={() => changeProductQuality(m, 'None')}
                                 >
-                                  None
+                                    None
                                 </DropdownItem>
                               </Tooltip>
                               <Tooltip
@@ -647,7 +643,7 @@ const QualityAssurance = () => {
                                 <DropdownItem
                                   onClick={() => changeProductQuality(m, 'Good')}
                                 >
-                                  Good
+                                    Good
                                 </DropdownItem>
                               </Tooltip>
                               <Tooltip

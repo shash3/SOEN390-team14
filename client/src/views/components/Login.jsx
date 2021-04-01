@@ -1,8 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';

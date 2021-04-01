@@ -1,13 +1,11 @@
+/* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 /* eslint-disable consistent-return */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable func-names */
 const Chart = require('chart.js');
 //
 // Chart extension for making the bars rounded
 // Code from: https://codepen.io/jedtrow/full/ygRYgo
 //
-
 Chart.elements.Rectangle.prototype.draw = function () {
   const { ctx } = this._chart;
   const vm = this._view;

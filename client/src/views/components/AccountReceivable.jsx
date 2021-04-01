@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-underscore-dangle */
-/* eslint no-console: ["error", { allow: ["error"] }] */
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -27,7 +25,7 @@ import {
   Modal,
 } from 'reactstrap';
 // core components
-import FinanceHeader from '../../components/Headers/FinanceHeader';
+import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 
 const AccountReceivable = () => {
   const [receivables, setReceivables] = useState([]);

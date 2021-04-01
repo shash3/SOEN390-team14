@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable max-len */
-/* eslint-disable no-console */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
 
@@ -39,7 +36,7 @@ import {
 } from 'reactstrap';
 // core components
 import axios from 'axios';
-import UserHeader from '../../components/Headers/UserHeader';
+import UserHeader from '../../components/Headers/UserHeader.jsx';
 
 const Profile = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));

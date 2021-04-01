@@ -1,11 +1,8 @@
 const express = require("express");
+
 const router = express.Router();
-const auth = require("../../../middleware/auth");
 const Inventory = require("../../../models/Inventory");
-const { check, validationResult } = require("express-validator");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
+const auth = require("../../../middleware/auth");
 
 // Retrieve all inventory
 router.get("/", auth, async (req, res) => {
@@ -45,11 +42,11 @@ router.post("/location", auth, async (req, res) => {
 // Add new inventory
 router.post("/add", async (req, res) => {
   const { name, quantity, location, type } = req.body;
-  inventory = new Inventory({
-    name:name,
-    type:type,
-    quantity:quantity,
-    location:location
+  const inventory = new Inventory({
+    name,
+    type,
+    quantity,
+    location
   });
   await inventory.save();
   res.json("added");
@@ -59,7 +56,7 @@ router.post("/add", async (req, res) => {
 router.put("/remove", async (req,res) => {
   const {name, quantity, location} = req.body;
   try{
-    await Inventory.find({name: name , location: location}).updateOne({quantity,quantity});
+    await Inventory.find({name , location}).updateOne({quantity});
     res.json("removed");
   } catch(err){
     console.log(err.message);
@@ -71,9 +68,9 @@ router.put("/remove", async (req,res) => {
 router.put("/decrement", async (req,res) => {
   const {name, quantity, location} = req.body;
   try{
-    const inventory = await Inventory.find({name: name , location: location});
-    const newQuantity = inventory[0]['quantity'] - quantity;
-    await Inventory.find({name: name , location: location}).updateOne({quantity:newQuantity});
+    const inventory = await Inventory.find({name , location});
+    const newQuantity = inventory[0].quantity - quantity;
+    await Inventory.find({name , location}).updateOne({quantity:newQuantity});
     res.json("decreased");
   } catch(err){
     console.log(err.message);
@@ -85,19 +82,19 @@ router.put("/superUpdate", async (req, res) => {
   const {name, type, quantity, location} = req.body;
 
   try{
-    const inv = await Inventory.find({name: name , location: location});
-    if (inv.length == 0){
-      inventory = new Inventory({
-        name:name,
-        type:type,
-        quantity:quantity,
-        location:location
+    const inv = await Inventory.find({name , location});
+    if (inv.length === 0){
+      const inventory = new Inventory({
+        name,
+        type,
+        quantity,
+        location
       });
       await inventory.save();
     }else{
-      await Inventory.find({name: name , location: location}).updateOne({quantity,quantity});
+      await Inventory.find({name , location}).updateOne({quantity});
     }
-      res.json("updated");
+    res.json("updated");
   } catch(err){
     console.log(err.message);
     res.status(500).send("Server Error");
@@ -110,18 +107,18 @@ router.put("/superIncrement", async (req, res) => {
   const {name, type, quantity, location} = req.body;
 
   try{
-    const inv = await Inventory.find({name: name , location: location});
-    if (inv.length == 0){
-      inventory = new Inventory({
-        name:name,
-        type:type,
-        quantity:quantity,
-        location:location
+    const inv = await Inventory.find({name , location});
+    if (inv.length === 0){
+      const inventory = new Inventory({
+        name,
+        type,
+        quantity,
+        location
       });
       await inventory.save();
     }else{
-      const newQuantity = inv[0]['quantity'] + quantity;
-      await Inventory.find({name: name , location: location}).updateOne({quantity:newQuantity});
+      const newQuantity = inv[0].quantity + quantity;
+      await Inventory.find({name , location}).updateOne({quantity:newQuantity});
     }
     res.json("increased");
   } catch(err){

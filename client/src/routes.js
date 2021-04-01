@@ -1,12 +1,12 @@
-import Index from './views/Index';
-import Profile from './views/components/Profile';
-import Transportation from './views/components/Transportation';
-import Register from './views/components/Register';
-import Login from './views/components/Login';
-import Finance from './views/components/Finance';
-import Production from './views/components/Production';
-import QualityAssurance from './views/components/QualityAssurance';
-import Help from './views/components/Help';
+import Index from './views/Index.jsx';
+import Profile from './views/components/Profile.jsx';
+import Transportation from './views/components/Transportation.jsx';
+import Register from './views/components/Register.jsx';
+import Login from './views/components/Login.jsx';
+import Finance from './views/components/Finance.jsx';
+import Production from './views/components/Production.jsx';
+import QualityAssurance from './views/components/QualityAssurance.jsx';
+import Help from './views/components/Help.jsx';
 
 // IN ADMIN.JS AS WELL IF MODIFYING
 const routes = [
