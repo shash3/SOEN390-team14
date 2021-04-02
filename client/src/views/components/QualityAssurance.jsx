@@ -2,8 +2,8 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -30,231 +30,275 @@ import {
   Input,
   ButtonGroup,
   Button,
-} from 'reactstrap';
+} from 'reactstrap'
 // core components
-import Tooltip from '@material-ui/core/Tooltip';
-import Header from '../../components/Headers/Header.jsx';
+import Tooltip from '@material-ui/core/Tooltip'
+import Header from '../../components/Headers/Header.jsx'
 
 const QualityAssurance = () => {
-  const userToken = JSON.parse(localStorage.getItem('user'));
-  const [userLoc, setUserLoc] = useState('');
+  const userToken = JSON.parse(localStorage.getItem('user'))
+  const [userLocation, setUserLoc] = useState('')
 
   // Quality database data
-  const [dirtyQualityData, setDirtyQualityData] = useState([]);
-  const [searchQualityData, setSearchQualityData] = useState([]);
-  const [updatedQualityIndicies, setUpdatedQualityIndicies] = useState([]);
+  const [dirtyQualityData, setDirtyQualityData] = useState([])
+  const [searchQualityData, setSearchQualityData] = useState([])
+  const [updatedQualityIndicies, setUpdatedQualityIndicies] = useState([])
 
   // Search input
-  const [qualityFormSearch, setQualityFormSearch] = useState('');
-  const [updateSearch, setUpdateSearch] = useState(false);
-  const [qualPage, setQualPage] = useState(0);
-  const [qualityMessages, setQualityMessages] = useState([]);
+  const [qualityFormSearch, setQualityFormSearch] = useState('')
+  const [updateSearch, setUpdateSearch] = useState(false)
+  const [qualPage, setQualPage] = useState(0)
+  const [qualityMessages, setQualityMessages] = useState(<></>)
 
-  const NUM_OF_ITEMS_IN_A_PAGE = 15;
-
+  const NUM_OF_ITEMS_IN_A_PAGE = 15
 
   /* ---------------------------
-   * Functions To Refresh Production Machines
-   * ---------------------------
-   */
+  * Functions To Refresh Production Machines
+  * ---------------------------
+  */
 
-  const [refreshMachine, setRefreshMachine] = useState(false);
+  const [refreshMachine, setRefreshMachine] = useState(false)
   /**
-   * Set a timer to refresh every few seconds.
-   */
+  * Set a timer to refresh every few seconds.
+  */
   useEffect(() => {
-    let refresh = true;
-    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 15);
-  }, []);
+    let refresh = true
+    setInterval(() => {
+      setRefreshMachine(refresh)
+      refresh = !refresh
+    }, 1000 * 15)
+  }, [])
 
   /**
-   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
-   */
+  * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
+  */
   useEffect(async () => {
     const returnUnavailableMachines = () => {
-      const reply = axios.post('/api/machine/unavailable',
-        {
-          location: userLocation,
-        },
-        {
+      const reply = axios
+        .post(
+          '/api/machine/unavailable',
+          {
+            location: userLocation,
+          },
+          {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          }
+        )
+        .then((response) => response.data)
+        .catch((err) => console.error('Error', err))
+      return reply
+    }
+
+    const readMachineLog = async () => {
+      const reply = await axios
+        .get('/api/machine/json', {
           headers: {
             'x-auth-token': userToken,
           },
-        }).then((response) => response.data).catch((err) => console.error('Error', err));
-      return reply;
-    };
+        })
+        .catch((err) => console.error('Error', err))
+      return reply.data
+    }
 
-    const readMachineLog = async () => {
-      const reply = await axios.get('/api/machine/json', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).catch((err) => console.error('Error', err));
-      return reply.data;
-    };
-  
     const writeMachineLog = async (qualityJson) => {
-      await axios.post('/api/machine/json', {
-        data: qualityJson,
-      },
-      {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).catch((error) => { console.error(error); });
-    };
+      await axios
+        .post(
+          '/api/machine/json',
+          {
+            data: qualityJson,
+          },
+          {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          }
+        )
+        .catch((error) => {
+          console.error(error)
+        })
+    }
 
     const updateMachineLog = async (machineKey, item, date, location) => {
-      const machinesLog = await readMachineLog();
-      const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
+      const machinesLog = await readMachineLog()
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
 
-      const year = date.getUTCFullYear();
-      const month = monthNames[date.getUTCMonth()];
-      
+      const year = date.getUTCFullYear()
+      const month = monthNames[date.getUTCMonth()]
+
       if (machinesLog[year] === undefined) {
-        machinesLog[year] = {};
+        machinesLog[year] = {}
       }
-      const machineYear = machinesLog[year];
-      
+      const machineYear = machinesLog[year]
+
       if (machineYear[month] === undefined) {
-        machineYear[month] = {};
+        machineYear[month] = {}
       }
-      const machineMonth = machineYear[month];
+      const machineMonth = machineYear[month]
 
       if (machineMonth[location] === undefined) {
-        machineMonth[location] = {};
+        machineMonth[location] = {}
       }
-      const machineLocation = machineMonth[location];
+      const machineLocation = machineMonth[location]
 
       if (machineLocation[machineKey] === undefined) {
         machineLocation[machineKey] = {
-          'items': {},
-          'minutesLogged' : 0,
-        };
+          items: {},
+          minutesLogged: 0,
+        }
       }
-      const machineItems = machineLocation[machineKey].items;
+      const machineItems = machineLocation[machineKey].items
 
       if (machineItems[item] === undefined) {
-        machineItems[item] = 0;
-      } 
+        machineItems[item] = 0
+      }
 
-      machineItems[item] += 1;
-      machineLocation[machineKey].minutesLogged += 5;
+      machineItems[item] += 1
+      machineLocation[machineKey].minutesLogged += 5
 
-      writeMachineLog(machinesLog);
-    };
+      writeMachineLog(machinesLog)
+    }
 
     const addToQuality = async (name, type, location) => {
-      await axios.post('/api/quality/add',
-        {
-          name,
-          type,
-          location,
-        },
-        {
-          headers: {
-            'x-auth-token': userToken,
+      await axios
+        .post(
+          '/api/quality/add',
+          {
+            name,
+            type,
+            location,
           },
-        }).catch((error) => {
-        console.error(error);
-      });
-    };
+          {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          }
+        )
+        .catch((error) => {
+          console.error(error)
+        })
+    }
 
     const removeItemFromMachine = async (key) => {
-      await axios.put('/api/machine/remove',
-        {
-          _id: key,
-        },
-        {
-          headers: {
-            'x-auth-token': userToken,
+      await axios
+        .put(
+          '/api/machine/remove',
+          {
+            _id: key,
           },
-        }).catch((err) => console.error('Error', err));
-    };
+          {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          }
+        )
+        .catch((err) => console.error('Error', err))
+    }
 
     const main = async () => {
       if (userLocation === undefined) {
-        return;
+        return
       }
-      let updated = 0;
-      const unavailMachines = await returnUnavailableMachines();
+      let updated = 0
+      const unavailMachines = await returnUnavailableMachines()
       for (let index = 0; index < unavailMachines.length; index += 1) {
-        const machine = unavailMachines[index];
-        if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-          await updateMachineLog(machine._id, machine.item, new Date(), userLocation);
-          await addToQuality(machine.item, machine.type, userLocation);
-          await removeItemFromMachine(machine._id);
-          updated += 1;
+        const machine = unavailMachines[index]
+        if (new Date(machine.finish_time).valueOf() < new Date().valueOf()) {
+          await updateMachineLog(machine._id, machine.item, new Date(), userLocation)
+          await addToQuality(machine.item, machine.type, userLocation)
+          await removeItemFromMachine(machine._id)
+          updated += 1
         }
       }
       if (updated > 0) {
-        updateMachineView(!machineView);
+        updateMachineView(!machineView)
       }
-    };
+    }
 
-    main();
-  }, [refreshMachine]);
+    main()
+  }, [refreshMachine])
 
   /* ------------------------
-   * Functions that deal with logging
-   * ------------------------
-   */
+  * Functions that deal with logging
+  * ------------------------
+  */
 
   const readQualityLog = async () => {
-    const qualityReply = await axios.get('/api/quality/json', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).catch((err) => console.error('Error', err));
-    return qualityReply.data;
-  };
+    const qualityReply = await axios
+      .get('/api/quality/json', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .catch((err) => console.error('Error', err))
+    return qualityReply.data
+  }
 
   const writeQualityLog = async (qualityJson) => {
-    await axios.post('/api/quality/json', {
-      data: qualityJson,
-    },
-    {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).catch((error) => { console.error(error); });
-  };
+    await axios
+      .post(
+        '/api/quality/json',
+        {
+          data: qualityJson,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 
   const addQualityToLog = async (qualityLog, name, quality) => {
-    const qualityLogJson = qualityLog;
+    const qualityLogJson = qualityLog
     if (qualityLogJson[name] === undefined) {
       qualityLogJson[name] = {
         good: 0,
         faulty: 0,
         total: 0,
-      };
+      }
     }
-    const itemQual = qualityLogJson[name];
+    const itemQual = qualityLogJson[name]
 
     switch (quality) {
     case 'Good':
-      itemQual.good += 1;
-      itemQual.total += 1;
-      break;
+      itemQual.good += 1
+      itemQual.total += 1
+      break
     case 'Faulty':
-      itemQual.faulty += 1;
-      itemQual.total += 1;
-      break;
+      itemQual.faulty += 1
+      itemQual.total += 1
+      break
     default:
-      break;
+      break
     }
-    return qualityLogJson;
-  };
+    return qualityLogJson
+  }
 
   /* ------------------------
-   * Function that interact with database backend
-   * ------------------------
-   */
+  * Function that interact with database backend
+  * ------------------------
+  */
 
   useEffect(() => {
-    // Retrieve product line location from user
+  // Retrieve product line location from user
     const getUserLoc = async () => {
       const response = await axios
         .get('/api/auth', {
@@ -262,285 +306,312 @@ const QualityAssurance = () => {
             'x-auth-token': userToken,
           },
         })
-        .catch((err) => console.error('Error', err));
+        .catch((err) => console.error('Error', err))
       if (response && response.data) {
-        const user = response.data;
-        setUserLoc(user.location);
+        const user = response.data
+        setUserLoc(user.location)
       }
-    };
-    getUserLoc();
-  }, []);
+    }
+    getUserLoc()
+  }, [])
 
   /**
-   * Retrieve all items in inventory with the specified name and location.
-   * It should return an array containing only 1 element based on the database conditions.
-   *
-   * @param {String} name the name of the item
-   * @param {String} location the location of the item
-   * @returns
-   */
+  * Retrieve all items in inventory with the specified name and location.
+  * It should return an array containing only 1 element based on the database conditions.
+  *
+  * @param {String} name the name of the item
+  * @param {String} location the location of the item
+  * @returns
+  */
   const getInventoryItems = async (name, location) => {
-    let material = [];
-    await axios.post('/api/inventory/location',
-      {
-        name,
-        location,
-      },
-      {
-        headers: {
-          'x-auth-token': userToken,
+    let material = []
+    await axios
+      .post(
+        '/api/inventory/location',
+        {
+          name,
+          location,
         },
-      })
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }
+      )
       .then((response) => {
         if (response.data) {
-          material = response.data;
+          material = response.data
         }
       })
-      .catch((error) => { console.error(error); });
-    return material;
-  };
+      .catch((error) => {
+        console.error(error)
+      })
+    return material
+  }
 
   /**
-   * Puts an item into inventory based on its name and location.
-   * If the item did not exist, then it is added as a new element.
-   * If the item already eisted, then the item is found in the database and only its quantity is
-   * updated.
-   *
-   * @param {String} name the name of the item
-   * @param {String} type the type of the item (raw, part, final)
-   * @param {String} location the location of the item
-   * @param {BigInteger} quantity the quantity of the item
-   */
+  * Puts an item into inventory based on its name and location.
+  * If the item did not exist, then it is added as a new element.
+  * If the item already eisted, then the item is found in the database and only its quantity is
+  * updated.
+  *
+  * @param {String} name the name of the item
+  * @param {String} type the type of the item (raw, part, final)
+  * @param {String} location the location of the item
+  * @param {BigInteger} quantity the quantity of the item
+  */
   const putInventoryItem = async (name, type, location, quantity) => {
-    await axios.put('/api/inventory/superUpdate',
-      {
-        name,
-        type,
-        location,
-        quantity,
-      },
-      {
-        headers: {
-          'x-auth-token': userToken,
+    await axios
+      .put(
+        '/api/inventory/superUpdate',
+        {
+          name,
+          type,
+          location,
+          quantity,
         },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  /**
+  * Gets all the quality data from the database.
+  */
+  const getQualityData = async () => {
+  // Update the view from database
+    await axios
+      .post(
+        '/api/quality/location',
+        {
+          location: userLocation,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }
+      )
+      .then((response) => {
+        setDirtyQualityData(response.data)
+        setUpdatedQualityIndicies(new Array(response.data.length).fill(false))
       })
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   /**
-   * Gets all the quality data from the database.
-   */
-  const getQualityData = async () => {
-    // Update the view from database
-    await axios.post('/api/quality/location',
-      {
-        location: userLoc,
-      },
-      {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-      setDirtyQualityData(response.data);
-      setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
-    })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  /**
-   * Remove a quality product from the quality database by its key.
-   *
-   * @param {String} key the unique key that identifies a quality product
-   */
+  * Remove a quality product from the quality database by its key.
+  *
+  * @param {String} key the unique key that identifies a quality product
+  */
   const removeQualityProduct = async (key) => {
-    await axios.post('/api/quality/delete',
-      {
-        _id: key,
-      },
-      {
-        headers: {
-          'x-auth-token': userToken,
+    await axios
+      .post(
+        '/api/quality/delete',
+        {
+          _id: key,
         },
-      }).catch((error) => {
-      console.error(error);
-    });
-  };
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        }
+      )
+      .catch((error) => {
+        console.error(error)
+      })
+  }
 
   /* ------------------------
-   * Functions for interacting with the HTML elements.
-   * ------------------------
-   */
+  * Functions for interacting with the HTML elements.
+  * ------------------------
+  */
 
   /**
-   * Updates the quality value of a product in the quality data.
-   * This function does not update the database directly, only a local variable.
-   *
-   * @param {Array} product the quality product to alter quality
-   * @param {String} value the new quality value
-   */
+  * Updates the quality value of a product in the quality data.
+  * This function does not update the database directly, only a local variable.
+  *
+  * @param {Array} product the quality product to alter quality
+  * @param {String} value the new quality value
+  */
   const changeProductQuality = (product, value) => {
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
-      const element = dirtyQualityData[index];
+      const element = dirtyQualityData[index]
       if (element._id === product._id) {
-        const prod = product;
-        prod.quality = value;
-        dirtyQualityData.splice(index, 1, prod);
-        updatedQualityIndicies.splice(index, 1, true);
-        setUpdateSearch(!updateSearch);
-        break;
+        const prod = product
+        prod.quality = value
+        dirtyQualityData.splice(index, 1, prod)
+        updatedQualityIndicies.splice(index, 1, true)
+        setUpdateSearch(!updateSearch)
+        break
       }
     }
-  };
+  }
 
   /**
-   * Updates the message for the quality table to the appropriate topic.
-   *
-   * @param {BigInteger} numOfChanges the number of changes made ot the quality tab
-   */
+  * Updates the message for the quality table to the appropriate topic.
+  *
+  * @param {BigInteger} numOfChanges the number of changes made ot the quality tab
+  */
   const updateQualityMessages = (numOfChanges) => {
     if (numOfChanges > 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
             <Button className="btn-info disabled">
-              Successfully updated the quality of
-              {' '}
-              {numOfChanges}
-              {' '}
-              products.
+       Successfully updated the quality of {numOfChanges} products.
             </Button>
-            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
-              &nbsp;X&nbsp;
+            <Button
+              onClick={() => setQualityMessages(<></>)}
+              className="close btn-danger"
+            >
+       &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+      setQualityMessages(html)
     } else if (numOfChanges === 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
             <Button className="btn-info disabled">
-              No updates have been made to the table.
+       No updates have been made to the table.
             </Button>
-            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
-              &nbsp;X&nbsp;
+            <Button
+              onClick={() => setQualityMessages(<></>)}
+              className="close btn-danger"
+            >
+       &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+
+      setQualityMessages(html)
     } else if (numOfChanges < 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
-            <Button className="btn-info disabled">
-              Cancelled any changes made.
-            </Button>
-            <Button onClick={() => setQualityMessages([])} className="close btn-danger">
-              &nbsp;X&nbsp;
+            <Button className="btn-info disabled">Cancelled any changes made.</Button>
+            <Button
+              onClick={() => setQualityMessages(<></>)}
+              className="close btn-danger"
+            >
+       &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+      setQualityMessages(html)
     }
-  };
+  }
 
   /**
-   * Adds or updates the product to the database.
-   *
-   * @param {Array} product the product to add to inventory
-   */
+  * Adds or updates the product to the database.
+  *
+  * @param {Array} product the product to add to inventory
+  */
   const addProductToInventory = async (product) => {
-    const { name, type, location } = product;
+    const { name, type, location } = product
 
-    const material = await getInventoryItems(name, location);
-    const inInventory = (material.length === 0 ? 0 : material[0].quantity);
+    const material = await getInventoryItems(name, location)
+    const inInventory = material.length === 0 ? 0 : material[0].quantity
 
-    await putInventoryItem(name, type, location, inInventory + 1);
-  };
+    await putInventoryItem(name, type, location, inInventory + 1)
+  }
 
   /**
-   * Updates the quality table to remove any items with quality good or faulty.
-   * If an item is good then it is added to the inventory database.
-   */
+  * Updates the quality table to remove any items with quality good or faulty.
+  * If an item is good then it is added to the inventory database.
+  */
   const updateQualityTable = async () => {
-    let qualityLogJson = await readQualityLog();
+    let qualityLogJson = await readQualityLog()
 
-    let qualityChanges = 0;
+    let qualityChanges = 0
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
-      const product = dirtyQualityData[index];
+      const product = dirtyQualityData[index]
       if (updatedQualityIndicies[index] && product.quality !== 'None') {
         switch (product.quality) {
         case 'Good':
-          await addProductToInventory(product);
-          removeQualityProduct(product._id);
-          qualityChanges += 1;
-          break;
+          await addProductToInventory(product)
+          removeQualityProduct(product._id)
+          qualityChanges += 1
+          break
         case 'Faulty':
-          removeQualityProduct(product._id);
-          qualityChanges += 1;
-          break;
+          removeQualityProduct(product._id)
+          qualityChanges += 1
+          break
         default:
-          break;
+          break
         }
       }
-      qualityLogJson = await addQualityToLog(qualityLogJson, product.name, product.quality);
-    // End of for loop
+      qualityLogJson = await addQualityToLog(
+        qualityLogJson,
+        product.name,
+        product.quality
+      )
+      // End of for loop
     }
 
     // Update the quality table view
-    getQualityData();
-    setUpdateSearch(!updateSearch);
-    updateQualityMessages(qualityChanges);
-    writeQualityLog(qualityLogJson);
-  };
+    getQualityData()
+    setUpdateSearch(!updateSearch)
+    updateQualityMessages(qualityChanges)
+    writeQualityLog(qualityLogJson)
+  }
 
   /**
-   * Removes any changes done to the quality table.
-   */
+  * Removes any changes done to the quality table.
+  */
   const cancelChanges = () => {
-    // Update the quality table view
-    getQualityData();
-    setUpdateSearch(!updateSearch);
-    updateQualityMessages(-1);
-  };
+  // Update the quality table view
+    getQualityData()
+    setUpdateSearch(!updateSearch)
+    updateQualityMessages(-1)
+  }
 
   /**
-   * Get quality information when searches are updated.
-   */
+  * Get quality information when searches are updated.
+  */
   useEffect(() => {
-    // retrieve quality information
+  // retrieve quality information
     const qualityLookUp = async () => {
       if (qualityFormSearch === '') {
-        setSearchQualityData(dirtyQualityData);
+        setSearchQualityData(dirtyQualityData)
       } else {
-        let searchResults = [];
+        let searchResults = []
         dirtyQualityData.forEach((element) => {
-          const { name } = element;
+          const { name } = element
           if (name.search(new RegExp(`^${qualityFormSearch}`, 'i')) >= 0) {
-            searchResults = [...searchResults, element];
+            searchResults = [...searchResults, element]
           }
-        });
-        setSearchQualityData(searchResults);
+        })
+        setSearchQualityData(searchResults)
       }
-    };
-    qualityLookUp();
-  }, [qualityFormSearch, dirtyQualityData, updateSearch]);
+    }
+    qualityLookUp()
+  }, [qualityFormSearch, dirtyQualityData, updateSearch])
 
   /**
-   * Initialize the quality information from the database.
-   */
+  * Initialize the quality information from the database.
+  */
   useEffect(() => {
-    getQualityData();
-  }, [userLoc]);
+    getQualityData()
+  }, [userLocation])
 
   /* ------------------------
-   * HTML display
-   * ------------------------
-   */
+  * HTML display
+  * ------------------------
+  */
 
   return (
     <>
@@ -573,7 +644,10 @@ const QualityAssurance = () => {
                         <Input
                           placeholder="Search"
                           type="text"
-                          onChange={(e) => { setQualityFormSearch(e.target.value); setQualPage(0); }}
+                          onChange={(e) => {
+                            setQualityFormSearch(e.target.value)
+                            setQualPage(0)
+                          }}
                         />
                       </Tooltip>
                     </InputGroup>
@@ -590,90 +664,88 @@ const QualityAssurance = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {searchQualityData.slice(qualPage * NUM_OF_ITEMS_IN_A_PAGE,
-                    (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE).map((m) => (
-                    <tr key={m.id} value={m.name}>
-                      <th scope="row">
-                        <Media className="align-items-center">
-                          <Media>
-                            <span className="mb-0 text-sm">{m.name}</span>
+                  {searchQualityData
+                    .slice(
+                      qualPage * NUM_OF_ITEMS_IN_A_PAGE,
+                      (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE
+                    )
+                    .map((m, i) => (
+                      <tr key={m.name + i.toString()} value={m.name}>
+                        <th scope="row">
+                          <Media className="align-items-center">
+                            <Media>
+                              <span className="mb-0 text-sm">{m.name}</span>
+                            </Media>
                           </Media>
-                        </Media>
-                      </th>
-                      <td>
-                        <Badge color="" className="badge-dot mr-4">
-                          <i className="bg-success" />
-                          {m.location}
-                        </Badge>
-                      </td>
-                      <td>{m.quality}</td>
-                      <td className="text-right">
-                        <UncontrolledDropdown>
-                          <Tooltip
-                            title={`Change ${m.name} quality`}
-                            arrow
-                            placement="top-start"
-                            enterDelay={750}
-                          >
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                          </Tooltip>
-                          <DropdownMenu className="dropdown-menu-arrow" right>
+                        </th>
+                        <td>
+                          <Badge color="" className="badge-dot mr-4">
+                            <i className="bg-success" />
+                            {m.location}
+                          </Badge>
+                        </td>
+                        <td>{m.quality}</td>
+                        <td className="text-right">
+                          <UncontrolledDropdown>
                             <Tooltip
-                              title={`Change ${m.name} quality to None`}
+                              title={`Change ${m.name} quality`}
                               arrow
                               placement="top-start"
                               enterDelay={750}
                             >
-                              <DropdownItem
-                                onClick={() => changeProductQuality(m, 'None')}
+                              <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={(e) => e.preventDefault()}
                               >
-                                  None
-                              </DropdownItem>
+                                <i className="fas fa-ellipsis-v" />
+                              </DropdownToggle>
                             </Tooltip>
-                            <Tooltip
-                              title={`Change ${m.name} quality to Good`}
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
-                            >
-                              <DropdownItem
-                                onClick={() => changeProductQuality(m, 'Good')}
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                              <Tooltip
+                                title={`Change ${m.name} quality to None`}
+                                arrow
+                                placement="top-start"
+                                enterDelay={750}
                               >
-                                  Good
-                              </DropdownItem>
-                            </Tooltip>
-                            <Tooltip
-                              title={`Change ${m.name} quality to Faulty`}
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
-                            >
-                              <DropdownItem
-                                onClick={() => changeProductQuality(m, 'Faulty')}
+                                <DropdownItem onClick={() => changeProductQuality(m, 'None')}>
+                 None
+                                </DropdownItem>
+                              </Tooltip>
+                              <Tooltip
+                                title={`Change ${m.name} quality to Good`}
+                                arrow
+                                placement="top-start"
+                                enterDelay={750}
                               >
-                                  Faulty
-                              </DropdownItem>
-                            </Tooltip>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </td>
-                    </tr>
-                  ))}
+                                <DropdownItem onClick={() => changeProductQuality(m, 'Good')}>
+                 Good
+                                </DropdownItem>
+                              </Tooltip>
+                              <Tooltip
+                                title={`Change ${m.name} quality to Faulty`}
+                                arrow
+                                placement="top-start"
+                                enterDelay={750}
+                              >
+                                <DropdownItem onClick={() => changeProductQuality(m, 'Faulty')}>
+                 Faulty
+                                </DropdownItem>
+                              </Tooltip>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
               <CardFooter className="py-4">
                 <ButtonGroup className="mb-2">
                   <Tooltip
-                    title="Apply the changes made to quality"
+                    title="Apply the changes made to the quality of all items"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -681,15 +753,15 @@ const QualityAssurance = () => {
                     <Button
                       className="btn-success"
                       onClick={() => {
-                        updateQualityTable();
+                        updateQualityTable()
                       }}
                     >
-                      Apply
+           Apply
                     </Button>
                   </Tooltip>
                   <div className="mx-2" />
                   <Tooltip
-                    title="Cancel the changes made to quality"
+                    title="Cancel the changes made to the quality of all items"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -697,10 +769,10 @@ const QualityAssurance = () => {
                     <Button
                       className="btn-warning"
                       onClick={() => {
-                        cancelChanges();
+                        cancelChanges()
                       }}
                     >
-                      Cancel
+           Cancel
                     </Button>
                   </Tooltip>
                 </ButtonGroup>
@@ -723,8 +795,8 @@ const QualityAssurance = () => {
 
                     {Array.from(
                       Array(
-                        Math.ceil(searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE),
-                      ).keys(),
+                        Math.ceil(searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE)
+                      ).keys()
                     )
                       .slice(
                         qualPage - 1 < 0
@@ -734,26 +806,27 @@ const QualityAssurance = () => {
                             : qualPage - 2,
                         qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
                           ? qualPage + 2
-                          : qualPage + 3,
+                          : qualPage + 3
                       )
                       .map((idx) => (
                         <PaginationItem
+                          key={idx}
                           className={idx === qualPage ? 'active' : ''}
                         >
-                          <PaginationLink
-                            href=""
-                            onClick={() => setQualPage(idx)}
-                          >
+                          <PaginationLink href="" onClick={() => setQualPage(idx)}>
                             {idx + 1}
                           </PaginationLink>
                         </PaginationItem>
                       ))}
 
-                    <PaginationItem className={qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE ? 'disabled' : 'active'}>
-                      <PaginationLink
-                        href=""
-                        onClick={() => setQualPage(qualPage + 1)}
-                      >
+                    <PaginationItem
+                      className={
+                        qualPage + 1 >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
+                          ? 'disabled'
+                          : 'active'
+                      }
+                    >
+                      <PaginationLink href="" onClick={() => setQualPage(qualPage + 1)}>
                         <i className="fas fa-angle-right" />
                         <span className="sr-only">Next</span>
                       </PaginationLink>
@@ -767,7 +840,7 @@ const QualityAssurance = () => {
         <></>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default QualityAssurance;
+export default QualityAssurance
