@@ -31,7 +31,7 @@ const Finance = () => {
   }
 
 
-
+useEffect(() => {
   const lookup = async() => {
     await axios
     .get('/api/planning/prod', {
@@ -59,7 +59,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     }).then((response) => {
-      setProdPlans(response.data)}).catch((error)=>{
+      setProdActual(response.data)}).catch((error)=>{
         console.error(error);
       });
 
@@ -69,12 +69,16 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     }).then((response) => {
-      setSalesPlans(response.data)}).catch((error)=>{
+      setSalesActual(response.data)}).catch((error)=>{
         console.error(error);
       });
 
       
   };
+  lookup(); 
+  },[]
+);
+
  
 
   // Change Between Tables
