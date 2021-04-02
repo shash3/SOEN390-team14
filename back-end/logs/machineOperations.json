@@ -4,7 +4,41 @@
       "Plant 1": {
         "6062910ad1ccdc4fc0ee752c": {
           "items": {
-            "Saddle": 1
+            "Saddle": 1,
+            "Small Carbon Bike": 2,
+            "Small Aluminium Bike": 4,
+            "Small Steel Bike": 7,
+            "Medium Aluminium Bike": 9
+          },
+          "minutesLogged": 5
+        },
+        "60629113d1ccdc4fc0ee752e": {
+          "items": {
+            "Saddle": 1,
+            "Small Carbon Bike": 6,
+            "Small Aluminium Bike": 5,
+            "Small Steel Bike": 2,
+            "Medium Aluminium Bike": 3
+          },
+          "minutesLogged": 5
+        },
+        "60629118d1ccdc4fc0ee752f": {
+          "items": {
+            "Saddle": 1,
+            "Medium Carbon Bike": 4,
+            "Large Carbon Bike": 2,
+            "Small Steel Bike": 8,
+            "Large Aluminium Bike": 5
+          },
+          "minutesLogged": 5
+        },
+        "60629215d1ccdc4fc0ee7530": {
+          "items": {
+            "Saddle": 1,
+            "Small Carbon Bike": 1,
+            "Medium Steel Bike": 5,
+            "Large Aluminium Bike": 7,
+            "Large Carbon Bike": 5
           },
           "minutesLogged": 5
         }
@@ -12,7 +46,11 @@
       "Plant 2": {
         "604c370d0877e8792500993e": {
           "items": {
-            "Saddle": 2
+            "Saddle": 2,
+            "Small Carbon Bike": 4,
+            "Small Steel Bike": 5,
+            "Large Steel Bike": 8,
+            "Medium Aluminium Bike": 5
           },
           "minutesLogged": 10
         }
