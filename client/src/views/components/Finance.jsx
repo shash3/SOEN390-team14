@@ -24,6 +24,8 @@ const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
+  const [prodActual,setProdActual] = useState({});
+  const [salesActual,setSalesActual] = useState({});
   if (Chart) {
     parseOptions(Chart, chartOptions());
   }
@@ -50,6 +52,27 @@ const Finance = () => {
       setSalesPlans(response.data)}).catch((error)=>{
         console.error(error);
       }); 
+
+      await axios
+    .get('/api/planning/prodActual', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setProdPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+
+      await axios
+    .get('/api/planning/salesActual', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setSalesPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+
       
   };
  
