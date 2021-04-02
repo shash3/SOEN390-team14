@@ -11,8 +11,7 @@ const salesPlanFile = './logs/plannedSales.json';
 
 
 
-router.post("/prod", auth, async (req,res) =>{
-    
+router.get("/prod", auth, async (req,res) =>{
 try{
     fs.readFile(prodPlanFile, 'utf8', (err, data) => {
         if (data === undefined) {
