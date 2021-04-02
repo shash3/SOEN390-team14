@@ -1,0 +1,23 @@
+{
+  "2021": {
+    "April": {
+      "Plant 1": {
+        "items": {
+          "Saddle": 2,
+          "Screw": 2,
+          "Hat": 3
+        }
+      },
+      "Plant 2": {
+        "items": {
+          "handlebar": 4
+        }
+      }
+    },
+    "June": {
+      "Plant 1": {
+        "steel bar": 5
+      }
+    }
+  }
+}

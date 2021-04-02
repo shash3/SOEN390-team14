@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 // reactstrap components
 import {
@@ -6,7 +7,7 @@ import {
   CardHeader,
   Container,
   Row,
-  Button, Col, CardBody,
+  Button, Col, CardBody, FormGroup, InputGroup, Input, Form,
 } from 'reactstrap';
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
@@ -20,10 +21,93 @@ import {
 } from '../../variables/charts';
 
 const Finance = () => {
-
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  const [formYear,setFormYear] = useState('');
+  const [formMonth,setFormMonth] = useState('');
+  const [planFormdata, setPlanFormData] = useState({});
+  const [prodPlans,setProdPlans] = useState({});
+  const [salesPlans,setSalesPlans] = useState({});
+  const [prodActual,setProdActual] = useState({});
+  const [salesActual,setSalesActual] = useState({});
   if (Chart) {
     parseOptions(Chart, chartOptions());
+
   }
+  
+  const onChangeFormProd = (e,plant) => {
+    prodPlans[formYear][formMonth][plant]["items"][e.name] = e.value;
+  };
+  const OnChangeFormSales = (e) => {
+    salesPlans[formYear][formMonth]["amount"] = e.value;
+  };
+
+useEffect(() => {
+  const lookup = async() => {
+    await axios
+    .get('/api/planning/prod', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setProdPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+
+      await axios
+    .get('/api/planning/sales', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setSalesPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      }); 
+
+      await axios
+    .get('/api/planning/prodActual', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setProdActual(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+
+      await axios
+    .get('/api/planning/salesActual', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setSalesActual(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+
+      
+  };
+  lookup(); 
+  },[]);
+
+  const addNewPlan = async () => {
+    await axios
+    .post("/api/planning/addPlanProd",{
+      data:prodPlans,
+    },{
+      headers: {
+        'x-auth-token': userToken,
+      },
+    });
+    await axios
+    .post("/api/planning/addPlanSales",{
+      data:salesPlans,
+    },{
+      headers: {
+        'x-auth-token': userToken,
+      },
+    });
+  }
+
+ 
 
   // Change Between Tables
   const [viewSales, setViewSales] = useState(false);
@@ -57,7 +141,7 @@ const Finance = () => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-
+          <Button onClick = {addNewPlan}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
@@ -94,11 +178,42 @@ const Finance = () => {
                   <Col className="">
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
-                        <h1 className="mb-0">Monthly Planning</h1>
-                        <p>Expected Sales  "Entered"</p>
-                        <p>Expected Procurement Costs  "Entered"</p>
-                        <p>Expected operating costs "Entered"</p>
-                        <p>Calculated profits "Calculated"</p>
+                        <h1 className="mb-3">Monthly Planning</h1>
+                        <Form className="form">
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Sales"
+                                  name="expectedSales"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Procurement Costs"
+                                  name="expectedProcurementCosts"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Operating Costs"
+                                  name="expectedOperatingCosts"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <p>Projected Profits</p>
+                          <div className="text-center">
+                            <Button color="primary">
+                              Change Monthly Goal
+                            </Button>
+                          </div>
+                        </Form>
                       </CardHeader>
                     </Card>
                   </Col>
