@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 
 // reactstrap components
 import {
@@ -20,10 +21,27 @@ import {
 } from '../../variables/charts';
 
 const Finance = () => {
-
+  const userToken = JSON.parse(localStorage.getItem('user'));
+  const [prodPlans,setProdPlans] = useState({});
   if (Chart) {
     parseOptions(Chart, chartOptions());
   }
+
+
+
+  const lookup = async() => {
+    await axios
+    .get('/api/planning/prod', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setProdPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      });
+     
+  };
+ 
 
   // Change Between Tables
   const [viewSales, setViewSales] = useState(false);
@@ -57,7 +75,7 @@ const Finance = () => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-
+        <Button onClick ={lookup}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
