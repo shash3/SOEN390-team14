@@ -22,14 +22,24 @@ import {
 
 const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
+  const [formYear,setFormYear] = useState('');
+  const [formMonth,setFormMonth] = useState('');
+  const [planFormdata, setPlanFormData] = useState({});
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
   const [salesActual,setSalesActual] = useState({});
   if (Chart) {
     parseOptions(Chart, chartOptions());
-  }
 
+  }
+  
+  const onChangeFormProd = (e,plant) => {
+    prodPlans[formYear][formMonth][plant]["items"][e.name] = e.value;
+  };
+  const OnChangeFormSales = (e) => {
+    salesPlans[formYear][formMonth]["amount"] = e.value;
+  };
 
 useEffect(() => {
   const lookup = async() => {
@@ -76,8 +86,26 @@ useEffect(() => {
       
   };
   lookup(); 
-  },[]
-);
+  },[]);
+
+  const addNewPlan = async () => {
+    await axios
+    .post("/api/planning/addPlanProd",{
+      data:prodPlans,
+    },{
+      headers: {
+        'x-auth-token': userToken,
+      },
+    });
+    await axios
+    .post("/api/planning/addPlanSales",{
+      data:salesPlans,
+    },{
+      headers: {
+        'x-auth-token': userToken,
+      },
+    });
+  }
 
  
 
@@ -113,6 +141,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
+          <Button onClick = {addNewPlan}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">

@@ -72,7 +72,33 @@ router.get("/salesActual", auth, async (req,res) =>{
             console.error(err.message);
             res.status(500).send("Server Error");
     }
-})        
+})    
+router.post("/addPlanProd", auth, async (req,res) => {
+   
+        const { data } = req.body;
+        const dataStr = JSON.stringify(data, null, 2);
+        try {
+          fs.writeFile(prodPlanFile, dataStr, 'utf8', () => {});
+          res.send(true);
+        } catch (err) {
+          console.error(err.message);
+          res.status(500).send("Server Error");
+        }
+  
+});  
+
+router.post("/addPlanSales", auth, async (req,res) => {
+   
+    const { data } = req.body;
+    const dataStr = JSON.stringify(data, null, 2);
+    try {
+      fs.writeFile(salesPlanFile, dataStr, 'utf8', () => {});
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+
+});  
         
 
 module.exports = router;
