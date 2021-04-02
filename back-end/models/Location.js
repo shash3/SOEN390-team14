@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const LocationSchema = new mongoose.Schema({
-  location:{
+  location: {
     type: String,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 // eslint-disable-next-line no-undef
-module.exports = Locations = mongoose.model('location', LocationSchema);
+module.exports = Locations = mongoose.model('location', LocationSchema)
