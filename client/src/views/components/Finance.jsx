@@ -6,7 +6,7 @@ import {
   CardHeader,
   Container,
   Row,
-  Button, Col, CardBody,
+  Button, Col, CardBody, FormGroup, InputGroup, Input, Form,
 } from 'reactstrap';
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
@@ -94,11 +94,42 @@ const Finance = () => {
                   <Col className="">
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
-                        <h1 className="mb-0">Monthly Planning</h1>
-                        <p>Expected Sales  "Entered"</p>
-                        <p>Expected Procurement Costs  "Entered"</p>
-                        <p>Expected operating costs "Entered"</p>
-                        <p>Calculated profits "Calculated"</p>
+                        <h1 className="mb-3">Monthly Planning</h1>
+                        <Form className="form">
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Sales"
+                                  name="expectedSales"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Procurement Costs"
+                                  name="expectedProcurementCosts"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup>
+                            <InputGroup>
+                              <Input
+                                  type="test"
+                                  placeholder="Expected Operating Costs"
+                                  name="expectedOperatingCosts"
+                              />
+                            </InputGroup>
+                          </FormGroup>
+                          <p>Projected Profits</p>
+                          <div className="text-center">
+                            <Button color="primary">
+                              Change Monthly Goal
+                            </Button>
+                          </div>
+                        </Form>
                       </CardHeader>
                     </Card>
                   </Col>
