@@ -29,11 +29,25 @@ const Finance = () => {
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
   const [salesActual,setSalesActual] = useState({});
+
+  // Holds all Locations
+  const [allLoc, setAllLoc] = useState([]);
+
+  // Get all plant locations
+  const getAllLoc = async () => {
+    const response = await axios
+        .get('/api/locations')
+        .catch((err) => console.error('Error', err));
+    if (response.data) {
+      setAllLoc(response.data);
+    }
+  };
+
+  // Get global variables for the charts
   if (Chart) {
     parseOptions(Chart, chartOptions());
+  };
 
-  }
-  
   const onChangeFormProd = (e,plant) => {
     prodPlans[formYear][formMonth][plant]["items"][e.name] = e.value;
   };
@@ -43,6 +57,7 @@ const Finance = () => {
 
 useEffect(() => {
   const lookup = async() => {
+    console.log(allBikes);
     await axios
     .get('/api/planning/prod', {
       headers: {
@@ -88,6 +103,34 @@ useEffect(() => {
   lookup(); 
   },[]);
 
+
+  // use effect to get all bike types
+  useEffect(async () =>
+    {setAllBikes(await getAllBikes())} , []
+  );
+
+  // Holds all final bike types
+  const[allBikes, setAllBikes] = useState([]);
+
+  // Get all final bikes
+  const getAllBikes = async () => {
+    const reply = await axios
+        .post(
+            '/api/product_line/type',
+            {
+              type: 'final',
+            },
+            {
+              headers: {
+                'x-auth-token': userToken,
+              },
+            }
+        )
+        .catch((err) => console.error('Error', err))
+    console.log(reply.data)
+    return reply.data
+  };
+
   const addNewPlan = async () => {
     await axios
     .post("/api/planning/addPlanProd",{
@@ -121,6 +164,7 @@ useEffect(() => {
   const [graphOptions, setGraphOptions] = useState(chartAnnualProfits.options);
 
   useEffect(()=> {
+    getAllLoc();
     if(viewSales){
       setGraphData(chartAnnualSales.data);
       setGraphOptions(chartAnnualSales.options);
@@ -165,11 +209,11 @@ useEffect(() => {
                         >
                           Toggle Graph
                         </Button>
-                              <div className="chart mb-3">
-                                <Bar data={graphData}
-                                     options={graphOptions}
-                                />
-                              </div>
+                        <div className="chart mb-3">
+                          <Bar data={graphData}
+                               options={graphOptions}
+                          />
+                        </div>
                       </CardBody>
                     </Card>
                   </Col>
@@ -179,42 +223,61 @@ useEffect(() => {
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
                         <h1 className="mb-3">Monthly Planning</h1>
+                      </CardHeader>
+                      <CardBody>
                         <Form className="form">
-                          <FormGroup>
-                            <InputGroup>
+                          <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Location</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
                               <Input
-                                  type="test"
-                                  placeholder="Expected Sales"
-                                  name="expectedSales"
-                              />
+                                  type="select"
+                                  name="location"
+                                  required
+                              >
+                                {[...allLoc].map((m) => (
+                                    <option key={m._id}>{m.location}</option>
+                                ))}
+                              </Input>
                             </InputGroup>
                           </FormGroup>
-                          <FormGroup>
-                            <InputGroup>
+                          <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Set Product</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
                               <Input
-                                  type="test"
-                                  placeholder="Expected Procurement Costs"
-                                  name="expectedProcurementCosts"
-                              />
+                                  type="select"
+                                  name="bikeType"
+                                  required
+                              >
+                                {[...allBikes].map((t) => (
+                                    <option key={t._id}>{t.name}</option>
+                                ))}
+                              </Input>
                             </InputGroup>
                           </FormGroup>
-                          <FormGroup>
-                            <InputGroup>
+                          <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Set Amount</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
                               <Input
-                                  type="test"
-                                  placeholder="Expected Operating Costs"
-                                  name="expectedOperatingCosts"
-                              />
+                                  type="number"
+                                  name="bikeAmount"
+                                  required
+                              >
+                              </Input>
                             </InputGroup>
                           </FormGroup>
-                          <p>Projected Profits</p>
                           <div className="text-center">
-                            <Button color="primary">
-                              Change Monthly Goal
+                            <Button color="primary" onClick="">
+                              Update Monthly Goals
                             </Button>
                           </div>
                         </Form>
-                      </CardHeader>
+                      </CardBody>
                     </Card>
                   </Col>
                   <Col className="">

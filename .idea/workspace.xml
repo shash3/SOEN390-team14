@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="585e4052-c1e9-4655-8b0c-272e0bbcf882" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/variables/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/variables/charts.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,6 +61,15 @@
     <property name="ts.external.directory.path" value="E:\Winter 2021\SOEN 390\Bikerr\SOEN390-team14\client\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RunManager">
+    <configuration name="install" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/back-end/package.json" />
+      <command value="install" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -77,6 +85,7 @@
       <workItem from="1616078225394" duration="1230000" />
       <workItem from="1617141582194" duration="7297000" />
       <workItem from="1617217345690" duration="8480000" />
+      <workItem from="1617387635441" duration="6178000" />
     </task>
     <servers />
   </component>
