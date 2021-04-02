@@ -23,6 +23,7 @@ import {
 const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [prodPlans,setProdPlans] = useState({});
+  const [salesPlans,setSalesPlans] = useState({});
   if (Chart) {
     parseOptions(Chart, chartOptions());
   }
@@ -39,7 +40,17 @@ const Finance = () => {
       setProdPlans(response.data)}).catch((error)=>{
         console.error(error);
       });
-     
+
+      await axios
+    .get('/api/planning/sales', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    }).then((response) => {
+      setSalesPlans(response.data)}).catch((error)=>{
+        console.error(error);
+      }); 
+      
   };
  
 
@@ -75,7 +86,6 @@ const Finance = () => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-        <Button onClick ={lookup}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">

@@ -26,5 +26,20 @@ catch (err) {
         res.status(500).send("Server Error");
 }
 })
+router.get("/sales", auth, async (req,res) =>{
+    try{
+        fs.readFile(salesPlanFile, 'utf8', (err, data) => {
+            if (data === undefined) {
+              data = '{}';
+            }
+            res.send(JSON.parse(data));       
+          });
+    }
+    catch (err) {
+         
+            console.error(err.message);
+            res.status(500).send("Server Error");
+    }
+    })
 
 module.exports = router;
