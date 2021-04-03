@@ -1260,7 +1260,7 @@ const ProductionScheduling = () => {
         </Form>
 
         {machines.map((m, i) => (
-          <div key={`Machine #${i + 1}`}>
+          <div key={m._id}>
             <Row>
               <div className="col">
                 <Card className="shadow">

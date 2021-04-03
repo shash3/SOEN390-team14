@@ -33,6 +33,7 @@ import {
 } from 'reactstrap'
 // core components
 import Tooltip from '@material-ui/core/Tooltip'
+import {exportToJsonExcel} from '../../variables/export'
 import Header from '../../components/Headers/Header.jsx'
 
 const QualityAssurance = () => {
@@ -623,9 +624,25 @@ const QualityAssurance = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h2 className="mb-0">Quality Parts</h2>
-                <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-                  <FormGroup className="mb-3 mt-3">
+                <Form>
+                  <h2 className="mb-0 d-inline">Quality Parts</h2>
+                  <Tooltip
+                    title="Export quality table to a file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="danger"
+                      onClick={() => exportToJsonExcel('Quality Parts', searchQualityData)}
+                    >
+           Export
+                    </Button>
+                  </Tooltip>
+                </Form>
+                <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-sm-flex ml-lg-auto">
+                  <FormGroup className="mt-3">
                     <InputGroup
                       className="input-group-alternative"
                       style={{ backgroundColor: '#2181EC' }}
@@ -669,8 +686,8 @@ const QualityAssurance = () => {
                       qualPage * NUM_OF_ITEMS_IN_A_PAGE,
                       (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE
                     )
-                    .map((m, i) => (
-                      <tr key={m.name + i.toString()} value={m.name}>
+                    .map((m) => (
+                      <tr key={m._id} value={m.name}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
