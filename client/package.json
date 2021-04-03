@@ -51,6 +51,8 @@
     "classnames": "2.2.6",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
+    "excel4node": "^1.7.2",
+    "file-saver": "^2.0.5",
     "jquery": "3.5.1",
     "moment": "2.29.1",
     "node-sass": "4.14.1",
