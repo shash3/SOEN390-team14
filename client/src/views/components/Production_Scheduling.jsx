@@ -21,8 +21,9 @@ import {
 } from 'reactstrap';
 
 // core components
-import Tooltip from '@material-ui/core/Tooltip';
-import ProductionHeader from '../../components/Headers/productionHeader.jsx';
+import Tooltip from '@material-ui/core/Tooltip'
+import ProductionHeader from '../../components/Headers/productionHeader.jsx'
+import refreshProduction from '../../variables/refreshProduction'
 
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -34,85 +35,11 @@ const ProductionScheduling = () => {
   const MINUTES_TO_FINISH = 5;
 
   /* ---------------------------
-   * Functions To Refresh Production Machines
+   * Refresh Production Machines
    * ---------------------------
    */
 
-  const [refreshMachine, setRefreshMachine] = useState(false);
-  /**
-   * Set a timer to refresh every few seconds.
-   */
-  useEffect(() => {
-    let refresh = true;
-    setInterval(() => { setRefreshMachine(refresh); refresh = !refresh; }, 1000 * 15);
-  }, []);
-
-  /**
-   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
-   */
-  useEffect(async () => {
-    const returnUnavailableMachines = () => {
-      const reply = axios.post('/api/machine/unavailable',
-        {
-          location: userLocation,
-        },
-        {
-          headers: {
-            'x-auth-token': userToken,
-          },
-        }).then((response) => response.data).catch((err) => console.error('Error', err));
-      return reply;
-    };
-
-    const addToQuality = async (name, type, location) => {
-      await axios.post('/api/quality/add',
-        {
-          name,
-          type,
-          location,
-        },
-        {
-          headers: {
-            'x-auth-token': userToken,
-          },
-        }).catch((error) => {
-        console.error(error);
-      });
-    };
-
-    const removeItemFromMachine = async (key) => {
-      await axios.put('/api/machine/remove',
-        {
-          _id: key,
-        },
-        {
-          headers: {
-            'x-auth-token': userToken,
-          },
-        }).catch((err) => console.error('Error', err));
-    };
-
-    const main = async () => {
-      if (userLocation === undefined) {
-        return;
-      }
-      let updated = 0;
-      const unavailMachines = await returnUnavailableMachines();
-      for (let index = 0; index < unavailMachines.length; index += 1) {
-        const machine = unavailMachines[index];
-        if ((new Date(machine.finish_time)).valueOf() < (new Date()).valueOf()) {
-          await addToQuality(machine.item, machine.type, userLocation);
-          await removeItemFromMachine(machine._id);
-          updated += 1;
-        }
-      }
-      if (updated > 0) {
-        updateMachineView(!machineView);
-      }
-    };
-
-    main();
-  }, [refreshMachine]);
+  refreshProduction()
 
   /**
    * Functions for interacting with machines.
