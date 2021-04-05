@@ -19,6 +19,8 @@ import {
   Container,
   Media,
 } from 'reactstrap';
+import jwt_decode from 'jwt-decode';
+import { useHistory } from 'react-router-dom';
 
 const AdminNavbar = (props) => {
   const [user, setUser] = useState({});
@@ -54,6 +56,33 @@ const AdminNavbar = (props) => {
   if (logout) {
     return <Redirect to="/auth/login" />;
   }
+
+  const [tokenRefresh, setTokenRefresh] = useState(false);
+  let history = useHistory();
+  /**
+   * Set a timer to refresh every few seconds.
+   */
+  useEffect(() => {
+    let refresh = true
+    setInterval(() => {
+      setTokenRefresh(refresh)
+      refresh = !refresh
+    }, 1000 * 15)
+  }, []);
+
+  useEffect(() => {
+    let token = localStorage.getItem('user')
+    let decodedToken = jwt_decode(token)
+    console.log('Decoded Token', decodedToken)
+    let currentDate = new Date()
+
+    // JWT exp is in seconds
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('permission');
+      history.push('/auth/login')
+    }
+  }, [tokenRefresh]);
 
   return (
     <>
