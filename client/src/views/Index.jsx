@@ -1,4 +1,4 @@
-import { React , useState } from 'react';
+import React, { useState } from 'react';
 // node.js library that concatenates classes (strings)
 import classnames from 'classnames';
 // javascipt plugin for creating charts
@@ -31,17 +31,17 @@ import {
 } from '../variables/charts';
 
 const Index = () => {
-  const [activeNav, setActiveNav] = useState(1)
-  const [chartExample1Data, setChartExample1Data] = useState('data1')
+  const [activeNav, setActiveNav] = useState(1);
+  const [chartExample1Data, setChartExample1Data] = useState('data1');
 
   if (Chart) {
-    parseOptions(Chart, chartOptions())
+    parseOptions(Chart, chartOptions());
   };
 
   const toggleNavs = (e, index) => {
-    e.preventDefault()
-    setActiveNav(index)
-    setChartExample1Data(`data${index}`)
+    e.preventDefault();
+    setActiveNav(index);
+    setChartExample1Data(`data${index}`);
   };
 
   return (
@@ -314,7 +314,7 @@ const Index = () => {
         </Row>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;
