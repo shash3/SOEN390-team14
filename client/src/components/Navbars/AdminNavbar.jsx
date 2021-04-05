@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 // reactstrap components
 import {
@@ -19,10 +19,14 @@ import {
   Container,
   Media,
 } from 'reactstrap';
+import jwt_decode from 'jwt-decode';
+import { useHistory } from 'react-router-dom';
 
 const AdminNavbar = (props) => {
   const [user, setUser] = useState({});
   const [logout, setLogout] = useState(false);
+  const [tokenRefresh, setTokenRefresh] = useState(false);
+  let history = useHistory();
 
   // get user information
   useEffect(() => {
@@ -52,8 +56,31 @@ const AdminNavbar = (props) => {
 
   // logout go back to login page
   if (logout) {
-    return <Redirect to="/auth/login" />;
+    history.push('/auth/login');
   }
+
+  /**
+   * Set a timer to refresh every few seconds.
+   */
+  useEffect(() => {
+    let refresh = true
+    setInterval(() => {
+      setTokenRefresh(refresh)
+      refresh = !refresh
+    }, 1000 * 15)
+  }, []);
+
+  useEffect(() => {
+    let token = localStorage.getItem('user')
+    let decodedToken = jwt_decode(token)
+    let currentDate = new Date()
+    // JWT exp is in seconds
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      localStorage.removeItem('user');
+      localStorage.removeItem('permission');
+      history.push('/auth/login')
+    }
+  }, [tokenRefresh]);
 
   return (
     <>
