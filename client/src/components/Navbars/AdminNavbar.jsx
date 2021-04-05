@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 // reactstrap components
 import {
@@ -25,6 +25,8 @@ import { useHistory } from 'react-router-dom';
 const AdminNavbar = (props) => {
   const [user, setUser] = useState({});
   const [logout, setLogout] = useState(false);
+  const [tokenRefresh, setTokenRefresh] = useState(false);
+  let history = useHistory();
 
   // get user information
   useEffect(() => {
@@ -54,11 +56,9 @@ const AdminNavbar = (props) => {
 
   // logout go back to login page
   if (logout) {
-    return <Redirect to="/auth/login" />;
+    history.push('/auth/login');
   }
 
-  const [tokenRefresh, setTokenRefresh] = useState(false);
-  let history = useHistory();
   /**
    * Set a timer to refresh every few seconds.
    */
@@ -73,9 +73,7 @@ const AdminNavbar = (props) => {
   useEffect(() => {
     let token = localStorage.getItem('user')
     let decodedToken = jwt_decode(token)
-    console.log('Decoded Token', decodedToken)
     let currentDate = new Date()
-
     // JWT exp is in seconds
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
       localStorage.removeItem('user');
