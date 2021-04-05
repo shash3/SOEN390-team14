@@ -36,13 +36,14 @@ const Index = () => {
 
   if (Chart) {
     parseOptions(Chart, chartOptions());
-  }
+  };
 
   const toggleNavs = (e, index) => {
     e.preventDefault();
     setActiveNav(index);
     setChartExample1Data(`data${index}`);
   };
+
   return (
     <>
       <Header />
@@ -161,9 +162,7 @@ const Index = () => {
                     <td>4,569</td>
                     <td>340</td>
                     <td>
-                      <i className="fas fa-arrow-up text-success mr-3" />
-                      {' '}
-                      46,53%
+                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
                     </td>
                   </tr>
                   <tr>
@@ -171,8 +170,7 @@ const Index = () => {
                     <td>3,985</td>
                     <td>319</td>
                     <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-warning mr-3" />{' '}
                       46,53%
                     </td>
                   </tr>
@@ -181,8 +179,7 @@ const Index = () => {
                     <td>3,513</td>
                     <td>294</td>
                     <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-warning mr-3" />{' '}
                       36,49%
                     </td>
                   </tr>
@@ -191,9 +188,7 @@ const Index = () => {
                     <td>2,050</td>
                     <td>147</td>
                     <td>
-                      <i className="fas fa-arrow-up text-success mr-3" />
-                      {' '}
-                      50,87%
+                      <i className="fas fa-arrow-up text-success mr-3" /> 50,87%
                     </td>
                   </tr>
                   <tr>
@@ -201,8 +196,7 @@ const Index = () => {
                     <td>1,795</td>
                     <td>190</td>
                     <td>
-                      <i className="fas fa-arrow-down text-danger mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-danger mr-3" />{' '}
                       46,53%
                     </td>
                   </tr>
