@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { React, useEffect, useState } from 'react';
 // node.js library that concatenates classes (strings)
 import classnames from 'classnames';
 // javascipt plugin for creating charts
@@ -29,20 +29,48 @@ import {
   chartExample1,
   chartExample2,
 } from '../variables/charts';
+import jwt_decode from 'jwt-decode';
+import { useHistory } from 'react-router-dom';
 
 const Index = () => {
-  const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState('data1');
+  const [tokenRefresh, setTokenRefresh] = useState(false);
+  let history = useHistory();
+  /**
+   * Set a timer to refresh every few seconds.
+   */
+  useEffect(() => {
+    let refresh = true
+    setInterval(() => {
+      setTokenRefresh(refresh)
+      refresh = !refresh
+    }, 1000 * 15)
+  }, []);
+
+  useEffect(() => {
+    let token = localStorage.getItem('user')
+    let decodedToken = jwt_decode(token)
+    console.log('Decoded Token', decodedToken)
+    let currentDate = new Date()
+
+    // JWT exp is in seconds
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      history.push('/auth/login')
+    }
+  }, [tokenRefresh]);
+
+  const [activeNav, setActiveNav] = useState(1)
+  const [chartExample1Data, setChartExample1Data] = useState('data1')
 
   if (Chart) {
-    parseOptions(Chart, chartOptions());
-  }
+    parseOptions(Chart, chartOptions())
+  };
 
   const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
-    setChartExample1Data(`data${index}`);
+    e.preventDefault()
+    setActiveNav(index)
+    setChartExample1Data(`data${index}`)
   };
+
   return (
     <>
       <Header />
@@ -161,9 +189,7 @@ const Index = () => {
                     <td>4,569</td>
                     <td>340</td>
                     <td>
-                      <i className="fas fa-arrow-up text-success mr-3" />
-                      {' '}
-                      46,53%
+                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
                     </td>
                   </tr>
                   <tr>
@@ -171,8 +197,7 @@ const Index = () => {
                     <td>3,985</td>
                     <td>319</td>
                     <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-warning mr-3" />{' '}
                       46,53%
                     </td>
                   </tr>
@@ -181,8 +206,7 @@ const Index = () => {
                     <td>3,513</td>
                     <td>294</td>
                     <td>
-                      <i className="fas fa-arrow-down text-warning mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-warning mr-3" />{' '}
                       36,49%
                     </td>
                   </tr>
@@ -191,9 +215,7 @@ const Index = () => {
                     <td>2,050</td>
                     <td>147</td>
                     <td>
-                      <i className="fas fa-arrow-up text-success mr-3" />
-                      {' '}
-                      50,87%
+                      <i className="fas fa-arrow-up text-success mr-3" /> 50,87%
                     </td>
                   </tr>
                   <tr>
@@ -201,8 +223,7 @@ const Index = () => {
                     <td>1,795</td>
                     <td>190</td>
                     <td>
-                      <i className="fas fa-arrow-down text-danger mr-3" />
-                      {' '}
+                      <i className="fas fa-arrow-down text-danger mr-3" />{' '}
                       46,53%
                     </td>
                   </tr>
@@ -320,7 +341,7 @@ const Index = () => {
         </Row>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index

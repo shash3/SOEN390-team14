@@ -10,6 +10,7 @@ import './assets/scss/argon-dashboard-react.scss';
 import AdminLayout from './layouts/Admin.jsx';
 import AuthLayout from './layouts/Auth.jsx';
 
+
 // verify user is logged in for private route
 const isLogin = () => {
   const user = localStorage.getItem('user');
