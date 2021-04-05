@@ -1,37 +1,35 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const SalesSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   quantity: {
     type: Number,
-    required: true
+    required: true,
   },
   purchaser: {
     type: String,
-    required: true
+    required: true,
   },
   location: {
     type: String,
-    required: true
+    required: true,
   },
   value: {
     type: Number,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    required: true
+    required: true,
   },
   paid: {
     type: Boolean,
-    required: true
-  }
-    
-    
-});
+    required: true,
+  },
+})
 
 // eslint-disable-next-line no-undef
-module.exports = Sales = mongoose.model('sales', SalesSchema);
+module.exports = Sales = mongoose.model('sales', SalesSchema)

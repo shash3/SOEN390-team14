@@ -65,7 +65,8 @@ The website is deployed and hosted on heroku. You can access the website through
   #### Enforcing Convention
   * Eslint has been installed.
   * `npm -g i eslint-cli` if you have never used eslint-cli before
-  * navigate into the client folder and run `eslint src`
+  * navigate into the client folder and run `eslint src` 
+  * navigate into the back-end folder and run `eslint name`, where `name` is the name of folder you want check.
 
 ***
 
