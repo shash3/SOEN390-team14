@@ -87,5 +87,4 @@ const exportGraphPDF = (defaultFilename, graphData) => {
 module.exports = {
   exportToJsonExcel,
   exportJsonToCSV
-
 }

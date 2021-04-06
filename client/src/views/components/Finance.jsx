@@ -12,13 +12,16 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Chart from 'chart.js';
-import {Bar} from "react-chartjs-2";
+import {Bar, Doughnut} from "react-chartjs-2";
 import {
   chartOptions,
   parseOptions,
   chartAnnualProfits,
   chartAnnualSales,
+  chartTotalCosts,
 } from '../../variables/charts';
+
+
 
 const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -229,7 +232,7 @@ useEffect(() => {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-0">Welcome to Finance!</h3>
+                  <h3 className="text-white mb-2">Welcome to Finance!</h3>
                 </CardHeader>
                 <Row className="mb-2 ml-2 mr-2 mt-2">
                   <Col className="">
@@ -238,8 +241,26 @@ useEffect(() => {
                         <h1 className=" mb-0">{graphTitle}</h1>
                       </CardHeader>
                       <CardBody>
+                        <Form className="form">
+                          <FormGroup>
+                            <InputGroup>
+                              <div>
+                                <Input
+                                    placeholder='Year'
+                                    type='number'
+                                    min={1000}
+                                    max={9999}
+                                    defaultValue={2021}
+                                />
+                              </div>
+                            </InputGroup>
+                          </FormGroup>
+                          <Button color="default">
+                            Update Year
+                          </Button>
+                        </Form>
                         <Button
-                            className="mt-4 mb-3"
+                            className="mt-2 mb-3"
                             color="default"
                             onClick={() => {
                               closeViewSales();
@@ -354,7 +375,6 @@ useEffect(() => {
                                   required
                                   onChange = {(e) => onChangeForm(e)}
                               >
-                                
                               </Input>
                             </InputGroup>
                           </FormGroup>
@@ -373,8 +393,15 @@ useEffect(() => {
                         <h1 className=" mb-0">Monthly Breakdown</h1>
                         <p>Total Sales/Cost/Profit</p>
                         <p>Sales: Dollar Amount/# Bikes Sold</p>
-                        <p>Cost: Operational Costs+Hours/Procurement Costs</p>
                       </CardHeader>
+                      <CardBody className="text-center">
+                        <h2>Cost: Operational Costs+Hours/Procurement Costs</h2>
+                        <div className="chart mb-3">
+                          <Doughnut data={chartTotalCosts.data}
+                                    options={chartTotalCosts.options}
+                          />
+                        </div>
+                      </CardBody>
                     </Card>
                   </Col>
                 </Row>
