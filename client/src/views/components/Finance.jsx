@@ -25,8 +25,8 @@ import {
 
 const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
-  const [formYear,setFormYear] = useState('');
-  const [formMonth,setFormMonth] = useState('');
+  const [displayYear,setDisplayYear] = useState('');
+  const [displayMonth,setDisplayMonth] = useState('');
   const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
@@ -35,7 +35,18 @@ const Finance = () => {
     quantity: 0,
     salesGoal: 0
   });
-  
+  const [operationalMinutes,setOperationalMinutes] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyProcurements,setMonthlyProcurements] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlySales, setMonthlySales] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [montlyCosts, setMonthlyCosts] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ])
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -79,53 +90,89 @@ const Finance = () => {
     parseOptions(Chart, chartOptions());
   };
 
- 
+ const getOperationLog = () => {
+
+   var i;
+   console.log(prodActual);
+   const updatedOperationalMinutes = operationalMinutes;
+   if(prodActual[displayYear]==undefined){
+   
+   return;
+   }
+  
+  for(i = 0;i<12;i++){
+    var monthSum = 0;
+    if(prodActual[displayYear][monthNames[i]] == undefined)
+    continue;
+    for(let plantName in prodActual[displayYear][monthNames[i]]){
+      var plantSum = 0;
+      var plant = prodActual[displayYear][monthNames[i]][plantName];
+      for(let machineName in plant ){
+        var machine = plant[machineName];
+        plantSum += machine['minutesLogged'];
+        
+      }
+      monthSum += plantSum;
+    }
+    updatedOperationalMinutes[i] = monthSum;
+   
+  }
+  console.log(updatedOperationalMinutes);
+  setOperationalMinutes(updatedOperationalMinutes);
+
+ }
 
 useEffect(() => {
   const lookup = async() => {
+    
     await axios
     .get('/api/planning/prod', {
       headers: {
         'x-auth-token': userToken,
       },
     }).then((response) => {
+      
       setProdPlans(response.data)}).catch((error)=>{
         console.error(error);
       });
-
+      
       await axios
     .get('/api/planning/sales', {
       headers: {
         'x-auth-token': userToken,
       },
     }).then((response) => {
+    
       setSalesPlans(response.data)}).catch((error)=>{
         console.error(error);
       }); 
-
+      
       await axios
     .get('/api/planning/prodActual', {
       headers: {
         'x-auth-token': userToken,
       },
     }).then((response) => {
+   
       setProdActual(response.data)}).catch((error)=>{
         console.error(error);
       });
-
+      
       await axios
     .get('/api/planning/salesActual', {
       headers: {
         'x-auth-token': userToken,
       },
     }).then((response) => {
+     
       setSalesActual(response.data)}).catch((error)=>{
         console.error(error);
       });
-
       
   };
   lookup(); 
+
+  
   },[]);
 
 
@@ -226,7 +273,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button></Button>
+          <Button onClick = {getOperationLog}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
