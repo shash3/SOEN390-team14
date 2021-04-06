@@ -22,4 +22,18 @@
       text-shadow: 0 0 8px #fff;
     }
   }
+  @media (min-width: 280px) {
+    font-size: 7vw;
+    margin-left: 9vw;
+   }
+   @media (min-width: 768px) {
+    margin-left: 0vw;
+    font-size: 5vw;
+   }
+   @media (min-width: 992px) {
+    font-size: 5vw;
+   }
+   @media (min-width: 1200px) {
+    font-size: 5vw;
+   }
 }
