@@ -28,6 +28,7 @@ catch (err) {
         res.status(500).send("Server Error");
 }
 })
+
 router.get("/sales", auth, async (req,res) =>{
     try{
         fs.readFile(salesPlanFile, 'utf8', (err, data) => {

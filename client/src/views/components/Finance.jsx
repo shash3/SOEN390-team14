@@ -123,6 +123,7 @@ const Finance = () => {
 
  }
  const getProcurementLog = () => {
+   var updatedProcurements = [];
    var procurementsInYear = [];
    procurement.forEach( p => {
      
@@ -144,11 +145,39 @@ const Finance = () => {
      
     }
   });
-  monthlyProcurements[i] = monthSum;
+  updatedProcurements[i] = monthSum;
 }
-  console.log(monthlyProcurements);
+  setMonthlyProcurements(updatedProcurements);
  }
- 
+
+ const getSalesLog = () => {
+   var salesInYear = [];
+   var updatedSales = [];
+   salesActual.forEach( p => {
+     
+     
+     if(new Date(p.date).getFullYear() == 2021)
+     {
+       
+       salesInYear.push(p);
+     }
+   });
+   for( var i = 0 ;i<12;i++){
+     var monthSum = 0;
+    salesInYear.forEach( p => {
+    
+    if(new Date(p.date).getMonth() == i)
+    {
+      
+      monthSum += p.value;
+     
+    }
+  });
+  updatedSales[i] = monthSum;
+}
+  setMonthlySales(updatedSales);
+  console.log(monthlySales);
+ }
 useEffect(() => {
   const lookup = async() => {
     await axios
@@ -165,7 +194,20 @@ useEffect(() => {
     .catch((error) => {
       console.error(error);
     });
-    
+    await axios
+    .get('/api/sales', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    })
+    .then((response) => {
+      if (response.data) {
+        setSalesActual(response.data);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
     await axios
     .get('/api/planning/prod', {
       headers: {
@@ -199,16 +241,7 @@ useEffect(() => {
         console.error(error);
       });
       
-      await axios
-    .get('/api/planning/salesActual', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).then((response) => {
      
-      setSalesActual(response.data)}).catch((error)=>{
-        console.error(error);
-      });
       
   };
   lookup(); 
@@ -315,7 +348,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {getProcurementLog}></Button>
+          <Button onClick = {getSalesLog}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
