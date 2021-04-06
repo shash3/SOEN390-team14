@@ -24,7 +24,11 @@ const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [formYear,setFormYear] = useState('');
   const [formMonth,setFormMonth] = useState('');
-  const [planFormdata, setPlanFormData] = useState({});
+  const [planFormdata, setPlanFormData] = useState({
+    location: '',
+    item: '',
+    quantitiy: ''
+  });
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
