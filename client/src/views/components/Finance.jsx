@@ -25,18 +25,36 @@ const Finance = () => {
   const [formYear,setFormYear] = useState('');
   const [formMonth,setFormMonth] = useState('');
   const [planFormdata, setPlanFormData] = useState({
+    year:0,
+    month:'',
     location: '',
     item: '',
-    quantitiy: ''
+    quantity: '',
+    salesGoal:0
   });
+  const{year, month, location, item, quantity} = planFormData;
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
   const [salesActual,setSalesActual] = useState({});
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   const onChangeForm = (e) => {
-    setTransportationData({
-      ...formData,
+    setPlanFormData({
+      ...planFormData,
       [e.target.name]: e.target.value,
     });
   };
@@ -142,6 +160,7 @@ useEffect(() => {
   };
 
   const addNewPlan = async () => {
+    
     await axios
     .post("/api/planning/addPlanProd",{
       data:prodPlans,
@@ -236,6 +255,37 @@ useEffect(() => {
                       </CardHeader>
                       <CardBody>
                         <Form className="form">
+                        <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Year</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
+                              <Input
+                                  type="number"
+                                  name="year"
+                                  required
+                                  onChange = {(e) => onChangeForm(e)}
+                              >
+                              </Input>
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Location</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
+                              <Input
+                                  type="select"
+                                  name="month"
+                                  required
+                                  onChange = {(e) => onChangeForm(e)}
+                              >
+                                {[...monthNames].map((m) => (
+                                    <option>{m}</option>
+                                ))}
+                              </Input>
+                            </InputGroup>
+                          </FormGroup>
                           <FormGroup className="mb-3">
                             <label>
                               <span className="text-muted">Location</span>
@@ -245,7 +295,7 @@ useEffect(() => {
                                   type="select"
                                   name="location"
                                   required
-                                  onChange = {() => onChangeForm(e)}
+                                  onChange = {(e) => onChangeForm(e)}
                               >
                                 {[...allLoc].map((m) => (
                                     <option key={m._id}>{m.location}</option>
@@ -260,9 +310,9 @@ useEffect(() => {
                             <InputGroup className="input-group-alternative">
                               <Input
                                   type="select"
-                                  name="bikeType"
+                                  name="item"
                                   required
-                                  onChange = {() => onChangeForm(e)}
+                                  onChange = {(e) => onChangeForm(e)}
                               >
                                 {[...allBikes].map((t) => (
                                     <option key={t._id}>{t.name}</option>
@@ -277,10 +327,27 @@ useEffect(() => {
                             <InputGroup className="input-group-alternative">
                               <Input
                                   type="number"
-                                  name="bikeAmount"
+                                  name="quantity"
                                   required
-                                  onChange = {() => onChangeForm(e)}
+                                  onChange = {(e) => onChangeForm(e)}
                               >
+                              </Input>
+                            </InputGroup>
+                          </FormGroup>
+                          <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted">Sales Goal</span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
+                              <Input
+                                  type="select"
+                                  name="month"
+                                  required
+                                  onChange = {(e) => onChangeForm(e)}
+                              >
+                                {[...monthNames].map((m) => (
+                                    <option>{m}</option>
+                                ))}
                               </Input>
                             </InputGroup>
                           </FormGroup>
