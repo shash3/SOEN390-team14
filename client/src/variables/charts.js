@@ -425,10 +425,15 @@ const chartAnnualProfits = {
     labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
     datasets : [
       {
-        label:'Profits',
+        label:'Expected Profits',
+        data:[10,5,8,15,20,30,6,2,4,14,9,4],
+      },
+      {
+        label:'Realized Profits',
         data:[20,12,8,6,30,9,11,2,1,18,4,7],
       },
     ],
+
   },
 };
 
@@ -467,8 +472,12 @@ const chartAnnualSales = {
     labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
     datasets : [
       {
-        label:'Sales',
+        label:'Expected Sales',
         data:[100,200,300,400,500,600,500,400,300,200,100,200],
+      },
+      {
+        label:'Realized Sales',
+        data:[600,500,400,300,200,100,100,200,300,400,500,600],
       },
     ],
   },
