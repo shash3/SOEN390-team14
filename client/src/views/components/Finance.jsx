@@ -58,7 +58,7 @@ const Finance = () => {
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
-  const [salesActual,setSalesActual] = useState({});
+  const [salesActual,setSalesActual] = useState([]);
   const [procurement,setProcurement] = useState([]);
   const monthNames = [
     'January',
@@ -100,7 +100,7 @@ const Finance = () => {
   };
 
   const getOperationLog = () => {
-    console.log("operation log");
+   
     var i;
    var displayYear1 = 2021;
     const updatedOperationalMinutes = operationalMinutes;
@@ -132,18 +132,19 @@ const Finance = () => {
  
   };
 useEffect(()=>{
+  
   const getMonthlySalesPlan = () => {
-    
+    console.log("jjjj");
     var i;
    var displayYear1 = 2021;
     const updatedSalesPlan = monthlySalesPlans;
-    if(prodActual[displayYear1]==undefined){
-    
+    if(salesPlans[displayYear1]==undefined){
+    console.log(prodActual);
     return;
     }
    
    for(i = 0;i<12;i++){
-     var monthSum = 0;
+     
      if(salesPlans[displayYear1][monthNames[i]] == undefined)
      continue;
     
@@ -151,7 +152,7 @@ useEffect(()=>{
      
     
    }
-   
+   console.log(updatedSalesPlan);
    setMonthlySalesPlans(updatedSalesPlan);
    return updatedSalesPlan;
  
@@ -162,7 +163,7 @@ useEffect(()=>{
    var displayYear1 = 2021;
     const updatedMonthlyCostsPlan = monthlyCostsPlan;
     if(prodPlans[displayYear1]==undefined){
-    
+    console.log("boom");
     return;
     }
    
@@ -170,16 +171,16 @@ useEffect(()=>{
      var monthSum = 0;
      if(prodPlans[displayYear1][monthNames[i]] == undefined)
      continue;
-     for(let plantName in prodActual[displayYear1][monthNames[i]]){
+     for(let plantName in prodPlans[displayYear1][monthNames[i]]){
        var plantSum = 0;
-       var plant = prodActual[displayYear1][monthNames[i]][plantName];
+       var plant = prodPlans[displayYear1][monthNames[i]][plantName];
        for(let itemName in plant ){
          plantSum += plant[itemName];
          
        }
        monthSum += plantSum;
      }
-     updatedCostsPlan[i] = monthSum*45*0.5+monthSum*100;
+     updatedMonthlyCostsPlan[i] = monthSum*45*0.5+monthSum*100;
     
    }
    
@@ -189,6 +190,7 @@ useEffect(()=>{
 
   };
   getMonthlySalesPlan();
+  console.log("hello");
   getMonthlyCostsPlan();
 },[prodPlans,salesPlans]);
  
@@ -198,7 +200,6 @@ useEffect(()=>{
  
 
   const getProcurementLog = () => {
-    console.log("procurement log");
     var updatedProcurements = [];
     var procurementsInYear = [];
     procurement.forEach( p => {
@@ -255,7 +256,7 @@ useEffect(() => {
    updatedSales[i] = monthSum;
  }
    setMonthlySales(updatedSales);
-   console.log(monthlySales);
+   
   };
   getSalesLog();
 },[salesActual])
@@ -268,7 +269,7 @@ useEffect(() => {
      getProcurementLog();
 
 
-     console.log("monthly costs");
+     
     
      var updatedMonthlyCosts = [];
      for(var i = 0; i<12 ; i++){
@@ -381,7 +382,7 @@ useEffect(() => {
   };
 
   const addNewPlan = async () => {
-    console.log(planFormData);
+    
     const{year, month, location, item, quantity, salesGoal} = planFormData;
     if(prodPlans[year]==undefined){
       prodPlans[year]={};
@@ -432,13 +433,41 @@ useEffect(() => {
   useEffect(()=> {
     getAllLoc();
     if(viewSales){
-      setGraphData(chartAnnualSales.data);
+      setGraphData({
+        labels: monthNames,
+        datasets : [
+          {
+            label:'Expected Sales',
+            data:monthlySalesPlans,
+           
+          },
+          {
+            label:'Actual Sales',
+            data:monthlySales,
+          },
+        ],
+    
+      });
       setGraphOptions(chartAnnualSales.options);
       setGraphTitle("Annual Sales");
     }
     else
     {
-      setGraphData(chartAnnualProfits.data);
+      setGraphData({
+        labels: monthNames,
+        datasets : [
+          {
+            label:'Expected Profits',
+            data:[10,5,8,15,20,30,6,2,4,14,9,4],
+           
+          },
+          {
+            label:'Realized Profits',
+            data:[20,12,8,6,30,9,11,2,1,18,4,7],
+          },
+        ],
+    
+      });
       setGraphOptions(chartAnnualProfits.options);
       setGraphTitle("Annual Profits");
     }
@@ -457,7 +486,7 @@ useEffect(() => {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-2">{monthlyCosts}</h3>
+                  <h3 className="text-white mb-2">{monthlyCostsPlan}</h3>
                 </CardHeader>
                 <Row className="mb-2 ml-2 mr-2 mt-2">
                   <Col className="">
