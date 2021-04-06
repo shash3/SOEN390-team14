@@ -501,6 +501,52 @@ const chartTotalCosts = {
   },
 };
 
+const chartTotalProfits = {
+  options: {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            callback(value) {
+              if (!(value % 10)) {
+                // return '$' + value + 'k'
+                return value;
+              }
+            },
+          },
+        },
+      ],
+    },
+    tooltips: {
+      callbacks: {
+        label(item, data) {
+          const label = data.datasets[item.datasetIndex].label || '';
+          const { yLabel } = item;
+          let content = '';
+          if (data.datasets.length > 1) {
+            content += label;
+          }
+          content += yLabel;
+          return content;
+        },
+      },
+    },
+  },
+  data: {
+    labels: ['Sales', 'Costs', 'Profits'],
+    datasets: [
+      {
+        data: [25, 20, 5],
+        backgroundColor: [
+          colors.theme.success,
+          colors.theme.danger,
+          colors.theme.info,
+        ],
+      },
+    ],
+  },
+}
+
 module.exports = {
   chartOptions, // used inside src/views/Index.js
   parseOptions, // used inside src/views/Index.js
@@ -509,5 +555,6 @@ module.exports = {
   chartAnnualProfits,
   chartAnnualSales,
   chartTotalCosts,
+  chartTotalProfits,
 };
 
