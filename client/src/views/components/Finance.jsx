@@ -41,13 +41,14 @@ const Finance = () => {
   const [monthlySales, setMonthlySales] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ]);
-  const [montlyCosts, setMonthlyCosts] = useState([
+  const [monthlyCosts, setMonthlyCosts] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
   const [salesActual,setSalesActual] = useState({});
+  const [procurement,setProcurement] = useState([]);
   const monthNames = [
     'January',
     'February',
@@ -90,7 +91,7 @@ const Finance = () => {
  const getOperationLog = () => {
 
    var i;
-   console.log(prodActual);
+ 
    const updatedOperationalMinutes = operationalMinutes;
    if(prodActual[displayYear]==undefined){
    
@@ -118,9 +119,49 @@ const Finance = () => {
   setOperationalMinutes(updatedOperationalMinutes);
 
  }
-
+ const getProcurementLog = () => {
+   var procurementsInYear = [];
+   procurement.forEach( p => {
+     
+     
+     if(new Date(p.date).getFullYear() == 2021)
+     {
+       console.log("hello");
+       procurementsInYear.push(p);
+     }
+   });
+   for( var i = 0 ;i<12;i++){
+     var monthSum = 0;
+    procurementsInYear.forEach( p => {
+    
+    if(new Date(p.date).getMonth() == i)
+    {
+      
+      monthSum += p.value;
+     
+    }
+  });
+  monthlyProcurements[i] = monthSum;
+}
+  console.log(monthlyProcurements);
+ }
+ 
 useEffect(() => {
   const lookup = async() => {
+    await axios
+    .get('/api/procurement', {
+      headers: {
+        'x-auth-token': userToken,
+      },
+    })
+    .then((response) => {
+      if (response.data) {
+        setProcurement(response.data);
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
     
     await axios
     .get('/api/planning/prod', {
@@ -215,7 +256,8 @@ useEffect(() => {
     if(salesPlans[year]==undefined){
       salesPlans[year]={};
     }
-    prodPlans[year][month][location][item]= quantity;
+    prodPlans[year][month][location][item]= parseInt(quantity);
+   
     salesPlans[year][month] = salesGoal;
     await axios
     .post("/api/planning/addPlanProd",{
@@ -270,7 +312,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {getOperationLog}></Button>
+          <Button onClick = {getProcurementLog}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
