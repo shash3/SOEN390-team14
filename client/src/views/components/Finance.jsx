@@ -50,7 +50,11 @@ const Finance = () => {
   ]);
   const [monthlyCosts, setMonthlyCosts] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyCostsPlan, setMonthlyCostsPlan] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
   ])
+
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -127,7 +131,7 @@ const Finance = () => {
    return updatedOperationalMinutes;
  
   };
-
+useEffect(()=>{
   const getMonthlySalesPlan = () => {
     
     var i;
@@ -152,6 +156,44 @@ const Finance = () => {
    return updatedSalesPlan;
  
   };
+
+  const getMonthlyCostsPlan = () => {
+    var i;
+   var displayYear1 = 2021;
+    const updatedMonthlyCostsPlan = monthlyCostsPlan;
+    if(prodPlans[displayYear1]==undefined){
+    
+    return;
+    }
+   
+   for(i = 0;i<12;i++){
+     var monthSum = 0;
+     if(prodPlans[displayYear1][monthNames[i]] == undefined)
+     continue;
+     for(let plantName in prodActual[displayYear1][monthNames[i]]){
+       var plantSum = 0;
+       var plant = prodActual[displayYear1][monthNames[i]][plantName];
+       for(let itemName in plant ){
+         plantSum += plant[itemName];
+         
+       }
+       monthSum += plantSum;
+     }
+     updatedCostsPlan[i] = monthSum*45*0.5+monthSum*100;
+    
+   }
+   
+   setMonthlyCostsPlan(updatedMonthlyCostsPlan);
+   return updatedMonthlyCostsPlan;
+ 
+
+  };
+  getMonthlySalesPlan();
+  getMonthlyCostsPlan();
+},[prodPlans,salesPlans]);
+ 
+  
+ 
 
  
 
@@ -186,35 +228,38 @@ const Finance = () => {
   };
  
  
-
- const getSalesLog = () => {
-   var salesInYear = [];
-   var updatedSales = [];
-   salesActual.forEach( p => {
+useEffect(() => {
+  const getSalesLog = () => {
+    var salesInYear = [];
+    var updatedSales = [];
+    salesActual.forEach( p => {
+      
+      
+      if(new Date(p.date).getFullYear() == 2021)
+      {
+        
+        salesInYear.push(p);
+      }
+    });
+    for( var i = 0 ;i<12;i++){
+      var monthSum = 0;
+     salesInYear.forEach( p => {
      
-     
-     if(new Date(p.date).getFullYear() == 2021)
+     if(new Date(p.date).getMonth() == i)
      {
        
-       salesInYear.push(p);
+       monthSum += p.value;
+      
      }
    });
-   for( var i = 0 ;i<12;i++){
-     var monthSum = 0;
-    salesInYear.forEach( p => {
-    
-    if(new Date(p.date).getMonth() == i)
-    {
-      
-      monthSum += p.value;
-     
-    }
-  });
-  updatedSales[i] = monthSum;
-}
-  setMonthlySales(updatedSales);
-  console.log(monthlySales);
+   updatedSales[i] = monthSum;
  }
+   setMonthlySales(updatedSales);
+   console.log(monthlySales);
+  };
+  getSalesLog();
+},[salesActual])
+ 
  useEffect(()=>{
   const getMonthlyCosts = () => {
 
