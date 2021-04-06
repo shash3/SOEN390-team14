@@ -19,7 +19,9 @@ import {
   chartAnnualProfits,
   chartAnnualSales,
   chartTotalCosts,
+  chartTotalProfits,
 } from '../../variables/charts';
+import {Link} from "react-router-dom";
 
 
 
@@ -548,6 +550,9 @@ useEffect(() => {
                                   type="number"
                                   name="year"
                                   required
+                                  min={1000}
+                                  max={9999}
+                                  defaultValue={2021}
                                   onChange = {(e) => onChangeForm(e)}
                               >
                               </Input>
@@ -645,11 +650,64 @@ useEffect(() => {
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
                         <h1 className=" mb-0">Monthly Breakdown</h1>
-                        <p>Total Sales/Cost/Profit</p>
-                        <p>Sales: Dollar Amount/# Bikes Sold</p>
                       </CardHeader>
                       <CardBody className="text-center">
-                        <h2>Cost: Operational Costs+Hours/Procurement Costs</h2>
+                        <h2 className="mb-4">Total Profits</h2>
+                        <div className="chart mb-3">
+                          <Bar data={chartTotalProfits.data}
+                               options={chartTotalProfits.options}
+                          />
+                        </div>
+                        <h2 className="mb-4">Sales</h2>
+                        <Row className="mb-5">
+                          <Col>
+                            <Card className="card-stats bg-light mb-4 mb-xl-0">
+                              <CardBody>
+                                <Row>
+                                  <Col className="col-auto">
+                                    <div className="icon icon-shape bg-white rounded-circle shadow">
+                                      <i className="fas fa-dollar-sign"></i>
+                                    </div>
+                                  </Col>
+                                  <div className="col">
+                                    <div className="row">
+                                      <span className="h2 font-weight-bold mb-0">
+                                        <h2 className="text-dark">Total $ Amount</h2>
+                                      </span>
+                                    </div>
+                                    <div className="row">
+                                      <h2 className="text-dark">100</h2>
+                                    </div>
+                                  </div>
+                                </Row>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                          <Col>
+                            <Card className="card-stats mb-4 mb-xl-0 bg-light" >
+                              <CardBody>
+                                <Row>
+                                  <Col className="col-auto">
+                                    <div className="icon icon-shape bg-white rounded-circle shadow">
+                                      <i className="fas fa-bicycle"></i>
+                                    </div>
+                                  </Col>
+                                  <div className="col">
+                                    <div className="row">
+                                      <span className=" font-weight-bold mb-0">
+                                        <h2 className="text-dark">Total # of Bikes</h2>
+                                      </span>
+                                    </div>
+                                    <div className="row">
+                                      <h2 className="text-dark">100</h2>
+                                    </div>
+                                  </div>
+                                </Row>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                        </Row>
+                        <h2 className="mb-4">Costs</h2>
                         <div className="chart mb-3">
                           <Doughnut data={chartTotalCosts.data}
                                     options={chartTotalCosts.options}
