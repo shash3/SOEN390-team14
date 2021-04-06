@@ -24,15 +24,15 @@ const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [formYear,setFormYear] = useState('');
   const [formMonth,setFormMonth] = useState('');
-  const [planFormdata, setPlanFormData] = useState({
+  const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
     location: '',
     item: '',
-    quantity: '',
-    salesGoal:0
+    quantity: 0,
+    salesGoal: 0
   });
-  const{year, month, location, item, quantity} = planFormData;
+  
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -76,16 +76,10 @@ const Finance = () => {
     parseOptions(Chart, chartOptions());
   };
 
-  const onChangeFormProd = (e,plant) => {
-    prodPlans[formYear][formMonth][plant]["items"][e.name] = e.value;
-  };
-  const OnChangeFormSales = (e) => {
-    salesPlans[formYear][formMonth]["amount"] = e.value;
-  };
+ 
 
 useEffect(() => {
   const lookup = async() => {
-    console.log(allBikes);
     await axios
     .get('/api/planning/prod', {
       headers: {
@@ -160,7 +154,22 @@ useEffect(() => {
   };
 
   const addNewPlan = async () => {
-    
+    console.log(planFormData);
+    const{year, month, location, item, quantity, salesGoal} = planFormData;
+    if(prodPlans[year]==undefined){
+      prodPlans[year]={};
+    }
+    if(prodPlans[year][month]==undefined){
+      prodPlans[year][month] = {};
+    }
+    if(prodPlans[year][month][location] == undefined){
+      prodPlans[year][month][location] = {};
+    }
+    if(salesPlans[year]==undefined){
+      salesPlans[year]={};
+    }
+    prodPlans[year][month][location][item]= quantity;
+    salesPlans[year][month] = salesGoal;
     await axios
     .post("/api/planning/addPlanProd",{
       data:prodPlans,
@@ -214,7 +223,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {addNewPlan}></Button>
+          <Button></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
@@ -271,7 +280,7 @@ useEffect(() => {
                           </FormGroup>
                           <FormGroup className="mb-3">
                             <label>
-                              <span className="text-muted">Location</span>
+                              <span className="text-muted">Month</span>
                             </label>
                             <InputGroup className="input-group-alternative">
                               <Input
@@ -340,19 +349,17 @@ useEffect(() => {
                             </label>
                             <InputGroup className="input-group-alternative">
                               <Input
-                                  type="select"
-                                  name="month"
+                                  type="number"
+                                  name="salesGoal"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
                               >
-                                {[...monthNames].map((m) => (
-                                    <option>{m}</option>
-                                ))}
+                                
                               </Input>
                             </InputGroup>
                           </FormGroup>
                           <div className="text-center">
-                            <Button color="primary" onClick="">
+                            <Button color="primary" onClick={addNewPlan}>
                               Update Monthly Goals
                             </Button>
                           </div>

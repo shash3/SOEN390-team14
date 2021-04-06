@@ -74,7 +74,7 @@ router.get("/salesActual", auth, async (req,res) =>{
     }
 })    
 router.post("/addPlanProd", auth, async (req,res) => {
-   
+   console.log("hello");
         const { data } = req.body;
         const dataStr = JSON.stringify(data, null, 2);
         try {
@@ -88,7 +88,7 @@ router.post("/addPlanProd", auth, async (req,res) => {
 });  
 
 router.post("/addPlanSales", auth, async (req,res) => {
-   
+   console.log("hi");
     const { data } = req.body;
     const dataStr = JSON.stringify(data, null, 2);
     try {
