@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="585e4052-c1e9-4655-8b0c-272e0bbcf882" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/views/components/Finance.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/variables/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/variables/charts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
