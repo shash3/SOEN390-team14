@@ -2,6 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 const Location = require('../../../models/Location')
+const writeToFile = require('../../../variables/logWriter')
+const User = require('../../../models/User')
 
 // Retrieve all locations
 router.get('/', async (req, res) => {
@@ -20,6 +22,10 @@ router.post('/add', async (req, res) => {
   const locations = new Location({
     location,
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a new location ${location}`
+  writeToFile(date, action, user._id)
   await locations.save()
   res.json('added')
 })

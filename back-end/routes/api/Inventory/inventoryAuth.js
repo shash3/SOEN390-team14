@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 const Inventory = require('../../../models/Inventory')
 const auth = require('../../../middleware/auth')
+const writeToFile = require('../../../variables/logWriter')
+const User = require('../../../models/User')
 
 // Retrieve all inventory
 router.get('/', auth, async (req, res) => {
@@ -48,6 +50,10 @@ router.post('/add', async (req, res) => {
     quantity,
     location,
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a new shipment of ${name}, quantity ${quantity}`
+  writeToFile(date, action, user._id)
   await inventory.save()
   res.json('added')
 })
@@ -56,6 +62,10 @@ router.post('/add', async (req, res) => {
 router.put('/remove', async (req, res) => {
   const { name, quantity, location } = req.body
   try {
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `removed ${quantity} of ${name} in inventory with location ${location}`
+    writeToFile(date, action, user._id)
     await Inventory.find({ name, location }).updateOne({ quantity })
     res.json('removed')
   } catch (err) {
@@ -73,6 +83,10 @@ router.put('/decrement', async (req, res) => {
     await Inventory.find({ name, location }).updateOne({
       quantity: newQuantity,
     })
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `removed ${quantity} of ${name} in inventory with location ${location}`
+    writeToFile(date, action, user._id)
     res.json('decreased')
   } catch (err) {
     console.log(err.message)
@@ -96,6 +110,10 @@ router.put('/superUpdate', async (req, res) => {
     } else {
       await Inventory.find({ name, location }).updateOne({ quantity })
     }
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `updated ${name} by ${quantity} in inventory with location ${location}`
+    writeToFile(date, action, user._id)
     res.json('updated')
   } catch (err) {
     console.log(err.message)
@@ -123,6 +141,10 @@ router.put('/superIncrement', async (req, res) => {
         quantity: newQuantity,
       })
     }
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `added ${quantity} of ${name} in inventory with location ${location}`
+    writeToFile(date, action, user._id)
     res.json('increased')
   } catch (err) {
     console.log(err.message)
