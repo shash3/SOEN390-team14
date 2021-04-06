@@ -25,6 +25,7 @@ import {
 
 const Finance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
+  const operationCostPerMinute = 0.5;
   const [displayYear,setDisplayYear] = useState('');
   const [displayMonth,setDisplayMonth] = useState('');
   const [planFormData, setPlanFormData] = useState({
@@ -177,6 +178,15 @@ const Finance = () => {
 }
   setMonthlySales(updatedSales);
   console.log(monthlySales);
+ }
+ const getMonthlyCosts = () => {
+   const updatedMonthlyCosts = [];
+   for(var i = 0; i<12 ; i++){
+    var c = operationalMinutes[i] * operationCostPerMinute + monthlyProcurements[i];
+    updatedMonthlyCosts.push(c);
+   }
+   setMonthlyCosts(updatedMonthlyCosts);
+   console.log(monthlyCosts);
  }
 useEffect(() => {
   const lookup = async() => {
@@ -348,7 +358,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {getSalesLog}></Button>
+          <Button onClick = {getMonthlyCosts}></Button>
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
