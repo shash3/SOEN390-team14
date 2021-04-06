@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const prodPlanFile = './logs/plannedProduction.json';
 const salesPlanFile = './logs/plannedSales.json';
-const prodActualFile = '/logs/machineOperations.json';
+const prodActualFile = './logs/machineOperations.json';
 const salesActualFile = './logs/salesLog.json';
 
 
@@ -45,7 +45,7 @@ router.get("/sales", auth, async (req,res) =>{
 })
 router.get("/prodActual", auth, async (req,res) =>{
     try{
-        fs.readFile(salesActualFile, 'utf8', (err, data) => {
+        fs.readFile(prodActualFile, 'utf8', (err, data) => {
             if (data === undefined) {
               data = '{}';
             }
