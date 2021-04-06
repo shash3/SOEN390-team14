@@ -88,7 +88,6 @@ const AdminNavbar = (props) => {
         <Container fluid>
           <div
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-            
           >
             {props.brandText}
           </div>
