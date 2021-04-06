@@ -34,6 +34,12 @@ const Finance = () => {
   const [prodActual,setProdActual] = useState({});
   const [salesActual,setSalesActual] = useState({});
 
+  const onChangeForm = (e) => {
+    setTransportationData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
   // Holds all Locations
   const [allLoc, setAllLoc] = useState([]);
 
@@ -239,6 +245,7 @@ useEffect(() => {
                                   type="select"
                                   name="location"
                                   required
+                                  onChange = {() => onChangeForm(e)}
                               >
                                 {[...allLoc].map((m) => (
                                     <option key={m._id}>{m.location}</option>
@@ -255,6 +262,7 @@ useEffect(() => {
                                   type="select"
                                   name="bikeType"
                                   required
+                                  onChange = {() => onChangeForm(e)}
                               >
                                 {[...allBikes].map((t) => (
                                     <option key={t._id}>{t.name}</option>
@@ -271,6 +279,7 @@ useEffect(() => {
                                   type="number"
                                   name="bikeAmount"
                                   required
+                                  onChange = {() => onChangeForm(e)}
                               >
                               </Input>
                             </InputGroup>
