@@ -427,6 +427,7 @@ const chartAnnualProfits = {
       {
         label:'Expected Profits',
         data:[10,5,8,15,20,30,6,2,4,14,9,4],
+        backgroundColor: colors.theme.info,
       },
       {
         label:'Realized Profits',
@@ -474,12 +475,29 @@ const chartAnnualSales = {
       {
         label:'Expected Sales',
         data:[100,200,300,400,500,600,500,400,300,200,100,200],
+        backgroundColor: colors.theme.info,
       },
       {
         label:'Realized Sales',
         data:[600,500,400,300,200,100,100,200,300,400,500,600],
       },
     ],
+  },
+};
+
+const chartTotalCosts = {
+  options: {
+  },
+  data: {
+    labels: ['Operational Costs', 'Procurement Costs'],
+    datasets: [{
+      data: [300, 50],
+      backgroundColor: [
+        colors.theme.info,
+        colors.theme.primary,
+      ],
+      hoverOffset: 4
+    },],
   },
 };
 
@@ -490,5 +508,6 @@ module.exports = {
   chartExample2, // used inside src/views/Index.js
   chartAnnualProfits,
   chartAnnualSales,
+  chartTotalCosts,
 };
 
