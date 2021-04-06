@@ -92,64 +92,72 @@ const Finance = () => {
     parseOptions(Chart, chartOptions());
   };
 
- const getOperationLog = () => {
-
-   var i;
- 
-   const updatedOperationalMinutes = operationalMinutes;
-   if(prodActual[displayYear]==undefined){
-   
-   return;
-   }
-  
-  for(i = 0;i<12;i++){
-    var monthSum = 0;
-    if(prodActual[displayYear][monthNames[i]] == undefined)
-    continue;
-    for(let plantName in prodActual[displayYear][monthNames[i]]){
-      var plantSum = 0;
-      var plant = prodActual[displayYear][monthNames[i]][plantName];
-      for(let machineName in plant ){
-        var machine = plant[machineName];
-        plantSum += machine['minutesLogged'];
-        
-      }
-      monthSum += plantSum;
+  const getOperationLog = () => {
+    console.log("operation log");
+    var i;
+   var displayYear1 = 2021;
+    const updatedOperationalMinutes = operationalMinutes;
+    if(prodActual[displayYear1]==undefined){
+    
+    return;
     }
-    updatedOperationalMinutes[i] = monthSum;
    
-  }
-  console.log(updatedOperationalMinutes);
-  setOperationalMinutes(updatedOperationalMinutes);
+   for(i = 0;i<12;i++){
+     var monthSum = 0;
+     if(prodActual[displayYear1][monthNames[i]] == undefined)
+     continue;
+     for(let plantName in prodActual[displayYear1][monthNames[i]]){
+       var plantSum = 0;
+       var plant = prodActual[displayYear1][monthNames[i]][plantName];
+       for(let machineName in plant ){
+         var machine = plant[machineName];
+         plantSum += machine['minutesLogged'];
+         
+       }
+       monthSum += plantSum;
+     }
+     updatedOperationalMinutes[i] = monthSum;
+    
+   }
+   
+   setOperationalMinutes(updatedOperationalMinutes);
+   return updatedOperationalMinutes;
+ 
+  };
 
- }
- const getProcurementLog = () => {
-   var updatedProcurements = [];
-   var procurementsInYear = [];
-   procurement.forEach( p => {
+ 
+
+  const getProcurementLog = () => {
+    console.log("procurement log");
+    var updatedProcurements = [];
+    var procurementsInYear = [];
+    procurement.forEach( p => {
+      
+      
+      if(new Date(p.date).getFullYear() == 2021)
+      {
      
+        procurementsInYear.push(p);
+      }
+    });
+    for( var i = 0 ;i<12;i++){
+      var monthSum = 0;
+     procurementsInYear.forEach( p => {
      
-     if(new Date(p.date).getFullYear() == 2021)
+     if(new Date(p.date).getMonth() == i)
      {
-       console.log("hello");
-       procurementsInYear.push(p);
+       
+       monthSum += p.value;
+      
      }
    });
-   for( var i = 0 ;i<12;i++){
-     var monthSum = 0;
-    procurementsInYear.forEach( p => {
-    
-    if(new Date(p.date).getMonth() == i)
-    {
-      
-      monthSum += p.value;
-     
-    }
-  });
-  updatedProcurements[i] = monthSum;
-}
-  setMonthlyProcurements(updatedProcurements);
+   updatedProcurements[i] = monthSum;
  }
+   setMonthlyProcurements(updatedProcurements);
+   return updatedProcurements;
+  };
+ 
+ 
 
  const getSalesLog = () => {
    var salesInYear = [];
@@ -179,15 +187,26 @@ const Finance = () => {
   setMonthlySales(updatedSales);
   console.log(monthlySales);
  }
- const getMonthlyCosts = () => {
-   const updatedMonthlyCosts = [];
-   for(var i = 0; i<12 ; i++){
-    var c = operationalMinutes[i] * operationCostPerMinute + monthlyProcurements[i];
-    updatedMonthlyCosts.push(c);
-   }
-   setMonthlyCosts(updatedMonthlyCosts);
-   console.log(monthlyCosts);
- }
+ useEffect(()=>{
+  const getMonthlyCosts = () => {
+
+     getOperationLog();
+    
+     getProcurementLog();
+
+
+     console.log("monthly costs");
+    
+     var updatedMonthlyCosts = [];
+     for(var i = 0; i<12 ; i++){
+      var c = (operationalMinutes[i] * operationCostPerMinute) + monthlyProcurements[i];
+      updatedMonthlyCosts.push(c);
+     }
+     setMonthlyCosts(updatedMonthlyCosts);
+   };
+   getMonthlyCosts();
+ },[procurement,prodActual]);
+ 
 useEffect(() => {
   const lookup = async() => {
     await axios
@@ -251,10 +270,11 @@ useEffect(() => {
         console.error(error);
       });
       
-     
       
   };
   lookup(); 
+  
+  
 
   
   },[]);
@@ -283,7 +303,7 @@ useEffect(() => {
             }
         )
         .catch((err) => console.error('Error', err))
-    console.log(reply.data)
+
     return reply.data
   };
 
@@ -358,13 +378,13 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {getMonthlyCosts}></Button>
+          
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-2">Welcome to Finance!</h3>
+                  <h3 className="text-white mb-2">{monthlyCosts}</h3>
                 </CardHeader>
                 <Row className="mb-2 ml-2 mr-2 mt-2">
                   <Col className="">
