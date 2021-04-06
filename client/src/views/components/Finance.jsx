@@ -45,6 +45,9 @@ const Finance = () => {
   const [monthlySales, setMonthlySales] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ]);
+  const [monthlySalesPlans, setMonthlySalesPlans] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
   const [monthlyCosts, setMonthlyCosts] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
@@ -122,6 +125,31 @@ const Finance = () => {
    
    setOperationalMinutes(updatedOperationalMinutes);
    return updatedOperationalMinutes;
+ 
+  };
+
+  const getMonthlySalesPlan = () => {
+    
+    var i;
+   var displayYear1 = 2021;
+    const updatedSalesPlan = monthlySalesPlans;
+    if(prodActual[displayYear1]==undefined){
+    
+    return;
+    }
+   
+   for(i = 0;i<12;i++){
+     var monthSum = 0;
+     if(salesPlans[displayYear1][monthNames[i]] == undefined)
+     continue;
+    
+       updatedSalesPlan[i] = salesPlans[displayYear1][monthNames[i]];
+     
+    
+   }
+   
+   setMonthlySalesPlans(updatedSalesPlan);
+   return updatedSalesPlan;
  
   };
 
