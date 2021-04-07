@@ -55,7 +55,15 @@ const Finance = () => {
   ]);
   const [monthlyCostsPlan, setMonthlyCostsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyProfits, setMonthlyProfits] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
   ])
+
+  
 
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
@@ -133,6 +141,30 @@ const Finance = () => {
    return updatedOperationalMinutes;
  
   };
+  useEffect(() => {
+    var updatedMonthlyProfitsPlan = [];
+    const getMonthlyProfitsPlan = () =>{
+      for ( var i = 0; i < 12 ; i++){
+        var p = monthlySalesPlans[i] - monthlyCostsPlan[i];
+        updatedMonthlyProfitsPlan.push(p);
+      }
+      setMonthlyProfitsPlan(updatedMonthlyProfitsPlan);
+    }
+    getMonthlyProfitsPlan();
+  },[monthlyCostsPlan,monthlySalesPlans]);
+
+  useEffect(() => {
+    var updatedMonthlyProfits = [];
+    const getMonthlyProfits = () =>{
+      for ( var i = 0; i < 12 ; i++){
+        var p = monthlySales[i] - monthlyCosts[i];
+        updatedMonthlyProfits.push(p);
+      }
+      setMonthlyProfits(updatedMonthlyProfits);
+    }
+    getMonthlyProfits();
+  },[monthlyCosts,monthlySales]);
+
 useEffect(()=>{
   
   const getMonthlySalesPlan = () => {
