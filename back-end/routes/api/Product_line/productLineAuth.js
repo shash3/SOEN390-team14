@@ -15,6 +15,7 @@ router.get('/', auth, async (req, res) => {
   }
 })
 
+
 // Retrieve specific product lines by name
 router.post('/', auth, async (req, res) => {
   const { name } = req.body
@@ -50,6 +51,18 @@ router.post('/add', async (req, res) => {
   })
   await product.save()
   res.json('added')
+})
+
+// Get the products type from its name
+router.post('/itemType', auth, async (req, res) => {
+  const { name } = req.body
+  try {
+    const product = await ProductLine.findOne({ name })
+    res.json(product.type)
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).send('Server Error')
+  }
 })
 
 module.exports = router
