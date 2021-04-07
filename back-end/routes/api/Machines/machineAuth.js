@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
   const { _id } = req.body
   try {
-    const product = await Machine.find({ _id })
+    const product = await Machine.findOne({ _id })
     res.json(product)
   } catch (err) {
     console.error(err.message)
