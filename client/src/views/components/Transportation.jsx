@@ -32,6 +32,7 @@ import {
 } from 'reactstrap';
 // core components
 import Header from '../../components/Headers/CardlessHeader.jsx';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -297,33 +298,46 @@ const Transportation = () => {
                           <i className="fas fa-search" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input
-                        placeholder="Search"
-                        type="text"
-                        onChange={(e) => { onChange(e); setTranPage(0); }}
-                      />
+                      <Tooltip
+                          title="Search item name in Transportation table"
+                          arrow
+                          placement="top-start"
+                          enterDelay={750}
+                      >
+                        <Input
+                            placeholder="Search"
+                            type="text"
+                            onChange={(e) => { onChange(e); setTranPage(0); }}
+                        />
+                      </Tooltip>
                     </InputGroup>
                   </FormGroup>
                 </Form>
-
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  onClick={() => {
-                    closeModal1();
-                    setTransportationData({
-                      _id: '',
-                      name: '',
-                      quantity: 0,
-                      type: '',
-                      location: '',
-                      destination: '',
-                      status: '',
-                    });
-                  }}
+                <Tooltip
+                    title="Click here to add a new shipment"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                 >
-                  Add Shipment
-                </Button>
+                  <Button
+                      className="mt-4"
+                      color="primary"
+                      onClick={() => {
+                        closeModal1();
+                        setTransportationData({
+                          _id: '',
+                          name: '',
+                          quantity: 0,
+                          type: '',
+                          location: '',
+                          destination: '',
+                          status: '',
+                        });
+                      }}
+                  >
+                    Add Shipment
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal1}
                   changeStatus={closeModal1}
@@ -335,65 +349,114 @@ const Transportation = () => {
                     <Form className="form" onSubmit={(e) => onAdd(e)}>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="NAME"
-                            name="name"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
+                          <Tooltip
+                              title="Enter the name of the material being shipped ex: Leather"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="NAME"
+                              name="name"
+                              onChange={(e) => onChangeAdd(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="number"
-                            placeholder="QUANTITY  (please use scroller on right)"
-                            name="quantity"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
+                          <Tooltip
+                              title="Enter the quantity of the material being shipped ex: 1"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                                type="number"
+                                placeholder="QUANTITY  (please use scroller on right)"
+                                name="quantity"
+                                onChange={(e) => onChangeAdd(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="TYPE"
-                            name="type"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
+                          <Tooltip
+                              title="Enter the type of the material being shipped ex: raw"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                                type="text"
+                                placeholder="TYPE"
+                                name="type"
+                                onChange={(e) => onChangeAdd(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="LOCATION"
-                            name="location"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
+                          <Tooltip
+                              title="Enter the location where the material being shipped from ex: Plant 1"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                                type="text"
+                                placeholder="LOCATION"
+                                name="location"
+                                onChange={(e) => onChangeAdd(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="DESTINATION"
-                            name="destination"
-                            onChange={(e) => onChangeAdd(e)}
-                          />
+                          <Tooltip
+                              title="Enter the destination where the material being shipped to ex: Plant 1"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                                type="text"
+                                placeholder="DESTINATION"
+                                name="destination"
+                                onChange={(e) => onChangeAdd(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary" onClick={(e) => onAdd(e)}>
-                          Add Shipment
-                        </Button>
+                        <Tooltip
+                            title="Submit the Shipment"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
+                        >
+                          <Button color="primary" onClick={(e) => onAdd(e)}>
+                            Add Shipment
+                          </Button>
+                        </Tooltip>
                       </div>
                     </Form>
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="secondary" onClick={closeModal1}>
-                      Cancel
-                    </Button>
+                    <Tooltip
+                        title="Cancel the Shipment"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                    >
+                      <Button color="secondary" onClick={closeModal1}>
+                        Cancel
+                      </Button>
+                    </Tooltip>
                   </ModalFooter>
                 </Modal>
               </CardHeader>
@@ -428,16 +491,23 @@ const Transportation = () => {
                       <td>{t.status}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="Change Shipment Status"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
@@ -564,16 +634,23 @@ const Transportation = () => {
                       <td>{t.destination}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="Change Packaging Status"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem href="#pablo" onClick={() => onSetReady(t._id)}>
                               Ready
@@ -673,16 +750,23 @@ const Transportation = () => {
                       <td>{t.destination}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="Delete Completed Shipment"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                                className="btn-icon-only text-light"
+                                href="#pablo"
+                                role="button"
+                                size="sm"
+                                color=""
+                                onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
