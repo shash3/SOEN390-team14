@@ -574,7 +574,7 @@ const Finance = () => {
             <div className="col">
               <Card className="bg-default shadow">
                 <CardHeader className="bg-transparent border-0">
-                  <h3 className="text-white mb-2">{monthlyCostsPlan}</h3>
+                  <h3 className="text-white mb-2">Welcome to Finance!</h3>
                 </CardHeader>
                 <Row className="mb-2 ml-2 mr-2 mt-2">
                   <Col className="">
