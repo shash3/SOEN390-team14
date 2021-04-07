@@ -14,11 +14,14 @@ matrix:
       node_js:
         - "stable"
       addons:
-         apt:
-          sources:
-            - google-chrome
-          packages:
-            - google-chrome-stable
+        chrome: stable
+      install:
+        - wget -N https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip -P ~/
+        - unzip ~/chromedriver_linux64.zip -d ~/
+        - rm ~/chromedriver_linux64.zip
+        - sudo mv -f ~/chromedriver /usr/local/share/
+        - sudo chmod +x /usr/local/share/chromedriver
+        - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
       services:
         - mongodb
       before_script:
