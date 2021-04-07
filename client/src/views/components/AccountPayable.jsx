@@ -26,6 +26,7 @@ import {
 } from 'reactstrap';
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const AccountPayable = () => {
   const [payables, setPayables] = useState([]);
@@ -123,21 +124,35 @@ const AccountPayable = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Accounts Payable</h2>
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  onClick={() => {
-                    closeModal();
-                  }}
+                <Tooltip
+                    title="Click to create a new AR receipt"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                 >
-                  Add AR Receipt
-                </Button>
-                <Button
-                  className="mt-4 float-right"
-                  color="danger"
+                  <Button
+                    className="mt-4"
+                    color="primary"
+                    onClick={() => {
+                      closeModal();
+                    }}
+                  >
+                    Add AR Receipt
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                 >
-                  Export to PDF
-                </Button>
+                  <Button
+                    className="mt-4 float-right"
+                    color="danger"
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal}
                   changeStatus={closeModal}
@@ -149,33 +164,61 @@ const AccountPayable = () => {
                     <Form className="form">
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="date"
-                            placeholder="Date"
-                            name="date"
-                          />
+                          <Tooltip
+                              title="Enter a date for when the receipt was created"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="date"
+                              placeholder="Date"
+                              name="date"
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="Status"
-                            name="status"
-                          />
+                          <Tooltip
+                              title="Enter the status of the receipt"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="Status"
+                              name="status"
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary">
-                          Add AR Receipt
-                        </Button>
+                        <Tooltip
+                            title="Click here to create the AR receipt"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
+                        >
+                          <Button color="primary">
+                            Add AR Receipt
+                          </Button>
+                        </Tooltip>
                       </div>
                     </Form>
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="secondary" onClick={closeModal}>
-                      Cancel
-                    </Button>
+                    <Tooltip
+                        title="Cancel the creation of the receipt"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                    >
+                      <Button color="secondary" onClick={closeModal}>
+                        Cancel
+                      </Button>
+                    </Tooltip>
                   </ModalFooter>
                 </Modal>
               </CardHeader>
@@ -210,16 +253,23 @@ const AccountPayable = () => {
 
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="More Options"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
@@ -282,19 +332,25 @@ const AccountPayable = () => {
                         {t.paid ? 'Paid' : 'Not Paid'}
                         {' '}
                       </td>
-
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="More Options"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"
