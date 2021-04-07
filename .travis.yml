@@ -1,29 +1,31 @@
-matrix:
-  include:
-    - language: node_js
-      node_js:
-        - "stable"
-      addons:
-        chrome: stable
-      before_script:
-        - cd back-end
-        - npm install
-      script:
-        - npm test
-    - language: node_js
-      node_js:
-        - "stable"
-      addons:
-        chrome: stable
-      dist: xenial
-      services:
-        - xvfb
-        - mongodb
-      before_script:
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3 
-        - cd client
-        - npm install
-      script:
-        - npm run test
+language: node_js
+  node_js:
+    - "stable"
+  addons:
+    chrome: stable
+  before_script:
+    - cd back-end
+    - npm install
+  script:
+    - npm test
+language: node_js
+  node_js:
+    - "stable"
+  addons:
+    chrome: stable
+  install:
+    - wget -N http://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip -P ~/
+    - unzip ~/chromedriver_linux64.zip -d ~/
+    - rm ~/chromedriver_linux64.zip
+    - sudo mv -f ~/chromedriver /usr/local/share/
+    - sudo chmod +x /usr/local/share/chromedriver
+    - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+  services:
+    - mongodb
+  before_script:
+    - whereis google-chrome-stable
+    - whereis chromedriver
+    - cd client
+    - npm install
+  script:
+    - npm test
