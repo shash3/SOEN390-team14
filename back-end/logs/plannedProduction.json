@@ -11,11 +11,19 @@
       }
     }
   },
+  "54": {
+    "March": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 77
+      }
+    }
+  },
   "2021": {
     "August": {
       "Plant 2": {
         "Large Aluminium Bike": 66,
-        "Small Aluminium Bike": 54
+        "Small Aluminium Bike": 54,
+        "test": 33
       }
     },
     "October": {
@@ -33,6 +41,51 @@
       "Plant 2": {
         "Small Carbon Bike": 26,
         "Large Aluminium Bike": 7
+      },
+      "Plant 1": {
+        "Small Steel Bike": 50
+      }
+    },
+    "June": {
+      "Plant 2": {
+        "test": 77
+      }
+    },
+    "July": {
+      "Plant 1": {
+        "Medium Aluminium Bike": 65,
+        "Large Steel Bike": 98
+      }
+    },
+    "April": {
+      "Plant 2": {
+        "Small Aluminium Bike": 56
+      }
+    },
+    "September": {
+      "Plant 2": {
+        "Small Aluminium Bike": 64
+      }
+    },
+    "March": {
+      "Plant 2": {
+        "Medium Carbon Bike": 73,
+        "Small Carbon Bike": 63
+      }
+    },
+    "December": {
+      "Plant 2": {
+        "Small Aluminium Bike": 62
+      }
+    },
+    "November": {
+      "Plant 2": {
+        "Medium Steel Bike": 48
+      }
+    },
+    "January": {
+      "Plant 2": {
+        "Medium Carbon Bike": 46
       }
     }
   }

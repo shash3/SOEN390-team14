@@ -26,13 +26,39 @@ import {Link} from "react-router-dom";
 
 
 const Finance = () => {
+  const colors = {
+    gray: {
+      100: '#f6f9fc',
+      200: '#e9ecef',
+      300: '#dee2e6',
+      400: '#ced4da',
+      500: '#adb5bd',
+      600: '#8898aa',
+      700: '#525f7f',
+      800: '#32325d',
+      900: '#212529',
+    },
+    theme: {
+      default: '#172b4d',
+      primary: '#5e72e4',
+      secondary: '#f4f5f7',
+      info: '#11cdef',
+      success: '#2dce89',
+      danger: '#f5365c',
+      warning: '#fb6340',
+    },
+    black: '#12263F',
+    white: '#FFFFFF',
+    transparent: 'transparent',
+  };
   const [update,setUpdate] = useState(false);
+  const [updateData,setUpdateData] = useState(false);
   const [finished, setFinished] = useState(false);
   const userToken = JSON.parse(localStorage.getItem('user'));
   const operationCostPerMinute = 0.05;
   const priceOfBicycle = 500;
   const [displayYear,setDisplayYear] = useState(2021);
-  const [displayMonth,setDisplayMonth] = useState('January');
+  const [displayMonth,setDisplayMonth] = useState(3);
   const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
@@ -41,6 +67,10 @@ const Finance = () => {
     quantity: 0,
     salesGoal: 0
   });
+  const [display,setDisplay] = useState({
+    year: 2021,
+    month: 3
+  })
   const [operationalMinutes,setOperationalMinutes] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ]);
@@ -65,7 +95,7 @@ const Finance = () => {
   const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
-
+  
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -85,7 +115,97 @@ const Finance = () => {
     'November',
     'December',
   ];
+  const onChangeDisplay = (e) => {
+    setDisplay({
+      ...display,
+      [e.target.name]:e.target.value,
+    })
+  }
   useEffect(() => {
+    var proc;
+    var saleA;
+    var prodP;
+    var prodA;
+    var salesP;
+
+    const lookup1 = async() => {
+      await axios
+      .get('/api/procurement', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+           proc = response.data;
+          setProcurement(response.data);
+        }
+      })
+      .catch((error) => {
+       
+        console.error(error);
+      });
+      await axios
+      .get('/api/sales', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+           saleA = response.data;
+          setSalesActual(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      await axios
+      .get('/api/planning/prod', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+         prodP = response.data;
+        setProdPlans(response.data)}).catch((error)=>{
+          console.error(error);
+        });
+        
+        await axios
+      .get('/api/planning/sales', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+         salesP = response.data;
+        setSalesPlans(response.data)}).catch((error)=>{
+          console.error(error);
+        }); 
+        
+        await axios
+      .get('/api/planning/prodActual', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+         prodA= response.data;
+        setProdActual(response.data)}).catch((error)=>{
+          console.error(error);
+        });
+       
+        var operMin = getOperationLog(prodA);
+   
+        var procLog = getProcurementLog(proc);
+        var monthC = getMonthlyCosts(operMin,procLog);
+        var monthCP = getMonthlyCostsPlan(prodP);
+        var monthSP = getMonthlySalesPlan(salesP)
+        var salesLog = getSalesLog(saleA);
+         getMonthlyProfitsPlan(monthSP,monthCP);
+         getMonthlyProfits(salesLog,monthC);
+
+        
+        
+    };
     
     const lookup = async() => {
       await axios
@@ -149,30 +269,33 @@ const Finance = () => {
           console.error(error);
         });
         
-        
     };
     
-    lookup(); 
+    lookup1(); 
     
-    },[update]);
+    
 
-    const getOperationLog = () => {
-   
+    },[updateData,displayYear]);
+
+    const getOperationLog = (prodActual) => {
+    
       var i;
      var displayYear1 = 2021;
-      const updatedOperationalMinutes = operationalMinutes;
-      if(prodActual[displayYear1]==undefined){
+    
+     
+      const updatedOperationalMinutes = [0,0,0,0,0,0,0,0,0,0,0,0];
+      if(prodActual[displayYear]==undefined){
       
-      return;
+      return updatedOperationalMinutes;
       }
      
      for(i = 0;i<12;i++){
        var monthSum = 0;
-       if(prodActual[displayYear1][monthNames[i]] == undefined)
+       if(prodActual[displayYear][monthNames[i]] == undefined)
        continue;
-       for(let plantName in prodActual[displayYear1][monthNames[i]]){
+       for(let plantName in prodActual[displayYear][monthNames[i]]){
          var plantSum = 0;
-         var plant = prodActual[displayYear1][monthNames[i]][plantName];
+         var plant = prodActual[displayYear][monthNames[i]][plantName];
          for(let machineName in plant ){
            var machine = plant[machineName];
            plantSum += machine['minutesLogged'];
@@ -189,13 +312,13 @@ const Finance = () => {
    
     };
 
-    const getProcurementLog = () => {
+    const getProcurementLog = (procurement) => {
       var updatedProcurements = [];
       var procurementsInYear = [];
       procurement.forEach( p => {
         
         
-        if(new Date(p.date).getFullYear() == 2021)
+        if(new Date(p.date).getFullYear() == displayYear)
         {
        
           procurementsInYear.push(p);
@@ -217,13 +340,10 @@ const Finance = () => {
      setMonthlyProcurements(updatedProcurements);
      return updatedProcurements;
     };
-    useEffect(()=>{
-      const getMonthlyCosts = () => {
+ 
+      const getMonthlyCosts = (operationalMinutes,monthlyProcurements) => {
     
-         getOperationLog();
-        
-         getProcurementLog();
-    
+  
     
          
         
@@ -233,32 +353,29 @@ const Finance = () => {
           updatedMonthlyCosts.push(c);
          }
          setMonthlyCosts(updatedMonthlyCosts);
+         return updatedMonthlyCosts;
        };
       
-       getMonthlyCosts();
-    
-     },[procurement,prodActual]);
-
-    useEffect(()=>{
+  
       
       
     
-      const getMonthlyCostsPlan = () => {
+      const getMonthlyCostsPlan = (prodPlans) => {
         var i;
        var displayYear1 = 2021;
-        const updatedMonthlyCostsPlan = monthlyCostsPlan;
-        if(prodPlans[displayYear1]==undefined){
+        const updatedMonthlyCostsPlan = [0,0,0,0,0,0,0,0,0,0,0,0];
+        if(prodPlans[displayYear]==undefined){
         
-        return;
+        return updatedMonthlyCostsPlan;
         }
        
        for(i = 0;i<12;i++){
          var monthSum = 0;
-         if(prodPlans[displayYear1][monthNames[i]] == undefined)
+         if(prodPlans[displayYear][monthNames[i]] == undefined)
          continue;
-         for(let plantName in prodPlans[displayYear1][monthNames[i]]){
+         for(let plantName in prodPlans[displayYear][monthNames[i]]){
            var plantSum = 0;
-           var plant = prodPlans[displayYear1][monthNames[i]][plantName];
+           var plant = prodPlans[displayYear][monthNames[i]][plantName];
            for(let itemName in plant ){
              plantSum += plant[itemName];
              
@@ -276,28 +393,24 @@ const Finance = () => {
       };
     
     
-      getMonthlyCostsPlan();
-      
-    },[prodPlans]);
 
-    useEffect(() => {
 
-      const getMonthlySalesPlan = () => {
+      const getMonthlySalesPlan = (salesPlans) => {
         
         var i;
        var displayYear1 = 2021;
-        const updatedSalesPlan = monthlySalesPlans;
-        if(salesPlans[displayYear1]==undefined){
+        const updatedSalesPlan =[0,0,0,0,0,0,0,0,0,0,0,0];
+        if(salesPlans[displayYear]==undefined){
         
-        return;
+        return updatedSalesPlan;
         }
        
        for(i = 0;i<12;i++){
          
-         if(salesPlans[displayYear1][monthNames[i]] == undefined)
+         if(salesPlans[displayYear][monthNames[i]] == undefined)
          continue;
         
-           updatedSalesPlan[i] = salesPlans[displayYear1][monthNames[i]];
+           updatedSalesPlan[i] = salesPlans[displayYear][monthNames[i]];
          
         
        }
@@ -306,19 +419,15 @@ const Finance = () => {
        return updatedSalesPlan;
      
       };
-      getMonthlySalesPlan();
-
-    },[salesPlans]);
-
-    useEffect(() => {
+ 
      
-      const getSalesLog = () => {
+      const getSalesLog = (salesActual) => {
         var salesInYear = [];
         var updatedSales = [];
         salesActual.forEach( p => {
           
           
-          if(new Date(p.date).getFullYear() == 2021)
+          if(new Date(p.date).getFullYear() == displayYear)
           {
             
             salesInYear.push(p);
@@ -338,16 +447,13 @@ const Finance = () => {
        updatedSales[i] = monthSum;
      }
        setMonthlySales(updatedSales);
+       return updatedSales;
        
       };
-      getSalesLog();
-   
-    },[salesActual])
-
-    useEffect(() => {
+     
 
     
-      const getMonthlyProfitsPlan = () =>{
+      const getMonthlyProfitsPlan = (monthlySalesPlans,monthlyCostsPlan) =>{
        
         var updatedMonthlyProfitsPlan = [];
         for ( var i = 0; i < 12 ; i++){
@@ -356,14 +462,9 @@ const Finance = () => {
         }
         setMonthlyProfitsPlan(updatedMonthlyProfitsPlan);
       }
-      getMonthlyProfitsPlan();
-   
- 
-    },[finished]);
-  
-    useEffect(() => {
     
-      const getMonthlyProfits = () =>{
+    
+      const getMonthlyProfits = (monthlySales,monthlyCosts) =>{
         var updatedMonthlyProfits = [];
         for ( var i = 0; i < 12 ; i++){
           var p = monthlySales[i] - monthlyCosts[i];
@@ -371,10 +472,7 @@ const Finance = () => {
         }
         setMonthlyProfits(updatedMonthlyProfits);
       }
-      getMonthlyProfits();
-      setFinished(!finished);
-
-    },[monthlyCosts,monthlySales]);
+    
 
    
 
@@ -404,19 +502,6 @@ const Finance = () => {
 
   
   
-
-
- 
-  
- 
-
- 
-  
- 
- 
-
- 
-
  
   // use effect to get all bike types
   useEffect(async () =>
@@ -491,7 +576,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
-    setUpdate(!update);
+    setUpdateData(!updateData);
     setPlanFormData({
       year:0,
       month:'',
@@ -560,7 +645,7 @@ const Finance = () => {
       setGraphTitle("Annual Profits");
     }
   },
-  [viewSales]
+  [viewSales,monthlySalesPlans,monthlyProfitsPlan,monthlySales,monthlyProfits,displayYear]
   );
 
   return (
@@ -583,7 +668,7 @@ const Finance = () => {
                         <h1 className=" mb-0">{graphTitle}</h1>
                       </CardHeader>
                       <CardBody>
-                        <Form className="form">
+                        <Form className="form" >
                           <FormGroup>
                             <InputGroup>
                               <div>
@@ -592,14 +677,15 @@ const Finance = () => {
                                     type='number'
                                     min={1000}
                                     max={9999}
-                                    defaultValue={2021}
+                                    name = {'year'}
+                                    defaultValue={displayYear}
+                                    onChange = {(e) => onChangeDisplay(e)}
+                                    
+                                    
                                 />
                               </div>
                             </InputGroup>
                           </FormGroup>
-                          <Button color="default">
-                            Update Year
-                          </Button>
                         </Form>
                         <Button
                             className="mt-2 mb-3"
@@ -609,6 +695,15 @@ const Finance = () => {
                             }}
                         >
                           Toggle Graph
+                        </Button>
+                        <Button
+                            className="mt-2 mb-3"
+                            color="default"
+                            onClick={() => {
+                             setDisplayYear(display.year);
+                            }}
+                        >
+                          Update Year
                         </Button>
                         <div className="chart mb-3">
                           <Bar data={graphData}
@@ -725,7 +820,7 @@ const Finance = () => {
                             </InputGroup>
                           </FormGroup>
                           <div className="text-center">
-                            <Button color="primary" onClick={addNewPlan}>
+                            <Button color="primary" type = "submit" onClick={addNewPlan}>
                               Update Monthly Goals
                             </Button>
                           </div>
@@ -736,12 +831,24 @@ const Finance = () => {
                   <Col className="">
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
-                        <h1 className=" mb-0">Monthly Breakdown</h1>
+                        <h1 className=" mb-0">Monthly Breakdown for {monthNames[displayMonth]}</h1>
                       </CardHeader>
                       <CardBody className="text-center">
                         <h2 className="mb-4">Total Profits</h2>
                         <div className="chart mb-3">
-                          <Bar data={chartTotalProfits.data}
+                          <Bar data={{
+                                      labels: ['Sales', 'Costs', 'Profits'],
+                                      datasets: [
+                                       {
+                                        data: [monthlySales[displayMonth], monthlyCosts[displayMonth], monthlyProfits[displayMonth]],
+                                        backgroundColor: [
+                                        colors.theme.success,
+                                        colors.theme.danger,
+                                        colors.theme.info,
+                                         ],
+                                       },
+                                               ],
+                                     }}
                                options={chartTotalProfits.options}
                           />
                         </div>
@@ -796,7 +903,17 @@ const Finance = () => {
                         </Row>
                         <h2 className="mb-4">Costs</h2>
                         <div className="chart mb-3">
-                          <Doughnut data={chartTotalCosts.data}
+                          <Doughnut data={{
+    labels: ['Operational Costs', 'Procurement Costs'],
+    datasets: [{
+      data: [operationalMinutes[displayMonth]*0.05,monthlyProcurements[displayMonth]],
+      backgroundColor: [
+        colors.theme.info,
+        colors.theme.primary,
+      ],
+      hoverOffset: 4
+    },],
+  }}
                                     options={chartTotalCosts.options}
                           />
                         </div>
