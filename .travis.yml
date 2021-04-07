@@ -24,8 +24,9 @@ matrix:
         - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
       services:
         - mongodb
+        - xvfb
       before_script:
         - cd client
         - npm install
       script:
-        - npm test
+        - xvfb-run make test
