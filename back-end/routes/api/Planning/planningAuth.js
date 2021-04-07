@@ -83,6 +83,7 @@ router.post('/addPlanSales', auth, async (req, res) => {
   const dataStr = JSON.stringify(data, null, 2)
   try {
     fs.writeFile(salesPlanFile, dataStr, 'utf8', () => {})
+    res.send(true);
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server Error')
