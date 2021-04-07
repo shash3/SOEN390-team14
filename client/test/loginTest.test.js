@@ -5,17 +5,15 @@ var By = require('selenium-webdriver').By,
   until = require('selenium-webdriver').until,
   chrome = require('selenium-webdriver/chrome'),
   chromedriver = require('chromedriver');
-var opts = webdriver.ChromeOptions();
 const assert = require('assert');
 
 chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build());
-opts.add_argument('--no-sandbox');
 
 describe('LoginTest', () => {
     let driver
     let vars
   beforeEach(async () => {
-    driver = await new webdriver.Builder().forBrowser('chrome').build()
+    driver = await new webdriver.Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().addArguments(['--no-sandbox'])).build()
     vars = {}
   })
   afterEach(async () => {
