@@ -28,6 +28,9 @@ import { Bar } from 'react-chartjs-2'
 import { FormGroup } from '@material-ui/core'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
 
+const FileSaver = require('file-saver')
+const xml2js = require('xml2js')
+
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'))
 
@@ -94,7 +97,7 @@ const ProductionScheduling = () => {
             headers: {
               'x-auth-token': userToken,
             },
-          }
+          },
         )
         .then((response) => response.data)
         .catch((err) => console.error('Error', err))
@@ -123,7 +126,7 @@ const ProductionScheduling = () => {
             headers: {
               'x-auth-token': userToken,
             },
-          }
+          },
         )
         .catch((error) => {
           console.error(error)
@@ -196,7 +199,7 @@ const ProductionScheduling = () => {
             headers: {
               'x-auth-token': userToken,
             },
-          }
+          },
         )
         .catch((error) => {
           console.error(error)
@@ -214,7 +217,7 @@ const ProductionScheduling = () => {
             headers: {
               'x-auth-token': userToken,
             },
-          }
+          },
         )
         .catch((err) => console.error('Error', err))
     }
@@ -232,7 +235,7 @@ const ProductionScheduling = () => {
             machine._id,
             machine.item,
             new Date(),
-            userLocation
+            userLocation,
           )
           await addToQuality(machine.item, machine.type, userLocation)
           await removeItemFromMachine(machine._id)
@@ -266,13 +269,33 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .catch((err) => console.error('Error', err))
     if (response && response.data) {
       const newMachines = response.data
       setMachines(newMachines)
     }
+  }
+
+  /**
+   * Get the machine by its id.
+   */
+  const getMachineById = async (_id) => {
+    const response = await axios
+      .post(
+        '/api/machine/',
+        {
+          _id,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        },
+      )
+      .catch((err) => console.error('Error', err))
+    return response.data
   }
 
   /**
@@ -289,7 +312,7 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .catch((err) => console.error('Error', err))
     updateMachineView(!machineView)
@@ -311,7 +334,7 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .catch((err) => console.error('Error', err))
     updateMachineView(!machineView)
@@ -342,7 +365,7 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .then(() => {
         getMachines()
@@ -366,7 +389,7 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .then(() => {
         getMachines()
@@ -443,7 +466,7 @@ const ProductionScheduling = () => {
           headers: {
             'x-auth-token': userToken,
           },
-        }
+        },
       )
       .catch((err) => console.error('Error', err))
     return reply.data
@@ -473,7 +496,7 @@ const ProductionScheduling = () => {
     location,
     year,
     labels,
-    plannedProduction
+    plannedProduction,
   ) => {
     const yearlyData = [
       rand(),
@@ -581,13 +604,13 @@ const ProductionScheduling = () => {
       location,
       year,
       labels,
-      productionPlanning
+      productionPlanning,
     )
     const createdYearlyData = await getYearlyActualData(
       location,
       year,
       labels,
-      machinesLog
+      machinesLog,
     )
     const plannedColor = `rgb(${rand()}, ${rand()}, ${rand()})`
     const actualColor = `rgb(${rand()}, ${rand()}, ${rand()})`
@@ -654,7 +677,7 @@ const ProductionScheduling = () => {
     year,
     month,
     labels,
-    plannedProduction
+    plannedProduction,
   ) => {
     if (
       plannedProduction[year] === undefined ||
@@ -702,7 +725,7 @@ const ProductionScheduling = () => {
     year,
     month,
     labels,
-    machinesLog
+    machinesLog,
   ) => {
     if (
       machinesLog[year] === undefined ||
@@ -749,14 +772,14 @@ const ProductionScheduling = () => {
       year,
       month,
       monthlyLabel,
-      productionPlanning
+      productionPlanning,
     )
     const monthlyCreatedData = await getMonthlyActual(
       location,
       year,
       month,
       monthlyLabel,
-      machinesLog
+      machinesLog,
     )
     const datasets = [
       {
@@ -827,7 +850,7 @@ const ProductionScheduling = () => {
     month,
     item,
     labels,
-    machinesLog
+    machinesLog,
   ) => {
     if (
       machinesLog[year] === undefined ||
@@ -874,7 +897,7 @@ const ProductionScheduling = () => {
       month,
       item,
       itemLabel,
-      machinesLog
+      machinesLog,
     )
     const datasets = [
       {
@@ -919,7 +942,7 @@ const ProductionScheduling = () => {
     year,
     month,
     labels,
-    machinesLog
+    machinesLog,
   ) => {
     if (
       machinesLog[year] === undefined ||
@@ -958,14 +981,14 @@ const ProductionScheduling = () => {
       location,
       year,
       month,
-      machinesLog
+      machinesLog,
     )
     const allMachineData = await getAllMachineData(
       location,
       year,
       month,
       allMachinesLabel,
-      machinesLog
+      machinesLog,
     )
 
     const datasets = [
@@ -995,7 +1018,7 @@ const ProductionScheduling = () => {
     month,
     machine,
     labels,
-    machinesLog
+    machinesLog,
   ) => {
     if (
       machinesLog[year] === undefined ||
@@ -1024,7 +1047,7 @@ const ProductionScheduling = () => {
       year,
       month,
       machine,
-      machinesLog
+      machinesLog,
     )
     const machineItemsData = await getMachineItemsData(
       location,
@@ -1032,7 +1055,7 @@ const ProductionScheduling = () => {
       month,
       machine,
       machineItemsLabel,
-      machinesLog
+      machinesLog,
     )
 
     const datasets = [
@@ -1057,22 +1080,22 @@ const ProductionScheduling = () => {
     const label = graphData.labels[index]
 
     switch (datasetName) {
-    case 'Items Created Monthly':
-      setGraphMonth(label)
-      setGraphLinks([...graphLinks, 'month'])
-      break
-    case 'Total Items Created':
-    case 'Total Amount Created by Machine':
-      setGraphItem(label)
-      setGraphLinks([...graphLinks, 'item'])
-      break
-    case 'Total Items Created In Machine':
-    case 'Total Items Created Per Machine':
-      setGraphMachineKey(label)
-      setGraphLinks([...graphLinks, 'machineItem'])
-      break
-    default:
-      break
+      case 'Items Created Monthly':
+        setGraphMonth(label)
+        setGraphLinks([...graphLinks, 'month'])
+        break
+      case 'Total Items Created':
+      case 'Total Amount Created by Machine':
+        setGraphItem(label)
+        setGraphLinks([...graphLinks, 'item'])
+        break
+      case 'Total Items Created In Machine':
+      case 'Total Items Created Per Machine':
+        setGraphMachineKey(label)
+        setGraphLinks([...graphLinks, 'machineItem'])
+        break
+      default:
+        break
     }
   }
 
@@ -1135,15 +1158,15 @@ const ProductionScheduling = () => {
       setGraphData(await getYearlyScheduling(userLocation, graphYear))
     } else if (graphDisplay === 'month') {
       setGraphData(
-        await getMonthlyScheduling(userLocation, graphYear, graphMonth)
+        await getMonthlyScheduling(userLocation, graphYear, graphMonth),
       )
     } else if (graphDisplay === 'item') {
       setGraphData(
-        await getItemScheduling(userLocation, graphYear, graphMonth, graphItem)
+        await getItemScheduling(userLocation, graphYear, graphMonth, graphItem),
       )
     } else if (graphDisplay === 'machine') {
       setGraphData(
-        await getAllMachineScheduling(userLocation, graphYear, graphMonth)
+        await getAllMachineScheduling(userLocation, graphYear, graphMonth),
       )
     } else if (graphDisplay === 'machineItem') {
       setGraphData(
@@ -1151,11 +1174,32 @@ const ProductionScheduling = () => {
           userLocation,
           graphYear,
           graphMonth,
-          graphMachineKey
-        )
+          graphMachineKey,
+        ),
       )
     }
   }, [graphYear, graphLinks, machineView, userLocation])
+
+  const exportMachineXML = async (key) => {
+    const machine = await getMachineById(key)
+    const xmlJson = {
+      "machines":
+      [
+        {
+          "machine": {
+            "id":machine._id,
+            "location":machine.location,
+            "product":machine.item,
+            "finishTime":machine.finish_time,
+          }
+        }
+      ]
+    }
+    const builder = new xml2js.Builder({ attrkey: 'ATTR' })
+    const xmlString = builder.buildObject(xmlJson)
+    const blob = new Blob([xmlString], {type: "application/xml"})
+    FileSaver.saveAs(blob, `Export_${machine._id}.xml`)
+  }
 
   /* -------------------------
    * Returns the HTML code for the productino tab.
@@ -1234,7 +1278,8 @@ const ProductionScheduling = () => {
               </Button>
             </CardHeader>
             <CardBody>
-              <Bar className="form-control"
+              <Bar
+                className="form-control"
                 data={graphData}
                 getElementAtEvent={(e) => {
                   selectedElementOnGraph(e)
@@ -1286,6 +1331,20 @@ const ProductionScheduling = () => {
                         Destroy Machine
                       </Button>
                     </Tooltip>
+                    <Tooltip
+                      title="Export the machine information to an XML format for communication"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                    >
+                      <Button
+                        color="info"
+                        onClick={() => exportMachineXML(m._id)}
+                        hidden={m.item === ''}
+                      >
+                        Export Machine
+                      </Button>
+                    </Tooltip>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
@@ -1322,8 +1381,8 @@ const ProductionScheduling = () => {
                                 {m.item === ''
                                   ? ''
                                   : new Date(
-                                    m.finish_time.toString()
-                                  ).toString()}
+                                      m.finish_time.toString(),
+                                    ).toString()}
                               </span>
                             </Media>
                           </Media>
