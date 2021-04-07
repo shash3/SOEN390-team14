@@ -13,7 +13,7 @@ describe('LoginTest', () => {
     let driver
     let vars
   beforeEach(async () => {
-    driver = await new webdriver.Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().addArguments(['--no-sandbox'])).build()
+    driver = await new webdriver.Builder().forBrowser('chrome').setChromeOptions(new chrome.Options().addArguments(['--headless','--no-sandbox', '--disable-dev-shm-usage'])).build()
     vars = {}
   })
   afterEach(async () => {
