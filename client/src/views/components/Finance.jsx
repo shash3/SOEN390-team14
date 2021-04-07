@@ -870,7 +870,7 @@ const Finance = () => {
                                       </span>
                                     </div>
                                     <div className="row">
-                                      <h2 className="text-dark">100</h2>
+                                      <h2 className="text-dark">{monthlySales[displayMonth]}</h2>
                                     </div>
                                   </div>
                                 </Row>
@@ -893,7 +893,7 @@ const Finance = () => {
                                       </span>
                                     </div>
                                     <div className="row">
-                                      <h2 className="text-dark">100</h2>
+                                      <h2 className="text-dark">{Math.round(monthlySales[displayMonth]/500)}</h2>
                                     </div>
                                   </div>
                                 </Row>

@@ -59,7 +59,8 @@
     },
     "April": {
       "Plant 2": {
-        "Small Aluminium Bike": 56
+        "Small Aluminium Bike": 56,
+        "Small Carbon Bike": 43
       }
     },
     "September": {
@@ -71,6 +72,9 @@
       "Plant 2": {
         "Medium Carbon Bike": 73,
         "Small Carbon Bike": 63
+      },
+      "Plant 1": {
+        "Small Steel Bike": 66
       }
     },
     "December": {
