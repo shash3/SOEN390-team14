@@ -26,10 +26,13 @@ import {Link} from "react-router-dom";
 
 
 const Finance = () => {
+  const [update,setUpdate] = useState(false);
+  const [finished, setFinished] = useState(false);
   const userToken = JSON.parse(localStorage.getItem('user'));
-  const operationCostPerMinute = 0.5;
-  const [displayYear,setDisplayYear] = useState('');
-  const [displayMonth,setDisplayMonth] = useState('');
+  const operationCostPerMinute = 0.05;
+  const priceOfBicycle = 500;
+  const [displayYear,setDisplayYear] = useState(2021);
+  const [displayMonth,setDisplayMonth] = useState('January');
   const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
@@ -83,6 +86,7 @@ const Finance = () => {
     'December',
   ];
   useEffect(() => {
+    
     const lookup = async() => {
       await axios
       .get('/api/procurement', {
@@ -147,8 +151,10 @@ const Finance = () => {
         
         
     };
+    
     lookup(); 
-    },[]);
+    
+    },[update]);
 
     const getOperationLog = () => {
    
@@ -228,42 +234,21 @@ const Finance = () => {
          }
          setMonthlyCosts(updatedMonthlyCosts);
        };
+      
        getMonthlyCosts();
+    
      },[procurement,prodActual]);
 
     useEffect(()=>{
-  
-      const getMonthlySalesPlan = () => {
-        console.log("jjjj");
-        var i;
-       var displayYear1 = 2021;
-        const updatedSalesPlan = monthlySalesPlans;
-        if(salesPlans[displayYear1]==undefined){
-        console.log(prodActual);
-        return;
-        }
-       
-       for(i = 0;i<12;i++){
-         
-         if(salesPlans[displayYear1][monthNames[i]] == undefined)
-         continue;
-        
-           updatedSalesPlan[i] = salesPlans[displayYear1][monthNames[i]];
-         
-        
-       }
-       console.log(updatedSalesPlan);
-       setMonthlySalesPlans(updatedSalesPlan);
-       return updatedSalesPlan;
-     
-      };
+      
+      
     
       const getMonthlyCostsPlan = () => {
         var i;
        var displayYear1 = 2021;
         const updatedMonthlyCostsPlan = monthlyCostsPlan;
         if(prodPlans[displayYear1]==undefined){
-        console.log("boom");
+        
         return;
         }
        
@@ -280,7 +265,7 @@ const Finance = () => {
            }
            monthSum += plantSum;
          }
-         updatedMonthlyCostsPlan[i] = monthSum*45*0.5+monthSum*100;
+         updatedMonthlyCostsPlan[i] = monthSum*45*operationCostPerMinute+monthSum*100;
         
        }
        
@@ -289,12 +274,44 @@ const Finance = () => {
      
     
       };
-      getMonthlySalesPlan();
-      console.log("hello");
+    
+    
       getMonthlyCostsPlan();
-    },[prodPlans,salesPlans]);
+      
+    },[prodPlans]);
 
     useEffect(() => {
+
+      const getMonthlySalesPlan = () => {
+        
+        var i;
+       var displayYear1 = 2021;
+        const updatedSalesPlan = monthlySalesPlans;
+        if(salesPlans[displayYear1]==undefined){
+        
+        return;
+        }
+       
+       for(i = 0;i<12;i++){
+         
+         if(salesPlans[displayYear1][monthNames[i]] == undefined)
+         continue;
+        
+           updatedSalesPlan[i] = salesPlans[displayYear1][monthNames[i]];
+         
+        
+       }
+      
+       setMonthlySalesPlans(updatedSalesPlan);
+       return updatedSalesPlan;
+     
+      };
+      getMonthlySalesPlan();
+
+    },[salesPlans]);
+
+    useEffect(() => {
+     
       const getSalesLog = () => {
         var salesInYear = [];
         var updatedSales = [];
@@ -324,11 +341,15 @@ const Finance = () => {
        
       };
       getSalesLog();
+   
     },[salesActual])
 
     useEffect(() => {
-      var updatedMonthlyProfitsPlan = [];
+
+    
       const getMonthlyProfitsPlan = () =>{
+       
+        var updatedMonthlyProfitsPlan = [];
         for ( var i = 0; i < 12 ; i++){
           var p = monthlySalesPlans[i] - monthlyCostsPlan[i];
           updatedMonthlyProfitsPlan.push(p);
@@ -336,11 +357,14 @@ const Finance = () => {
         setMonthlyProfitsPlan(updatedMonthlyProfitsPlan);
       }
       getMonthlyProfitsPlan();
-    },[monthlyCostsPlan,monthlySalesPlans]);
+   
+ 
+    },[finished]);
   
     useEffect(() => {
-      var updatedMonthlyProfits = [];
+    
       const getMonthlyProfits = () =>{
+        var updatedMonthlyProfits = [];
         for ( var i = 0; i < 12 ; i++){
           var p = monthlySales[i] - monthlyCosts[i];
           updatedMonthlyProfits.push(p);
@@ -348,7 +372,11 @@ const Finance = () => {
         setMonthlyProfits(updatedMonthlyProfits);
       }
       getMonthlyProfits();
+      setFinished(!finished);
+
     },[monthlyCosts,monthlySales]);
+
+   
 
   const onChangeForm = (e) => {
     setPlanFormData({
@@ -420,6 +448,17 @@ const Finance = () => {
   const addNewPlan = async () => {
     
     const{year, month, location, item, quantity, salesGoal} = planFormData;
+    if(year==0||
+      month==''||
+      location == ''||
+      item == ''||
+      quantity == 0 ||
+      salesGoal == 0 
+      )
+      {
+        window.alert("invalid input");
+        return;
+      }
     if(prodPlans[year]==undefined){
       prodPlans[year]={};
     }
@@ -434,7 +473,8 @@ const Finance = () => {
     }
     prodPlans[year][month][location][item]= parseInt(quantity);
    
-    salesPlans[year][month] = salesGoal;
+    salesPlans[year][month] = parseInt(salesGoal)*priceOfBicycle;
+    
     await axios
     .post("/api/planning/addPlanProd",{
       data:prodPlans,
@@ -451,6 +491,16 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
+    setUpdate(!update);
+    setPlanFormData({
+      year:0,
+      month:'',
+      location: '',
+      item: '',
+      quantity: 0,
+      salesGoal: 0
+    });
+    
   }
 
  
@@ -588,7 +638,8 @@ const Finance = () => {
                                   required
                                   min={1000}
                                   max={9999}
-                                  defaultValue={2021}
+                                  defaultValue = {0}
+                                  
                                   onChange = {(e) => onChangeForm(e)}
                               >
                               </Input>
@@ -604,7 +655,7 @@ const Finance = () => {
                                   name="month"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Month</option>
                                 {[...monthNames].map((m) => (
                                     <option>{m}</option>
                                 ))}
@@ -621,7 +672,7 @@ const Finance = () => {
                                   name="location"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Location</option>
                                 {[...allLoc].map((m) => (
                                     <option key={m._id}>{m.location}</option>
                                 ))}
@@ -638,7 +689,7 @@ const Finance = () => {
                                   name="item"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Product</option>
                                 {[...allBikes].map((t) => (
                                     <option key={t._id}>{t.name}</option>
                                 ))}

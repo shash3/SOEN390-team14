@@ -4,17 +4,35 @@
       "": {
         "": 0
       }
+    },
+    "August": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 83
+      }
     }
   },
   "2021": {
     "August": {
       "Plant 2": {
-        "Large Aluminium Bike": 66
+        "Large Aluminium Bike": 66,
+        "Small Aluminium Bike": 54
       }
     },
     "October": {
       "Plant 2": {
-        "Large Aluminium Bike": 83
+        "Large Aluminium Bike": 83,
+        "Small Carbon Bike": 66
+      }
+    },
+    "May": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 44
+      }
+    },
+    "February": {
+      "Plant 2": {
+        "Small Carbon Bike": 26,
+        "Large Aluminium Bike": 7
       }
     }
   }
