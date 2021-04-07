@@ -19,6 +19,7 @@ import {
 } from 'reactstrap';
 
 const Login = () => {
+  const [passwordVerification, setPasswordVerification] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,6 +39,7 @@ const Login = () => {
       .post('/api/auth/login', body)
       .then((response) => {
         if (response.data.token) {
+          setPasswordVerification(false);
           localStorage.setItem('user', JSON.stringify(response.data.token));
           localStorage.setItem(
             'permission',
@@ -47,6 +49,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
+        setPasswordVerification(true);
         console.error(error);
       });
   };
@@ -97,6 +100,16 @@ const Login = () => {
                     minLength="8"
                   />
                 </InputGroup>
+               <br/>
+                {passwordVerification && (
+            
+                  <div class="alert alert-danger" role="alert">
+                  Incorrect Password
+                  </div>
+                )}
+
+                
+              
               </FormGroup>
               <div className="custom-control custom-control-alternative custom-checkbox">
                 <input

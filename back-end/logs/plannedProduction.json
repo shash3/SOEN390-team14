@@ -4,30 +4,35 @@
       "": {
         "": 0
       }
+    },
+    "August": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 83
+      }
     }
   },
   "2021": {
-    "April": {
-      "Plant 1": {
-        "Saddle": 2,
-        "Screw": 2,
-        "Hat": 3
-      },
+    "August": {
       "Plant 2": {
-        "handlebar": 4,
-        "Medium Steel Bike": "77"
+        "Large Aluminium Bike": 66,
+        "Small Aluminium Bike": 54
       }
     },
-    "June": {
-      "Plant 1": {
-        "steel bar": 5
+    "October": {
+      "Plant 2": {
+        "Large Aluminium Bike": 83,
+        "Small Carbon Bike": 66
       }
-    }
-  },
-  "2022": {
-    "March": {
-      "Plant 3": {
-        "Large Aluminium Bike": "77"
+    },
+    "May": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 44
+      }
+    },
+    "February": {
+      "Plant 2": {
+        "Small Carbon Bike": 26,
+        "Large Aluminium Bike": 7
       }
     }
   }

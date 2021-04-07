@@ -26,9 +26,13 @@ import {Link} from "react-router-dom";
 
 
 const Finance = () => {
+  const [update,setUpdate] = useState(false);
+  const [finished, setFinished] = useState(false);
   const userToken = JSON.parse(localStorage.getItem('user'));
-  const [displayYear,setDisplayYear] = useState('');
-  const [displayMonth,setDisplayMonth] = useState('');
+  const operationCostPerMinute = 0.05;
+  const priceOfBicycle = 500;
+  const [displayYear,setDisplayYear] = useState(2021);
+  const [displayMonth,setDisplayMonth] = useState('January');
   const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
@@ -46,13 +50,26 @@ const Finance = () => {
   const [monthlySales, setMonthlySales] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ]);
+  const [monthlySalesPlans, setMonthlySalesPlans] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
   const [monthlyCosts, setMonthlyCosts] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyCostsPlan, setMonthlyCostsPlan] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyProfits, setMonthlyProfits] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
+  ]);
+  const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
+    0,0,0,0,0,0,0,0,0,0,0,0
   ])
+
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
-  const [salesActual,setSalesActual] = useState({});
+  const [salesActual,setSalesActual] = useState([]);
   const [procurement,setProcurement] = useState([]);
   const monthNames = [
     'January',
@@ -68,6 +85,298 @@ const Finance = () => {
     'November',
     'December',
   ];
+  useEffect(() => {
+    
+    const lookup = async() => {
+      await axios
+      .get('/api/procurement', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setProcurement(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      await axios
+      .get('/api/sales', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setSalesActual(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      await axios
+      .get('/api/planning/prod', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+        
+        setProdPlans(response.data)}).catch((error)=>{
+          console.error(error);
+        });
+        
+        await axios
+      .get('/api/planning/sales', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+      
+        setSalesPlans(response.data)}).catch((error)=>{
+          console.error(error);
+        }); 
+        
+        await axios
+      .get('/api/planning/prodActual', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      }).then((response) => {
+     
+        setProdActual(response.data)}).catch((error)=>{
+          console.error(error);
+        });
+        
+        
+    };
+    
+    lookup(); 
+    
+    },[update]);
+
+    const getOperationLog = () => {
+   
+      var i;
+     var displayYear1 = 2021;
+      const updatedOperationalMinutes = operationalMinutes;
+      if(prodActual[displayYear1]==undefined){
+      
+      return;
+      }
+     
+     for(i = 0;i<12;i++){
+       var monthSum = 0;
+       if(prodActual[displayYear1][monthNames[i]] == undefined)
+       continue;
+       for(let plantName in prodActual[displayYear1][monthNames[i]]){
+         var plantSum = 0;
+         var plant = prodActual[displayYear1][monthNames[i]][plantName];
+         for(let machineName in plant ){
+           var machine = plant[machineName];
+           plantSum += machine['minutesLogged'];
+           
+         }
+         monthSum += plantSum;
+       }
+       updatedOperationalMinutes[i] = monthSum;
+      
+     }
+     
+     setOperationalMinutes(updatedOperationalMinutes);
+     return updatedOperationalMinutes;
+   
+    };
+
+    const getProcurementLog = () => {
+      var updatedProcurements = [];
+      var procurementsInYear = [];
+      procurement.forEach( p => {
+        
+        
+        if(new Date(p.date).getFullYear() == 2021)
+        {
+       
+          procurementsInYear.push(p);
+        }
+      });
+      for( var i = 0 ;i<12;i++){
+        var monthSum = 0;
+       procurementsInYear.forEach( p => {
+       
+       if(new Date(p.date).getMonth() == i)
+       {
+         
+         monthSum += p.value;
+        
+       }
+     });
+     updatedProcurements[i] = monthSum;
+   }
+     setMonthlyProcurements(updatedProcurements);
+     return updatedProcurements;
+    };
+    useEffect(()=>{
+      const getMonthlyCosts = () => {
+    
+         getOperationLog();
+        
+         getProcurementLog();
+    
+    
+         
+        
+         var updatedMonthlyCosts = [];
+         for(var i = 0; i<12 ; i++){
+          var c = (operationalMinutes[i] * operationCostPerMinute) + monthlyProcurements[i];
+          updatedMonthlyCosts.push(c);
+         }
+         setMonthlyCosts(updatedMonthlyCosts);
+       };
+      
+       getMonthlyCosts();
+    
+     },[procurement,prodActual]);
+
+    useEffect(()=>{
+      
+      
+    
+      const getMonthlyCostsPlan = () => {
+        var i;
+       var displayYear1 = 2021;
+        const updatedMonthlyCostsPlan = monthlyCostsPlan;
+        if(prodPlans[displayYear1]==undefined){
+        
+        return;
+        }
+       
+       for(i = 0;i<12;i++){
+         var monthSum = 0;
+         if(prodPlans[displayYear1][monthNames[i]] == undefined)
+         continue;
+         for(let plantName in prodPlans[displayYear1][monthNames[i]]){
+           var plantSum = 0;
+           var plant = prodPlans[displayYear1][monthNames[i]][plantName];
+           for(let itemName in plant ){
+             plantSum += plant[itemName];
+             
+           }
+           monthSum += plantSum;
+         }
+         updatedMonthlyCostsPlan[i] = monthSum*45*operationCostPerMinute+monthSum*100;
+        
+       }
+       
+       setMonthlyCostsPlan(updatedMonthlyCostsPlan);
+       return updatedMonthlyCostsPlan;
+     
+    
+      };
+    
+    
+      getMonthlyCostsPlan();
+      
+    },[prodPlans]);
+
+    useEffect(() => {
+
+      const getMonthlySalesPlan = () => {
+        
+        var i;
+       var displayYear1 = 2021;
+        const updatedSalesPlan = monthlySalesPlans;
+        if(salesPlans[displayYear1]==undefined){
+        
+        return;
+        }
+       
+       for(i = 0;i<12;i++){
+         
+         if(salesPlans[displayYear1][monthNames[i]] == undefined)
+         continue;
+        
+           updatedSalesPlan[i] = salesPlans[displayYear1][monthNames[i]];
+         
+        
+       }
+      
+       setMonthlySalesPlans(updatedSalesPlan);
+       return updatedSalesPlan;
+     
+      };
+      getMonthlySalesPlan();
+
+    },[salesPlans]);
+
+    useEffect(() => {
+     
+      const getSalesLog = () => {
+        var salesInYear = [];
+        var updatedSales = [];
+        salesActual.forEach( p => {
+          
+          
+          if(new Date(p.date).getFullYear() == 2021)
+          {
+            
+            salesInYear.push(p);
+          }
+        });
+        for( var i = 0 ;i<12;i++){
+          var monthSum = 0;
+         salesInYear.forEach( p => {
+         
+         if(new Date(p.date).getMonth() == i)
+         {
+           
+           monthSum += p.value;
+          
+         }
+       });
+       updatedSales[i] = monthSum;
+     }
+       setMonthlySales(updatedSales);
+       
+      };
+      getSalesLog();
+   
+    },[salesActual])
+
+    useEffect(() => {
+
+    
+      const getMonthlyProfitsPlan = () =>{
+       
+        var updatedMonthlyProfitsPlan = [];
+        for ( var i = 0; i < 12 ; i++){
+          var p = monthlySalesPlans[i] - monthlyCostsPlan[i];
+          updatedMonthlyProfitsPlan.push(p);
+        }
+        setMonthlyProfitsPlan(updatedMonthlyProfitsPlan);
+      }
+      getMonthlyProfitsPlan();
+   
+ 
+    },[finished]);
+  
+    useEffect(() => {
+    
+      const getMonthlyProfits = () =>{
+        var updatedMonthlyProfits = [];
+        for ( var i = 0; i < 12 ; i++){
+          var p = monthlySales[i] - monthlyCosts[i];
+          updatedMonthlyProfits.push(p);
+        }
+        setMonthlyProfits(updatedMonthlyProfits);
+      }
+      getMonthlyProfits();
+      setFinished(!finished);
+
+    },[monthlyCosts,monthlySales]);
+
+   
 
   const onChangeForm = (e) => {
     setPlanFormData({
@@ -93,132 +402,22 @@ const Finance = () => {
     parseOptions(Chart, chartOptions());
   };
 
- const getOperationLog = () => {
-
-   var i;
- 
-   const updatedOperationalMinutes = operationalMinutes;
-   if(prodActual[displayYear]==undefined){
-   
-   return;
-   }
   
-  for(i = 0;i<12;i++){
-    var monthSum = 0;
-    if(prodActual[displayYear][monthNames[i]] == undefined)
-    continue;
-    for(let plantName in prodActual[displayYear][monthNames[i]]){
-      var plantSum = 0;
-      var plant = prodActual[displayYear][monthNames[i]][plantName];
-      for(let machineName in plant ){
-        var machine = plant[machineName];
-        plantSum += machine['minutesLogged'];
-        
-      }
-      monthSum += plantSum;
-    }
-    updatedOperationalMinutes[i] = monthSum;
-   
-  }
-  console.log(updatedOperationalMinutes);
-  setOperationalMinutes(updatedOperationalMinutes);
-
- }
- const getProcurementLog = () => {
-   var procurementsInYear = [];
-   procurement.forEach( p => {
-     
-     
-     if(new Date(p.date).getFullYear() == 2021)
-     {
-       console.log("hello");
-       procurementsInYear.push(p);
-     }
-   });
-   for( var i = 0 ;i<12;i++){
-     var monthSum = 0;
-    procurementsInYear.forEach( p => {
-    
-    if(new Date(p.date).getMonth() == i)
-    {
-      
-      monthSum += p.value;
-     
-    }
-  });
-  monthlyProcurements[i] = monthSum;
-}
-  console.log(monthlyProcurements);
- }
- 
-useEffect(() => {
-  const lookup = async() => {
-    await axios
-    .get('/api/procurement', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    })
-    .then((response) => {
-      if (response.data) {
-        setProcurement(response.data);
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    
-    await axios
-    .get('/api/planning/prod', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).then((response) => {
-      
-      setProdPlans(response.data)}).catch((error)=>{
-        console.error(error);
-      });
-      
-      await axios
-    .get('/api/planning/sales', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).then((response) => {
-    
-      setSalesPlans(response.data)}).catch((error)=>{
-        console.error(error);
-      }); 
-      
-      await axios
-    .get('/api/planning/prodActual', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).then((response) => {
-   
-      setProdActual(response.data)}).catch((error)=>{
-        console.error(error);
-      });
-      
-      await axios
-    .get('/api/planning/salesActual', {
-      headers: {
-        'x-auth-token': userToken,
-      },
-    }).then((response) => {
-     
-      setSalesActual(response.data)}).catch((error)=>{
-        console.error(error);
-      });
-      
-  };
-  lookup(); 
-
   
-  },[]);
 
 
+ 
+  
+ 
+
+ 
+  
+ 
+ 
+
+ 
+
+ 
   // use effect to get all bike types
   useEffect(async () =>
     {setAllBikes(await getAllBikes())} , []
@@ -242,13 +441,24 @@ useEffect(() => {
             }
         )
         .catch((err) => console.error('Error', err))
-    console.log(reply.data)
+
     return reply.data
   };
 
   const addNewPlan = async () => {
-    console.log(planFormData);
+    
     const{year, month, location, item, quantity, salesGoal} = planFormData;
+    if(year==0||
+      month==''||
+      location == ''||
+      item == ''||
+      quantity == 0 ||
+      salesGoal == 0 
+      )
+      {
+        window.alert("invalid input");
+        return;
+      }
     if(prodPlans[year]==undefined){
       prodPlans[year]={};
     }
@@ -263,7 +473,8 @@ useEffect(() => {
     }
     prodPlans[year][month][location][item]= parseInt(quantity);
    
-    salesPlans[year][month] = salesGoal;
+    salesPlans[year][month] = parseInt(salesGoal)*priceOfBicycle;
+    
     await axios
     .post("/api/planning/addPlanProd",{
       data:prodPlans,
@@ -280,6 +491,16 @@ useEffect(() => {
         'x-auth-token': userToken,
       },
     });
+    setUpdate(!update);
+    setPlanFormData({
+      year:0,
+      month:'',
+      location: '',
+      item: '',
+      quantity: 0,
+      salesGoal: 0
+    });
+    
   }
 
  
@@ -298,13 +519,43 @@ useEffect(() => {
   useEffect(()=> {
     getAllLoc();
     if(viewSales){
-      setGraphData(chartAnnualSales.data);
+      setGraphData({
+        labels: monthNames,
+        datasets : [
+          {
+            label:'Expected Sales',
+            data:monthlySalesPlans,
+            backgroundColor:'#11cdef'
+           
+          },
+          {
+            label:'Actual Sales',
+            data:monthlySales,
+          },
+        ],
+    
+      });
       setGraphOptions(chartAnnualSales.options);
       setGraphTitle("Annual Sales");
     }
     else
     {
-      setGraphData(chartAnnualProfits.data);
+      setGraphData({
+        labels: monthNames,
+        datasets : [
+          {
+            label:'Expected Profits',
+            data:monthlyProfitsPlan,
+            backgroundColor:'#11cdef'
+           
+          },
+          {
+            label:'Realized Profits',
+            data:monthlyProfits,
+          },
+        ],
+    
+      });
       setGraphOptions(chartAnnualProfits.options);
       setGraphTitle("Annual Profits");
     }
@@ -317,7 +568,7 @@ useEffect(() => {
         <FinanceHeader/>
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Button onClick = {getProcurementLog}></Button>
+          
           {/* Dark table */}
           <Row className="mt-5">
             <div className="col">
@@ -387,7 +638,8 @@ useEffect(() => {
                                   required
                                   min={1000}
                                   max={9999}
-                                  defaultValue={2021}
+                                  defaultValue = {0}
+                                  
                                   onChange = {(e) => onChangeForm(e)}
                               >
                               </Input>
@@ -403,7 +655,7 @@ useEffect(() => {
                                   name="month"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Month</option>
                                 {[...monthNames].map((m) => (
                                     <option>{m}</option>
                                 ))}
@@ -420,7 +672,7 @@ useEffect(() => {
                                   name="location"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Location</option>
                                 {[...allLoc].map((m) => (
                                     <option key={m._id}>{m.location}</option>
                                 ))}
@@ -437,7 +689,7 @@ useEffect(() => {
                                   name="item"
                                   required
                                   onChange = {(e) => onChangeForm(e)}
-                              >
+                              > <option>Select a Product</option>
                                 {[...allBikes].map((t) => (
                                     <option key={t._id}>{t.name}</option>
                                 ))}

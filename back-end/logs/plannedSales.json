@@ -1,11 +1,20 @@
 {
   "0": {
-    "": 0
+    "": 0,
+    "August": 900
   },
   "2021": {
-    "April": "99"
+    "April": 99,
+    "August": 49500,
+    "October": 49500,
+    "May": 40000,
+    "February": 4500
   },
   "2022": {
-    "March": "99"
+    "March": 99,
+    "July": 47,
+    "June": 88,
+    "August": 99,
+    "October": 31
   }
 }
