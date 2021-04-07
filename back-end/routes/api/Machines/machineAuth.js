@@ -68,7 +68,7 @@ router.post('/available', auth, async (req, res) => {
 })
 
 // Add a new machine
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { location } = req.body
   const machine = new Machine({
     location,
@@ -84,7 +84,7 @@ router.post('/add', async (req, res) => {
 })
 
 // Delete a machine
-router.post('/delete', async (req, res) => {
+router.post('/delete', auth, async (req, res) => {
   const { _id } = req.body
   try {
     await Machine.deleteOne({ _id })
@@ -100,7 +100,7 @@ router.post('/delete', async (req, res) => {
 })
 
 // Add item to machine
-router.put('/add', async (req, res) => {
+router.put('/add', auth, async (req, res) => {
   const { _id, item, type, finishTime } = req.body
   try {
     machine = await Machine.find({ _id }).updateOne({
@@ -120,7 +120,7 @@ router.put('/add', async (req, res) => {
 })
 
 // Remove item from machine
-router.put('/remove', async (req, res) => {
+router.put('/remove', auth, async (req, res) => {
   const { _id } = req.body
   try {
     machine = await Machine.find({ _id }).updateOne({ item: '', type: '' })

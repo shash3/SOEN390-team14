@@ -42,7 +42,7 @@ router.post('/location', auth, async (req, res) => {
 })
 
 // Add new inventory
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { name, quantity, location, type } = req.body
   const inventory = new Inventory({
     name,
@@ -59,7 +59,7 @@ router.post('/add', async (req, res) => {
 })
 
 // Remove a certain quantity from inventory
-router.put('/remove', async (req, res) => {
+router.put('/remove', auth, async (req, res) => {
   const { name, quantity, location } = req.body
   try {
     const date = new Date().toUTCString()
@@ -75,7 +75,7 @@ router.put('/remove', async (req, res) => {
 })
 
 // Decrease a product by a certain quantity from inventory
-router.put('/decrement', async (req, res) => {
+router.put('/decrement', auth, async (req, res) => {
   const { name, quantity, location } = req.body
   try {
     const inventory = await Inventory.find({ name, location })
@@ -94,7 +94,7 @@ router.put('/decrement', async (req, res) => {
   }
 })
 
-router.put('/superUpdate', async (req, res) => {
+router.put('/superUpdate', auth, async (req, res) => {
   const { name, type, quantity, location } = req.body
 
   try {
@@ -122,7 +122,7 @@ router.put('/superUpdate', async (req, res) => {
 })
 
 // Increments the item in inventory by the given quantity. If the item does not exist, then the item is created with the given quantity.
-router.put('/superIncrement', async (req, res) => {
+router.put('/superIncrement', auth, async (req, res) => {
   const { name, type, quantity, location } = req.body
 
   try {

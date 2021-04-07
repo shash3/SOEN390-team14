@@ -2,6 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 const Location = require('../../../models/Location')
+const auth = require('../../../middleware/auth')
 const writeToFile = require('../../../variables/logWriter')
 const User = require('../../../models/User')
 
@@ -17,7 +18,7 @@ router.get('/', async (req, res) => {
 })
 
 // add a new location
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { location } = req.body
   const locations = new Location({
     location,

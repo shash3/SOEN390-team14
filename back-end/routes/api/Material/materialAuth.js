@@ -30,7 +30,7 @@ router.post('/', auth, async (req, res) => {
 })
 
 // add new material
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { name, type } = req.body
   const material = new Material({
     name,
