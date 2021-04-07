@@ -17,7 +17,7 @@ const Login = () => (
               {' '}
               <a
                 className="font-weight-bold ml-1"
-                href="https://www.creative-tim.com?ref=adr-auth-footer"
+                href="https://github.com/shash3/SOEN390-team14/"
                 rel="noreferrer"
                 target="_blank"
               >
