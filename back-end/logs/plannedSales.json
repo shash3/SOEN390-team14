@@ -3,12 +3,22 @@
     "": 0,
     "August": 900
   },
+  "54": {
+    "March": 49500
+  },
   "2021": {
-    "April": 99,
-    "August": 49500,
+    "April": 32500,
+    "August": 46500,
     "October": 49500,
     "May": 40000,
-    "February": 4500
+    "February": 37500,
+    "June": 49500,
+    "July": 37500,
+    "September": 499500,
+    "March": 43500,
+    "December": 31500,
+    "November": 41000,
+    "January": 44000
   },
   "2022": {
     "March": 99,
