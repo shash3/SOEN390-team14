@@ -142,7 +142,7 @@ const Finance = () => {
         }
       })
       .catch((error) => {
-        console.log("hhhhhhhhhhhhhhh");
+       
         console.error(error);
       });
       await axios
@@ -192,9 +192,9 @@ const Finance = () => {
         setProdActual(response.data)}).catch((error)=>{
           console.error(error);
         });
-        console.log(prodA);
+       
         var operMin = getOperationLog(prodA);
-        console.log(operMin);
+   
         var procLog = getProcurementLog(proc);
         var monthC = getMonthlyCosts(operMin,procLog);
         var monthCP = getMonthlyCostsPlan(prodP);
@@ -281,7 +281,7 @@ const Finance = () => {
     
       var i;
      var displayYear1 = 2021;
-     console.log(displayYear);
+    
      
       const updatedOperationalMinutes = [0,0,0,0,0,0,0,0,0,0,0,0];
       if(prodActual[displayYear]==undefined){
@@ -343,9 +343,7 @@ const Finance = () => {
  
       const getMonthlyCosts = (operationalMinutes,monthlyProcurements) => {
     
-      
-        console.log(operationalMinutes);
-        console.log(monthlyProcurements);
+  
     
          
         
@@ -705,7 +703,7 @@ const Finance = () => {
                              setDisplayYear(display.year);
                             }}
                         >
-                          Toggle Graph
+                          Update Year
                         </Button>
                         <div className="chart mb-3">
                           <Bar data={graphData}
