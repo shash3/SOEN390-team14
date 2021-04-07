@@ -50,6 +50,7 @@
     "chart.js": "2.9.4",
     "classnames": "2.2.6",
     "eslint": "^7.22.0",
+    "jest": "^26.6.3",
     "jquery": "3.5.1",
     "jwt-decode": "^3.1.2",
     "moment": "2.29.1",
@@ -64,7 +65,9 @@
     "react-dom": "17.0.1",
     "react-router-dom": "5.2.0",
     "react-scripts": "^4.0.1",
-    "reactstrap": "8.9.0"
+    "reactstrap": "8.9.0",
+    "chromedriver": "^89.0.0",
+    "selenium-webdriver": "^4.0.0-beta.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
