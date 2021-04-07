@@ -26,4 +26,4 @@ matrix:
         - cd client
         - npm install
       script:
-        - xvfb-run make test
+        - npm run test
