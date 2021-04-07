@@ -5,6 +5,8 @@ const router = express.Router()
 const fs = require('fs')
 const Machine = require('../../../models/Machine')
 const auth = require('../../../middleware/auth')
+const writeToFile = require('../../../variables/logWriter')
+const User = require('../../../models/User')
 
 // Retrieve all machines
 router.get('/', auth, async (req, res) => {
@@ -66,31 +68,39 @@ router.post('/available', auth, async (req, res) => {
 })
 
 // Add a new machine
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { location } = req.body
   const machine = new Machine({
     location,
     item: '',
     type: '',
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a new machine ${location}`
+  writeToFile(date, action, user._id)
   await machine.save()
   res.json('saved')
 })
 
 // Delete a machine
-router.post('/delete', async (req, res) => {
+router.post('/delete', auth, async (req, res) => {
   const { _id } = req.body
   try {
     await Machine.deleteOne({ _id })
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `deleted machine ${id}`
+    writeToFile(date, action, user._id)
     res.json('deleted')
   } catch (err) {
-    console.log(err.message)
+    console.error(err.message)
     res.status(500).send('Server Error')
   }
 })
 
 // Add item to machine
-router.put('/add', async (req, res) => {
+router.put('/add', auth, async (req, res) => {
   const { _id, item, type, finishTime } = req.body
   try {
     machine = await Machine.find({ _id }).updateOne({
@@ -98,6 +108,10 @@ router.put('/add', async (req, res) => {
       type,
       finish_time: finishTime,
     })
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `added a item ${item} to machine`
+    writeToFile(date, action, user._id)
     res.json('updated')
   } catch (err) {
     console.error(err.message)
@@ -106,10 +120,14 @@ router.put('/add', async (req, res) => {
 })
 
 // Remove item from machine
-router.put('/remove', async (req, res) => {
+router.put('/remove', auth, async (req, res) => {
   const { _id } = req.body
   try {
     machine = await Machine.find({ _id }).updateOne({ item: '', type: '' })
+    const date = new Date().toUTCString()
+    const user = await User.findById(req.user.id).select('-password')
+    const action = `removed item ${_id} from machine`
+    writeToFile(date, action, user._id)
     res.json('updated')
   } catch (err) {
     console.error(err.message)
