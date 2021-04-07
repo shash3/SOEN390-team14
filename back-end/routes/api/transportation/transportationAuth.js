@@ -2,7 +2,9 @@ const express = require('express')
 
 const router = express.Router()
 const Transportation = require('../../../models/Transportation')
+const User = require('../../../models/User')
 const auth = require('../../../middleware/auth')
+const writeToFile = require('../../../variables/logWriter')
 
 // Retrieve all shipments
 router.get('/', auth, async (req, res) => {
@@ -62,6 +64,10 @@ router.post('/add', auth, async (req, res) => {
     status,
     packagingStatus: false,
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a new shipment of ${name}, amount: ${quantity} from ${location} to ${destination}`
+  writeToFile(date, action, user._id)
   await transportation.save()
   res.send(true)
 })
@@ -85,12 +91,20 @@ router.post('/addP', auth, async (req, res) => {
     status,
     packagingStatus,
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a packaging status: ${packagingStatus}`
+  writeToFile(date, action, user._id)
   await transportation.save()
   res.send(true)
 })
 
 router.post('/delete', auth, async (req, res) => {
   const { _id } = req.body
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `deleted by id: ${_id}`
+  writeToFile(date, action, user._id)
   await Transportation.deleteOne({ _id })
   res.send(true)
 })
@@ -98,11 +112,19 @@ router.post('/delete', auth, async (req, res) => {
 router.post('/changeStatus', auth, async (req, res) => {
   const { _id, status } = req.body
   await Transportation.updateOne({ _id }, { $set: { status } })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `changed status of ${_id} to ${status}`
+  writeToFile(date, action, user._id)
   res.send(true)
 })
 
 router.post('/sendShipment', auth, async (req, res) => {
   const { _id } = req.body
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `changed packaging status of ${_id} to true`
+  writeToFile(date, action, user._id)
   await Transportation.updateOne({ _id }, { $set: { packagingStatus: true } })
   res.send(true)
 })

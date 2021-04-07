@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 const Material = require('../../../models/Material')
 const auth = require('../../../middleware/auth')
+const writeToFile = require('../../../variables/logWriter')
+const User = require('../../../models/User')
 
 // Retrieve all materials
 router.get('/', auth, async (req, res) => {
@@ -28,12 +30,16 @@ router.post('/', auth, async (req, res) => {
 })
 
 // add new material
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { name, type } = req.body
   const material = new Material({
     name,
     type,
   })
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a new material by the name ${name} and type ${type}`
+  writeToFile(date, action, user._id)
   await material.save()
   res.json('added')
 })
