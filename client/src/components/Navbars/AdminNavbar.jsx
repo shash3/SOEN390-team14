@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useHistory } from 'react-router-dom';
 import axios from 'axios';
 // reactstrap components
 import {
@@ -20,13 +21,13 @@ import {
   Media,
 } from 'reactstrap';
 import jwt_decode from 'jwt-decode';
-import { useHistory } from 'react-router-dom';
+
 
 const AdminNavbar = (props) => {
   const [user, setUser] = useState({});
   const [logout, setLogout] = useState(false);
   const [tokenRefresh, setTokenRefresh] = useState(false);
-  let history = useHistory();
+  const history = useHistory();
 
   // get user information
   useEffect(() => {
@@ -71,9 +72,9 @@ const AdminNavbar = (props) => {
   }, []);
 
   useEffect(() => {
-    let token = localStorage.getItem('user')
-    let decodedToken = jwt_decode(token)
-    let currentDate = new Date()
+    const token = localStorage.getItem('user')
+    const decodedToken = jwt_decode(token)
+    const currentDate = new Date()
     // JWT exp is in seconds
     if (decodedToken.exp * 1000 < currentDate.getTime()) {
       localStorage.removeItem('user');
@@ -86,24 +87,11 @@ const AdminNavbar = (props) => {
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
         <Container fluid>
-          <Link
+          <div
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-            to="/"
           >
             {props.brandText}
-          </Link>
-          <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form>
+          </div>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -124,26 +112,6 @@ const AdminNavbar = (props) => {
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
-                <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
-                  <span>My profile</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-                <DropdownItem divider />
                 <DropdownItem onClick={(e) => loggingOut(e)}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>

@@ -1,11 +1,48 @@
 {
   "0": {
-    "": 0
+    "": 0,
+    "August": 900
+  },
+  "54": {
+    "March": 4950
+  },
+  "1995": {
+    "July": 4400
+  },
+  "2020": {
+    "April": 3465,
+    "August": 5050,
+    "October": 7950,
+    "May": 5600,
+    "February": 8750,
+    "June": 2650,
+    "July": 8600,
+    "September": 2400,
+    "March": 1350,
+    "December": 4150,
+    "November": 2100,
+    "January": 9400
   },
   "2021": {
-    "April": "99"
+    "April": 1465,
+    "August": 1050,
+    "October": 4950,
+    "May": 1600,
+    "February": 3750,
+    "June": 1650,
+    "July": 1600,
+    "September": 4400,
+    "March": 4350,
+    "December": 3150,
+    "November": 4100,
+    "January": 4400
   },
   "2022": {
-    "March": "99"
+    "March": 9900,
+    "July": 4700,
+    "June": 8800,
+    "August": 9900,
+    "October": 3100
+    
   }
 }

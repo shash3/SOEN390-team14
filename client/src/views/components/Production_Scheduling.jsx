@@ -446,12 +446,13 @@ const ProductionScheduling = () => {
   }
 
   const readProductionPlanning = async () => {
-    const reply = { data: {} }
-    // const reply = await axios.get('/api/planning/json', {
-    //   headers: {
-    //     'x-auth-token': userToken,
-    //   },
-    // }).catch((err) => console.error('Error', err));
+    const reply = await axios
+      .get('/api/planning/prod', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .catch((err) => console.error('Error', err))
     return reply.data
   }
 
@@ -479,7 +480,7 @@ const ProductionScheduling = () => {
    */
   const getPlanningYears = async () => {
     const productionPlanning = await readProductionPlanning()
-    const years = [2020, 2021] // Object.keys(productionPlanning);
+    const years = Object.keys(productionPlanning)
     return years
   }
 
@@ -498,24 +499,10 @@ const ProductionScheduling = () => {
     labels,
     plannedProduction,
   ) => {
-    const yearlyData = [
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-      rand(),
-    ]
     const quantitiesPlanned = []
     const plannedYearData = plannedProduction[year]
     if (plannedYearData === undefined) {
-      return yearlyData // Array(labels.length).fill(0, 0, labels.length);
+      return Array(labels.length).fill(0, 0, labels.length)
     }
 
     labels.forEach((month) => {
@@ -684,21 +671,7 @@ const ProductionScheduling = () => {
       plannedProduction[year][month] === undefined ||
       plannedProduction[year][month][location] === undefined
     ) {
-      const yearlyData = [
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-        rand(),
-      ]
-      return yearlyData // Array(labels.length).fill(0, 0, labels.length)
+      return Array(labels.length).fill(0, 0, labels.length)
     }
     const productionPlan = plannedProduction[year][month][location]
 

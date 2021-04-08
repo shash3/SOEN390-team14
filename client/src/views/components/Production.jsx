@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
@@ -37,19 +38,35 @@ import {
   ModalBody,
   ModalFooter,
   FormFeedback,
-  ButtonGroup,
 } from 'reactstrap'
 
 // core components
 import { inArray } from 'jquery'
 import { useLoading, Oval } from '@agney/react-loading'
 import Tooltip from '@material-ui/core/Tooltip'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
-import { exportToJsonExcel } from '../../variables/export'
-
+import { exportToJsonExcel } from '../../variables/export
 const xml2js = require('xml2js')
 
 const Production = () => {
+  const exportToPDF = () => {
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#inv-table',
+    })
+    doc.save('Inventory.pdf')
+  }
+
+  const exportToPDF2 = () => {
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#pl-table',
+    })
+    doc.save('Product Line.pdf')
+  }
+
   const userToken = JSON.parse(localStorage.getItem('user'))
   const [userLoc, setUserLoc] = useState('')
 
@@ -1013,6 +1030,7 @@ const Production = () => {
    * Creating product from product line.
    */
   const createProduct = async (productName, productQuantity, productLocation) => {
+
     /**
      * Returns the finish_time of the machine that has an item and the smallest finish_time.
      *
@@ -1106,6 +1124,7 @@ const Production = () => {
           <Button className="btn-danger" disabled>
             There are not enough machines available at your location (
             {productLocation}
+
             ).
             {nextAvailTime == null
               ? ''
@@ -1135,6 +1154,7 @@ const Production = () => {
               <label className="text-indigo strong">{name}</label> to make{' '}
               {productQuantity} {productName} at your location (
               {productLocation}
+
               ).
               <br />
               Requires {quantNeed}, but only {quantHave} in inventory.
@@ -1165,6 +1185,7 @@ const Production = () => {
             {productQuantity}{' '}
             <label className="text-indigo strong">{productName}</label> in
             production machines at {productLocation}.
+
           </Button>
         </FormGroup>
       )
@@ -1188,6 +1209,7 @@ const Production = () => {
       // Get the materials to create the product.
       const matList = await returnProductLine(productName)
       const invalids = await returnInvalidMaterials(matList)
+
 
       // Check if there is are materials with not enough quantity to make the products.
       if (invalids.length > 0) {
@@ -1331,17 +1353,31 @@ const Production = () => {
                 <Form>
                   <h2 className="mb-0 d-inline">Inventory</h2>
                   <Tooltip
-                    title="Export inventory table to a file"
+                    title="Export to PDF"
                     arrow
                     placement="top-start"
                     enterDelay={750}
                   >
                     <Button
-                      className="float-right"
+                      className="mt-4 float-right"
                       color="danger"
+                      onClick={() => exportToPDF()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export inventory table to a XLSX file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="mt-4 float-right"
+                      color="success"
                       onClick={() => exportToJsonExcel('Inventory', inventory)}
                     >
-                      Export
+                      Export to XLSX
                     </Button>
                   </Tooltip>
                 </Form>
@@ -1403,9 +1439,41 @@ const Production = () => {
                       </Button>
                     </Link>
                   </Tooltip>
+                  <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="danger"
+                      onClick={() => exportToPDF()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export inventory table to a XLSX file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Inventory', inventory)}
+                    >
+                      Export to XLSX
+                    </Button>
+                  </Tooltip>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table
+                id="inv-table"
+                className="align-items-center table-flush"
+                responsive
+              >
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
@@ -1555,7 +1623,7 @@ const Production = () => {
                 <Form>
                   <h2 className="mb-0 d-inline">Product Line</h2>
                   <Tooltip
-                    title="Export product line table to a file"
+                    title="Export product line table to a XLSX file"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -1563,9 +1631,23 @@ const Production = () => {
                     <Button
                       className="float-right"
                       color="danger"
+                      onClick={() => exportToPDF2()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export product line table to a XLSX file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="success"
                       onClick={() => exportProductLine()}
                     >
-                      Export
+                      Export to XLSX
                     </Button>
                   </Tooltip>
                 </Form>
@@ -1616,6 +1698,35 @@ const Production = () => {
                     </Button>
                   </Tooltip>
                   <Tooltip
+                    title="Export product line table to a XLSX file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="danger"
+                      onClick={() => exportToPDF2()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export product line table to a XLSX file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      className="float-right"
+                      color="success"
+                      onClick={() => exportProductLine()}
+                    >
+                      Export to XLSX
+
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
                     title="Create a product through an imported XML file"
                     arrow
                     placement="top-start"
@@ -1639,7 +1750,11 @@ const Production = () => {
                   </section>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table
+                id="pl-table"
+                className="align-items-center table-flush"
+                responsive
+              >
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
