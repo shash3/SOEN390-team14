@@ -4,24 +4,27 @@
     "August": 900
   },
   "54": {
-    "March": 49500
+    "March": 4950
   },
   "1995": {
-    "July": 44000
+    "July": 4400
+  },
+  "2020": {
+    "October": 1100
   },
   "2021": {
-    "April": 346500,
-    "August": 10500,
-    "October": 49500,
-    "May": 16000,
-    "February": 37500,
-    "June": 16500,
-    "July": 16000,
-    "September": 44000,
-    "March": 43500,
-    "December": 31500,
-    "November": 41000,
-    "January": 44000
+    "April": 1465,
+    "August": 1050,
+    "October": 4950,
+    "May": 1600,
+    "February": 3750,
+    "June": 1650,
+    "July": 1600,
+    "September": 4400,
+    "March": 4350,
+    "December": 3150,
+    "November": 4100,
+    "January": 4400
   },
   "2022": {
     "March": 99,
