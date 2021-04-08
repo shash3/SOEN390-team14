@@ -1,9 +1,8 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 // reactstrap components
 import {
@@ -30,44 +29,56 @@ import {
   Input,
   ButtonGroup,
   Button,
-} from 'reactstrap';
+} from 'reactstrap'
 // core components
-import Tooltip from '@material-ui/core/Tooltip';
-import Header from '../../components/Headers/Header.jsx';
+import Tooltip from '@material-ui/core/Tooltip'
+import { exportToJsonExcel } from '../../variables/export'
+import Header from '../../components/Headers/CardlessHeader.jsx'
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const QualityAssurance = () => {
-  const userToken = JSON.parse(localStorage.getItem('user'));
-  const [userLoc, setUserLoc] = useState('');
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#quality-table'
+    })
+    doc.save('Quality.pdf')
+  }
+
+  const userToken = JSON.parse(localStorage.getItem('user'))
+  const [userLocation, setUserLoc] = useState('')
 
   // Quality database data
-  const [dirtyQualityData, setDirtyQualityData] = useState([]);
-  const [searchQualityData, setSearchQualityData] = useState([]);
-  const [updatedQualityIndicies, setUpdatedQualityIndicies] = useState([]);
+  const [dirtyQualityData, setDirtyQualityData] = useState([])
+  const [searchQualityData, setSearchQualityData] = useState([])
+  const [updatedQualityIndicies, setUpdatedQualityIndicies] = useState([])
 
   // Search input
-  const [qualityFormSearch, setQualityFormSearch] = useState('');
-  const [updateSearch, setUpdateSearch] = useState(false);
-  const [qualPage, setQualPage] = useState(0);
-  const [qualityMessages, setQualityMessages] = useState([]);
+  const [qualityFormSearch, setQualityFormSearch] = useState('')
+  const [updateSearch, setUpdateSearch] = useState(false)
+  const [qualPage, setQualPage] = useState(0)
+  const [qualityMessages, setQualityMessages] = useState(<></>)
 
-  const NUM_OF_ITEMS_IN_A_PAGE = 15;
+  const NUM_OF_ITEMS_IN_A_PAGE = 15
 
   /* ---------------------------
    * Functions To Refresh Production Machines
    * ---------------------------
    */
 
-  const [refreshMachine, setRefreshMachine] = useState(false);
+  const [refreshMachine, setRefreshMachine] = useState(false)
   /**
    * Set a timer to refresh every few seconds.
    */
   useEffect(() => {
-    let refresh = true;
+    let refresh = true
     setInterval(() => {
-      setRefreshMachine(refresh);
-      refresh = !refresh;
-    }, 1000 * 15);
-  }, []);
+      setRefreshMachine(refresh)
+      refresh = !refresh
+    }, 1000 * 15)
+  }, [])
 
   /**
    * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
@@ -78,7 +89,7 @@ const QualityAssurance = () => {
         .post(
           '/api/machine/unavailable',
           {
-            location: userLoc,
+            location: userLocation,
           },
           {
             headers: {
@@ -87,9 +98,91 @@ const QualityAssurance = () => {
           },
         )
         .then((response) => response.data)
-        .catch((err) => console.error('Error', err));
-      return reply;
-    };
+        .catch((err) => console.error('Error', err))
+      return reply
+    }
+
+    const readMachineLog = async () => {
+      const reply = await axios
+        .get('/api/machine/json', {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        })
+        .catch((err) => console.error('Error', err))
+      return reply.data
+    }
+
+    const writeMachineLog = async (qualityJson) => {
+      await axios
+        .post(
+          '/api/machine/json',
+          {
+            data: qualityJson,
+          },
+          {
+            headers: {
+              'x-auth-token': userToken,
+            },
+          },
+        )
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+
+    const updateMachineLog = async (machineKey, item, date, location) => {
+      const machinesLog = await readMachineLog()
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ]
+
+      const year = date.getUTCFullYear()
+      const month = monthNames[date.getUTCMonth()]
+
+      if (machinesLog[year] === undefined) {
+        machinesLog[year] = {}
+      }
+      const machineYear = machinesLog[year]
+
+      if (machineYear[month] === undefined) {
+        machineYear[month] = {}
+      }
+      const machineMonth = machineYear[month]
+
+      if (machineMonth[location] === undefined) {
+        machineMonth[location] = {}
+      }
+      const machineLocation = machineMonth[location]
+
+      if (machineLocation[machineKey] === undefined) {
+        machineLocation[machineKey] = {
+          items: {},
+          minutesLogged: 0,
+        }
+      }
+      const machineItems = machineLocation[machineKey].items
+
+      if (machineItems[item] === undefined) {
+        machineItems[item] = 0
+      }
+
+      machineItems[item] += 1
+      machineLocation[machineKey].minutesLogged += 5
+
+      writeMachineLog(machinesLog)
+    }
 
     const addToQuality = async (name, type, location) => {
       await axios
@@ -107,9 +200,9 @@ const QualityAssurance = () => {
           },
         )
         .catch((error) => {
-          console.error(error);
-        });
-    };
+          console.error(error)
+        })
+    }
 
     const removeItemFromMachine = async (key) => {
       await axios
@@ -124,25 +217,33 @@ const QualityAssurance = () => {
             },
           },
         )
-        .catch((err) => console.error('Error', err));
-    };
+        .catch((err) => console.error('Error', err))
+    }
 
     const main = async () => {
-      if (userLoc === undefined) {
-        return;
+      if (userLocation === undefined) {
+        return
       }
-      const machines = await returnUnavailableMachines();
-      for (let index = 0; index < machines.length; index += 1) {
-        const machine = machines[index];
+      let updated = 0
+      const unavailMachines = await returnUnavailableMachines()
+      for (let index = 0; index < unavailMachines.length; index += 1) {
+        const machine = unavailMachines[index]
         if (new Date(machine.finish_time).valueOf() < new Date().valueOf()) {
-          await addToQuality(machine.item, machine.type, userLoc);
-          await removeItemFromMachine(machine._id);
+          await updateMachineLog(
+            machine._id,
+            machine.item,
+            new Date(),
+            userLocation,
+          )
+          await addToQuality(machine.item, machine.type, userLocation)
+          await removeItemFromMachine(machine._id)
+          updated += 1
         }
       }
-    };
+    }
 
-    main();
-  }, [refreshMachine]);
+    main()
+  }, [refreshMachine])
 
   /* ------------------------
    * Functions that deal with logging
@@ -156,9 +257,9 @@ const QualityAssurance = () => {
           'x-auth-token': userToken,
         },
       })
-      .catch((err) => console.error('Error', err));
-    return qualityReply.data;
-  };
+      .catch((err) => console.error('Error', err))
+    return qualityReply.data
+  }
 
   const writeQualityLog = async (qualityJson) => {
     await axios
@@ -174,35 +275,35 @@ const QualityAssurance = () => {
         },
       )
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   const addQualityToLog = async (qualityLog, name, quality) => {
-    const qualityLogJson = qualityLog;
+    const qualityLogJson = qualityLog
     if (qualityLogJson[name] === undefined) {
       qualityLogJson[name] = {
         good: 0,
         faulty: 0,
         total: 0,
-      };
+      }
     }
-    const itemQual = qualityLogJson[name];
+    const itemQual = qualityLogJson[name]
 
     switch (quality) {
-    case 'Good':
-      itemQual.good += 1;
-      itemQual.total += 1;
-      break;
-    case 'Faulty':
-      itemQual.faulty += 1;
-      itemQual.total += 1;
-      break;
-    default:
-      break;
+      case 'Good':
+        itemQual.good += 1
+        itemQual.total += 1
+        break
+      case 'Faulty':
+        itemQual.faulty += 1
+        itemQual.total += 1
+        break
+      default:
+        break
     }
-    return qualityLogJson;
-  };
+    return qualityLogJson
+  }
 
   /* ------------------------
    * Function that interact with database backend
@@ -218,14 +319,14 @@ const QualityAssurance = () => {
             'x-auth-token': userToken,
           },
         })
-        .catch((err) => console.error('Error', err));
+        .catch((err) => console.error('Error', err))
       if (response && response.data) {
-        const user = response.data;
-        setUserLoc(user.location);
+        const user = response.data
+        setUserLoc(user.location)
       }
-    };
-    getUserLoc();
-  }, []);
+    }
+    getUserLoc()
+  }, [])
 
   /**
    * Retrieve all items in inventory with the specified name and location.
@@ -236,7 +337,7 @@ const QualityAssurance = () => {
    * @returns
    */
   const getInventoryItems = async (name, location) => {
-    let material = [];
+    let material = []
     await axios
       .post(
         '/api/inventory/location',
@@ -252,14 +353,14 @@ const QualityAssurance = () => {
       )
       .then((response) => {
         if (response.data) {
-          material = response.data;
+          material = response.data
         }
       })
       .catch((error) => {
-        console.error(error);
-      });
-    return material;
-  };
+        console.error(error)
+      })
+    return material
+  }
 
   /**
    * Puts an item into inventory based on its name and location.
@@ -289,9 +390,9 @@ const QualityAssurance = () => {
         },
       )
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   /**
    * Gets all the quality data from the database.
@@ -302,7 +403,7 @@ const QualityAssurance = () => {
       .post(
         '/api/quality/location',
         {
-          location: userLoc,
+          location: userLocation,
         },
         {
           headers: {
@@ -311,13 +412,13 @@ const QualityAssurance = () => {
         },
       )
       .then((response) => {
-        setDirtyQualityData(response.data);
-        setUpdatedQualityIndicies(new Array(response.data.length).fill(false));
+        setDirtyQualityData(response.data)
+        setUpdatedQualityIndicies(new Array(response.data.length).fill(false))
       })
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   /**
    * Remove a quality product from the quality database by its key.
@@ -338,9 +439,9 @@ const QualityAssurance = () => {
         },
       )
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   /* ------------------------
    * Functions for interacting with the HTML elements.
@@ -356,17 +457,17 @@ const QualityAssurance = () => {
    */
   const changeProductQuality = (product, value) => {
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
-      const element = dirtyQualityData[index];
+      const element = dirtyQualityData[index]
       if (element._id === product._id) {
-        const prod = product;
-        prod.quality = value;
-        dirtyQualityData.splice(index, 1, prod);
-        updatedQualityIndicies.splice(index, 1, true);
-        setUpdateSearch(!updateSearch);
-        break;
+        const prod = product
+        prod.quality = value
+        dirtyQualityData.splice(index, 1, prod)
+        updatedQualityIndicies.splice(index, 1, true)
+        setUpdateSearch(!updateSearch)
+        break
       }
     }
-  };
+  }
 
   /**
    * Updates the message for the quality table to the appropriate topic.
@@ -375,62 +476,59 @@ const QualityAssurance = () => {
    */
   const updateQualityMessages = (numOfChanges) => {
     if (numOfChanges > 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
             <Button className="btn-info disabled">
-              Successfully updated the quality of
-              {' '}
-              {numOfChanges}
-              {' '}
-              products.
+              Successfully updated the quality of {numOfChanges} products.
             </Button>
             <Button
-              onClick={() => setQualityMessages([])}
+              onClick={() => setQualityMessages(<></>)}
               className="close btn-danger"
             >
               &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>,
-      ];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+      setQualityMessages(html)
     } else if (numOfChanges === 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
             <Button className="btn-info disabled">
               No updates have been made to the table.
             </Button>
             <Button
-              onClick={() => setQualityMessages([])}
+              onClick={() => setQualityMessages(<></>)}
               className="close btn-danger"
             >
               &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>,
-      ];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+
+      setQualityMessages(html)
     } else if (numOfChanges < 0) {
-      const html = [
+      const html = (
         <FormGroup>
           <ButtonGroup className="">
             <Button className="btn-info disabled">
               Cancelled any changes made.
             </Button>
             <Button
-              onClick={() => setQualityMessages([])}
+              onClick={() => setQualityMessages(<></>)}
               className="close btn-danger"
             >
               &nbsp;X&nbsp;
             </Button>
           </ButtonGroup>
-        </FormGroup>,
-      ];
-      setQualityMessages(html);
+        </FormGroup>
+      )
+      setQualityMessages(html)
     }
-  };
+  }
 
   /**
    * Adds or updates the product to the database.
@@ -438,63 +536,63 @@ const QualityAssurance = () => {
    * @param {Array} product the product to add to inventory
    */
   const addProductToInventory = async (product) => {
-    const { name, type, location } = product;
+    const { name, type, location } = product
 
-    const material = await getInventoryItems(name, location);
-    const inInventory = material.length === 0 ? 0 : material[0].quantity;
+    const material = await getInventoryItems(name, location)
+    const inInventory = material.length === 0 ? 0 : material[0].quantity
 
-    await putInventoryItem(name, type, location, inInventory + 1);
-  };
+    await putInventoryItem(name, type, location, inInventory + 1)
+  }
 
   /**
    * Updates the quality table to remove any items with quality good or faulty.
    * If an item is good then it is added to the inventory database.
    */
   const updateQualityTable = async () => {
-    let qualityLogJson = await readQualityLog();
+    let qualityLogJson = await readQualityLog()
 
-    let qualityChanges = 0;
+    let qualityChanges = 0
     for (let index = 0; index < dirtyQualityData.length; index += 1) {
-      const product = dirtyQualityData[index];
+      const product = dirtyQualityData[index]
       if (updatedQualityIndicies[index] && product.quality !== 'None') {
         switch (product.quality) {
-        case 'Good':
-          await addProductToInventory(product);
-          removeQualityProduct(product._id);
-          qualityChanges += 1;
-          break;
-        case 'Faulty':
-          removeQualityProduct(product._id);
-          qualityChanges += 1;
-          break;
-        default:
-          break;
+          case 'Good':
+            await addProductToInventory(product)
+            removeQualityProduct(product._id)
+            qualityChanges += 1
+            break
+          case 'Faulty':
+            removeQualityProduct(product._id)
+            qualityChanges += 1
+            break
+          default:
+            break
         }
       }
       qualityLogJson = await addQualityToLog(
         qualityLogJson,
         product.name,
         product.quality,
-      );
+      )
       // End of for loop
     }
 
     // Update the quality table view
-    getQualityData();
-    setUpdateSearch(!updateSearch);
-    updateQualityMessages(qualityChanges);
-    writeQualityLog(qualityLogJson);
-  };
+    getQualityData()
+    setUpdateSearch(!updateSearch)
+    updateQualityMessages(qualityChanges)
+    writeQualityLog(qualityLogJson)
+  }
 
   /**
    * Removes any changes done to the quality table.
    */
   const cancelChanges = () => {
     // Update the quality table view
-    getQualityData();
-    setUpdateSearch(!updateSearch);
-    updateQualityMessages(-1);
-  };
+    getQualityData()
+    setUpdateSearch(!updateSearch)
+    updateQualityMessages(-1)
+  }
 
   /**
    * Get quality information when searches are updated.
@@ -503,27 +601,27 @@ const QualityAssurance = () => {
     // retrieve quality information
     const qualityLookUp = async () => {
       if (qualityFormSearch === '') {
-        setSearchQualityData(dirtyQualityData);
+        setSearchQualityData(dirtyQualityData)
       } else {
-        let searchResults = [];
+        let searchResults = []
         dirtyQualityData.forEach((element) => {
-          const { name } = element;
+          const { name } = element
           if (name.search(new RegExp(`^${qualityFormSearch}`, 'i')) >= 0) {
-            searchResults = [...searchResults, element];
+            searchResults = [...searchResults, element]
           }
-        });
-        setSearchQualityData(searchResults);
+        })
+        setSearchQualityData(searchResults)
       }
-    };
-    qualityLookUp();
-  }, [qualityFormSearch, dirtyQualityData, updateSearch]);
+    }
+    qualityLookUp()
+  }, [qualityFormSearch, dirtyQualityData, updateSearch])
 
   /**
    * Initialize the quality information from the database.
    */
   useEffect(() => {
-    getQualityData();
-  }, [userLoc]);
+    getQualityData()
+  }, [userLocation])
 
   /* ------------------------
    * HTML display
@@ -540,9 +638,41 @@ const QualityAssurance = () => {
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h2 className="mb-0">Quality Parts</h2>
-                <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-                  <FormGroup className="mb-3 mt-3">
+                <Form>
+                  <h2 className="mb-0 d-inline">Quality Parts</h2>
+                  <Tooltip
+                      title="Export to PDF"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                  >
+                    <Button
+                        className="mt-4 float-right"
+                        color="danger"
+                        onClick={() => exportToPDF()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export quality table to a file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                        className="mt-4 float-right"
+                      color="success"
+                      onClick={() =>
+                        exportToJsonExcel('Quality Parts', searchQualityData)
+                      }
+                    >
+                      Export to XLSX
+                    </Button>
+                  </Tooltip>
+                </Form>
+                <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-sm-flex ml-lg-auto">
+                  <FormGroup className="mt-3">
                     <InputGroup
                       className="input-group-alternative"
                       style={{ backgroundColor: '#2181EC' }}
@@ -562,8 +692,8 @@ const QualityAssurance = () => {
                           placeholder="Search"
                           type="text"
                           onChange={(e) => {
-                            setQualityFormSearch(e.target.value);
-                            setQualPage(0);
+                            setQualityFormSearch(e.target.value)
+                            setQualPage(0)
                           }}
                         />
                       </Tooltip>
@@ -571,7 +701,7 @@ const QualityAssurance = () => {
                   </FormGroup>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table id="quality-table" className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
@@ -586,8 +716,8 @@ const QualityAssurance = () => {
                       qualPage * NUM_OF_ITEMS_IN_A_PAGE,
                       (qualPage + 1) * NUM_OF_ITEMS_IN_A_PAGE,
                     )
-                    .map((m, i) => (
-                      <tr key={m.name + i.toString()} value={m.name}>
+                    .map((m) => (
+                      <tr key={m._id} value={m.name}>
                         <th scope="row">
                           <Media className="align-items-center">
                             <Media>
@@ -629,9 +759,11 @@ const QualityAssurance = () => {
                                 enterDelay={750}
                               >
                                 <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'None')}
+                                  onClick={() =>
+                                    changeProductQuality(m, 'None')
+                                  }
                                 >
-                                    None
+                                  None
                                 </DropdownItem>
                               </Tooltip>
                               <Tooltip
@@ -641,9 +773,11 @@ const QualityAssurance = () => {
                                 enterDelay={750}
                               >
                                 <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'Good')}
+                                  onClick={() =>
+                                    changeProductQuality(m, 'Good')
+                                  }
                                 >
-                                    Good
+                                  Good
                                 </DropdownItem>
                               </Tooltip>
                               <Tooltip
@@ -653,7 +787,9 @@ const QualityAssurance = () => {
                                 enterDelay={750}
                               >
                                 <DropdownItem
-                                  onClick={() => changeProductQuality(m, 'Faulty')}
+                                  onClick={() =>
+                                    changeProductQuality(m, 'Faulty')
+                                  }
                                 >
                                   Faulty
                                 </DropdownItem>
@@ -676,7 +812,7 @@ const QualityAssurance = () => {
                     <Button
                       className="btn-success"
                       onClick={() => {
-                        updateQualityTable();
+                        updateQualityTable()
                       }}
                     >
                       Apply
@@ -692,7 +828,7 @@ const QualityAssurance = () => {
                     <Button
                       className="btn-warning"
                       onClick={() => {
-                        cancelChanges();
+                        cancelChanges()
                       }}
                     >
                       Cancel
@@ -729,10 +865,10 @@ const QualityAssurance = () => {
                         qualPage - 1 < 0
                           ? qualPage
                           : qualPage - 2 < 0
-                            ? qualPage - 1
-                            : qualPage - 2,
-                        qualPage + 1
-                          >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
+                          ? qualPage - 1
+                          : qualPage - 2,
+                        qualPage + 1 >=
+                          searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
                           ? qualPage + 2
                           : qualPage + 3,
                       )
@@ -752,8 +888,8 @@ const QualityAssurance = () => {
 
                     <PaginationItem
                       className={
-                        qualPage + 1
-                        >= searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
+                        qualPage + 1 >=
+                        searchQualityData.length / NUM_OF_ITEMS_IN_A_PAGE
                           ? 'disabled'
                           : 'active'
                       }
@@ -775,7 +911,7 @@ const QualityAssurance = () => {
         <></>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default QualityAssurance;
+export default QualityAssurance
