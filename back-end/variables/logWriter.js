@@ -4,7 +4,7 @@ const fs = require('fs')
 const writeToFile = (date, action, user) => {
   fs.appendFile(
     accountabilityLog,
-    `[${date}] ${action} by ${user}`,
+    `[${date}] ${action} by ${user}\n`,
     'utf8',
     () => {},
   )
