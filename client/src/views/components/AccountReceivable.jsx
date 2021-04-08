@@ -27,6 +27,7 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
+import {exportToJsonExcel} from "../../variables/export";
 
 const AccountReceivable = () => {
   const [receivables, setReceivables] = useState([]);
@@ -151,6 +152,20 @@ const AccountReceivable = () => {
                     color="danger"
                   >
                     Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('AR Unpaid Receipts', receivables)}
+                  >
+                    Export to CSV
                   </Button>
                 </Tooltip>
                 <Modal
@@ -301,7 +316,20 @@ const AccountReceivable = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Paid Accounts Receivable</h2>
-
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('AP Paid Receipts', receivablesP)}
+                  >
+                    Export to CSV
+                  </Button>
+                </Tooltip>
               </CardHeader>
               <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">

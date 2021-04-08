@@ -28,6 +28,7 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
+import {exportToJsonExcel} from "../../variables/export";
 
 const Procurement = () => {
   const [procurement, setProcurement] = useState([]);
@@ -225,6 +226,20 @@ const Procurement = () => {
                     color="danger"
                   >
                     Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Procurement Orders', procurement)}
+                  >
+                    Export to CSV
                   </Button>
                 </Tooltip>
                 <Modal

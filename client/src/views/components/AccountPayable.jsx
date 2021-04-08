@@ -27,6 +27,7 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
+import {exportToJsonExcel} from "../../variables/export";
 
 const AccountPayable = () => {
   const [payables, setPayables] = useState([]);
@@ -153,6 +154,20 @@ const AccountPayable = () => {
                     Export to PDF
                   </Button>
                 </Tooltip>
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('AP Unpaid Receipts', payables)}
+                  >
+                    Export to CSV
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal}
                   changeStatus={closeModal}
@@ -232,7 +247,6 @@ const AccountPayable = () => {
                     <th scope="col"> </th>
                   </tr>
                 </thead>
-
                 <tbody style={{ overflow: 'auto' }}>
                   {payables.map((t) => (
                     <tr key={t._id} value={t.name}>
@@ -243,14 +257,12 @@ const AccountPayable = () => {
                           </Media>
                         </Media>
                       </th>
-
                       <td>{t.date.substr(0, 10)}</td>
                       <td>{t.value}</td>
                       <td>
                         {t.paid ? 'Paid' : 'Not Paid'}
                         {' '}
                       </td>
-
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <Tooltip
@@ -289,9 +301,7 @@ const AccountPayable = () => {
                     </tr>
                   ))}
                 </tbody>
-
               </Table>
-
             </Card>
           </div>
         </Row>
@@ -302,7 +312,20 @@ const AccountPayable = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Paid Accounts Payable</h2>
-
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('AP Paid Receipts', payablesP)}
+                  >
+                    Export to CSV
+                  </Button>
+                </Tooltip>
               </CardHeader>
               <Table className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
@@ -314,7 +337,6 @@ const AccountPayable = () => {
                     <th scope="col"> </th>
                   </tr>
                 </thead>
-
                 <tbody style={{ overflow: 'auto' }}>
                   {payablesP.map((t) => (
                     <tr key={t._id} value={t.name}>
