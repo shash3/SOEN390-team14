@@ -14,6 +14,16 @@ const sendSignupEmail = (email, name) => {
   })
 }
 
+const sendSuggestion = (name, suggestion) => {
+  sgMail.send({
+    to: 'soen390shop@gmail.com',
+    from: 'soen390shop@gmail.com',
+    subject: `Suggestion from ${name}`,
+    text: suggestion,
+  })
+}
+
 module.exports = {
   sendSignupEmail,
+  sendSuggestion,
 }

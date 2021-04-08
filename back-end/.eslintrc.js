@@ -12,4 +12,5 @@ module.exports = {
     'no-multi-assign': 0,
     'no-underscore-dangle': 0,
   },
+  ignorePatterns: ['test/*', '!.test.js'],
 }
