@@ -88,4 +88,3 @@ The website is deployed and hosted on heroku. You can access the website through
 * Michael Takenaka 
 * Ashraf Khalil	
 * James	El Tayar
-* Jamil	Hirsh	
