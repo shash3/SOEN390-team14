@@ -38,7 +38,7 @@
         "Large Aluminium Bike": 66,
         "Small Aluminium Bike": 54,
         "test": 33,
-        "Small Carbon Bike": 30
+        "Small Carbon Bike": 23
       },
       "Plant 1": {
         "Small Steel Bike": 55
@@ -56,7 +56,8 @@
         "Large Aluminium Bike": 66
       },
       "Plant 1": {
-        "Small Aluminium Bike": 85
+        "Small Aluminium Bike": 85,
+        "test": 15
       }
     },
     "February": {
@@ -65,12 +66,14 @@
         "Large Aluminium Bike": 7
       },
       "Plant 1": {
-        "Small Steel Bike": 50
+        "Small Steel Bike": 33
       }
     },
     "June": {
       "Plant 2": {
-        "test": 77
+        "test": 77,
+        "Small Steel Bike": 21,
+        "Medium Carbon Bike": 21
       }
     },
     "July": {

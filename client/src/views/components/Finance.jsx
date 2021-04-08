@@ -96,8 +96,7 @@ const Finance = () => {
   const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
-  let proc;
-  let saleA;
+
 
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
@@ -124,53 +123,16 @@ const Finance = () => {
       [e.target.name]:e.target.value,
     })
   }
-   useEffect(() => {
-    const lookup0 = async() =>{
-    await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           proc = response.data;
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-    
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           saleA = response.data;
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-    lookup0();
-    getAllLoc();
-    setBikes();
-
-  },[]); 
+  
   useEffect(() => {
-   
+    var proc;
+    var saleA;
     var prodP;
     var prodA;
     var salesP;
 
     const lookup1 = async() => {
-     /**   await axios
+        await axios
       .get('/api/procurement', {
         headers: {
           'x-auth-token': userToken,
@@ -201,7 +163,7 @@ const Finance = () => {
       .catch((error) => {
         console.error(error);
       });
-      **/
+      
       await axios
       .get('/api/planning/prod', {
         headers: {
@@ -237,6 +199,7 @@ const Finance = () => {
         
        
        console.log(proc);
+       console.log(saleA);
         var operMin = getOperationLog(prodA);
   
         var procLog = getProcurementLog(proc);
@@ -255,71 +218,13 @@ const Finance = () => {
         
     };
     
-    const lookup = async() => {
-      await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/planning/prod', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-        
-        setProdPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-        await axios
-      .get('/api/planning/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-      
-        setSalesPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        }); 
-        
-        await axios
-      .get('/api/planning/prodActual', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-     
-        setProdActual(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-    };
     
-    lookup1(); 
+    setTimeout(() => {
+      lookup1();
+    getAllLoc();
+    setBikes();
+    },3000);
+   
     
     
 
@@ -446,7 +351,7 @@ const Finance = () => {
       const getMonthlySalesPlan = (salesPlans) => {
         
         var i;
-       var displayYear1 = 2021;
+       
         const updatedSalesPlan =[0,0,0,0,0,0,0,0,0,0,0,0];
         if(salesPlans[displayYear]==undefined){
         
@@ -623,6 +528,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
+    
     setUpdateData(!updateData);
     setPlanFormData({
       year:0,
