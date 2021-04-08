@@ -1,10 +1,11 @@
+/* eslint-disable no-param-reassign */
 const express = require('express')
 
 const router = express.Router()
 const fs = require('fs')
-const Procurement = require('../../../models/Procurement')
-const Sales = require('../../../models/Sales')
 const auth = require('../../../middleware/auth')
+const writeToFile = require('../../../variables/logWriter')
+const User = require('../../../models/User')
 
 const prodPlanFile = './logs/plannedProduction.json'
 const salesPlanFile = './logs/plannedSales.json'
@@ -65,9 +66,12 @@ router.get('/salesActual', auth, async (req, res) => {
   }
 })
 router.post('/addPlanProd', auth, async (req, res) => {
-  console.log('hello')
   const { data } = req.body
   const dataStr = JSON.stringify(data, null, 2)
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a planned production ${dataStr}`
+  writeToFile(date, action, user._id)
   try {
     fs.writeFile(prodPlanFile, dataStr, 'utf8', () => {})
     res.send(true)
@@ -81,9 +85,13 @@ router.post('/addPlanSales', auth, async (req, res) => {
   console.log('hi')
   const { data } = req.body
   const dataStr = JSON.stringify(data, null, 2)
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added a planned sales ${dataStr}`
+  writeToFile(date, action, user._id)
   try {
     fs.writeFile(salesPlanFile, dataStr, 'utf8', () => {})
-    res.send(true);
+    res.send(true)
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server Error')
@@ -91,9 +99,13 @@ router.post('/addPlanSales', auth, async (req, res) => {
 })
 
 // Write the log file for machine
-router.post('/addProdActual', auth, (req, res) => {
+router.post('/addProdActual', auth, async (req, res) => {
   const { data } = req.body
   const dataStr = JSON.stringify(data, null, 2)
+  const date = new Date().toUTCString()
+  const user = await User.findById(req.user.id).select('-password')
+  const action = `added actual production ${dataStr}`
+  writeToFile(date, action, user._id)
   try {
     fs.writeFile(prodActualFile, dataStr, 'utf8', () => {})
   } catch (err) {

@@ -232,7 +232,6 @@ const AccountReceivable = () => {
                     <th scope="col"> </th>
                   </tr>
                 </thead>
-
                 <tbody style={{ overflow: 'auto' }}>
                   {receivables.map((t) => (
                     <tr key={t._id} value={t.name}>
@@ -358,20 +357,16 @@ const AccountReceivable = () => {
                             >
                               Delete
                             </DropdownItem>
-
                           </DropdownMenu>
                         </UncontrolledDropdown>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-
               </Table>
-
             </Card>
           </div>
         </Row>
-
       </Container>
     </>
   );

@@ -27,6 +27,7 @@ import {
 
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Procurement = () => {
   const [procurement, setProcurement] = useState([]);
@@ -188,30 +189,44 @@ const Procurement = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Procurement</h2>
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  onClick={() => {
-                    closeModal();
-                    setProcurementData({
-                      name: '',
-                      quantity: 0,
-                      purchaser: '',
-                      location: '',
-                      value: 0,
-                      date: '',
+                <Tooltip
+                    title="Click here to add a new PO"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                    className="mt-4"
+                    color="primary"
+                    onClick={() => {
+                      closeModal();
+                      setProcurementData({
+                        name: '',
+                        quantity: 0,
+                        purchaser: '',
+                        location: '',
+                        value: 0,
+                        date: '',
 
-                    });
-                  }}
+                      });
+                    }}
+                  >
+                    Add Procurement
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                 >
-                  Add Procurement
-                </Button>
-                <Button
-                  className="mt-4 float-right"
-                  color="danger"
-                >
-                  Export to PDF
-                </Button>
+                  <Button
+                    className="mt-4 float-right"
+                    color="danger"
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal}
                   changeStatus={closeModal}
@@ -223,84 +238,140 @@ const Procurement = () => {
                     <Form className="form">
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="select"
-                            placeholder="NAME"
-                            name="name"
-                            onChange={(e) => onChangeProcurementData(e)}
+                          <Tooltip
+                              title="Select the name of the order being purchased ex: Leather"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            {[{ name: 'Select Material' }, ...materials].map((m) => (
-                              <option>{m.name}</option>
-                            ))}
-                          </Input>
+                            <Input
+                              type="select"
+                              placeholder="NAME"
+                              name="name"
+                              onChange={(e) => onChangeProcurementData(e)}
+                            >
+                              {[{ name: 'Select Material' }, ...materials].map((m) => (
+                                <option>{m.name}</option>
+                              ))}
+                            </Input>
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="number"
-                            placeholder="QUANTITY  (please use scroller on right)"
-                            name="quantity"
-                            onChange={(e) => onChangeProcurementData(e)}
-                          />
+                          <Tooltip
+                              title="Enter the quantity of material being purchased ex: 1"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="number"
+                              placeholder="QUANTITY  (please use scroller on right)"
+                              name="quantity"
+                              onChange={(e) => onChangeProcurementData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="Supplier"
-                            name="supplier"
-                            onChange={(e) => onChangeProcurementData(e)}
-                          />
+                          <Tooltip
+                              title="Enter who supplied the material being bought ex: Leather Inc."
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="Supplier"
+                              name="supplier"
+                              onChange={(e) => onChangeProcurementData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="select"
-                            placeholder="Destination"
-                            name="destination"
-                            onChange={(e) => onChangeProcurementData(e)}
+                          <Tooltip
+                              title="Enter where the material being purchased will be delivered ex: Plant 1"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="select"
+                              placeholder="Destination"
+                              name="destination"
+                              onChange={(e) => onChangeProcurementData(e)}
 
+                            >
+                              {[{ location: 'Select Destination' }, ...locations].map((l) => (
+                                <option>{l.location}</option>
+                              ))}
+                            </Input>
+                          </Tooltip>
+                        </InputGroup>
+                      </FormGroup>
+                      <FormGroup>
+                        <InputGroup>
+                          <Tooltip
+                              title="Enter th net value of the materials being purchased ex: 20"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            {[{ location: 'Select Destination' }, ...locations].map((l) => (
-                              <option>{l.location}</option>
-                            ))}
-                          </Input>
+                            <Input
+                              type="number"
+                              placeholder="Net Value"
+                              name="value"
+                              onChange={(e) => onChangeProcurementData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="number"
-                            placeholder="Net Value"
-                            name="value"
-                            onChange={(e) => onChangeProcurementData(e)}
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <FormGroup>
-                        <InputGroup>
-                          <Input
-                            type="date"
-                            placeholder="Date"
-                            name="date"
-                            onChange={(e) => onChangeProcurementData(e)}
-                          />
+                          <Tooltip
+                              title="Enter the date the materials were purchased"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="date"
+                              placeholder="Date"
+                              name="date"
+                              onChange={(e) => onChangeProcurementData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary" onClick={() => { addProcurement(); closeModal(); }}>
-                          Add Procurement
-                        </Button>
+                        <Tooltip
+                            title="Click to create the PO order"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
+                        >
+                          <Button color="primary" onClick={() => { addProcurement(); closeModal(); }}>
+                            Add Procurement
+                          </Button>
+                        </Tooltip>
                       </div>
                     </Form>
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="secondary" onClick={closeModal}>
-                      Cancel
-                    </Button>
+                    <Tooltip
+                        title="Cancel PO"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                    >
+                      <Button color="secondary" onClick={closeModal}>
+                        Cancel
+                      </Button>
+                    </Tooltip>
                   </ModalFooter>
                 </Modal>
               </CardHeader>
@@ -317,7 +388,6 @@ const Procurement = () => {
                     <th scope="col"> </th>
                   </tr>
                 </thead>
-
                 <tbody style={{ overflow: 'auto' }}>
                   {procurement.map((t) => (
                     <tr key={t._id} value={t.name}>
@@ -336,16 +406,23 @@ const Procurement = () => {
                       <td>{t.date.substr(0, 10)}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="Delete PO"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"

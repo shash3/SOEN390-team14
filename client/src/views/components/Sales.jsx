@@ -27,6 +27,7 @@ import {
 
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -135,30 +136,44 @@ const Sales = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Sales</h2>
-                <Button
-                  className="mt-4"
-                  color="primary"
-                  onClick={() => {
-                    closeModal();
-                    setSalesData({
-                      name: '',
-                      quantity: 0,
-                      purchaser: '',
-                      location: '',
-                      value: 0,
-                      date: '',
+                <Tooltip
+                    title="Add a new Sales Order"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                    className="mt-4"
+                    color="primary"
+                    onClick={() => {
+                      closeModal();
+                      setSalesData({
+                        name: '',
+                        quantity: 0,
+                        purchaser: '',
+                        location: '',
+                        value: 0,
+                        date: '',
 
-                    });
-                  }}
+                      });
+                    }}
+                  >
+                    Add Sales Order
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
                 >
-                  Add Sales Order
-                </Button>
-                <Button
-                  className="mt-4 float-right"
-                  color="danger"
-                >
-                  Export to PDF
-                </Button>
+                  <Button
+                    className="mt-4 float-right"
+                    color="danger"
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal}
                   changeStatus={closeModal}
@@ -170,75 +185,131 @@ const Sales = () => {
                     <Form className="form">
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="NAME"
-                            name="name"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter a Name for the material being sold ex: Leather"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="NAME"
+                              name="name"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="number"
-                            placeholder="QUANTITY  (please use scroller on right)"
-                            name="quantity"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter the amount of the material being sold ex: 2"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="number"
+                              placeholder="QUANTITY  (please use scroller on right)"
+                              name="quantity"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="Purchaser"
-                            name="purchaser"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter who purchased the material being sold ex: SportExperts"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="Purchaser"
+                              name="purchaser"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="text"
-                            placeholder="Location"
-                            name="location"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter where the material currently is: SportExperts"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="text"
+                              placeholder="Location"
+                              name="location"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="number"
-                            placeholder="Net Value"
-                            name="value"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter the net value of the material being sold ex: 20"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="number"
+                              placeholder="Net Value"
+                              name="value"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
-                          <Input
-                            type="date"
-                            placeholder="Date"
-                            name="date"
-                            onChange={(e) => onChangeSalesData(e)}
-                          />
+                          <Tooltip
+                              title="Enter when the date when the material was sold "
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
+                          >
+                            <Input
+                              type="date"
+                              placeholder="Date"
+                              name="date"
+                              onChange={(e) => onChangeSalesData(e)}
+                            />
+                          </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <div className="text-center">
-                        <Button color="primary" onClick={() => { addSale(); closeModal(); }}>
-                          Add Sales Order
-                        </Button>
+                        <Tooltip
+                            title="Click her to add the sale order"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
+                        >
+                          <Button color="primary" onClick={() => { addSale(); closeModal(); }}>
+                            Add Sales Order
+                          </Button>
+                        </Tooltip>
                       </div>
                     </Form>
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="secondary" onClick={closeModal}>
-                      Cancel
-                    </Button>
+                    <Tooltip
+                        title="Cancel the sale order"
+                        arrow
+                        placement="top-start"
+                        enterDelay={750}
+                    >
+                      <Button color="secondary" onClick={closeModal}>
+                        Cancel
+                      </Button>
+                    </Tooltip>
                   </ModalFooter>
                 </Modal>
               </CardHeader>
@@ -255,7 +326,6 @@ const Sales = () => {
                     <th scope="col"> </th>
                   </tr>
                 </thead>
-
                 <tbody style={{ overflow: 'auto' }}>
                   {sales.map((t) => (
                     <tr key={t._id} value={t.name}>
@@ -274,16 +344,23 @@ const Sales = () => {
                       <td>{t.date.substr(0, 10)}</td>
                       <td className="text-right">
                         <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn-icon-only text-light"
-                            href="#pablo"
-                            role="button"
-                            size="sm"
-                            color=""
-                            onClick={(e) => e.preventDefault()}
+                          <Tooltip
+                              title="Delete a sale order"
+                              arrow
+                              placement="top-start"
+                              enterDelay={750}
                           >
-                            <i className="fas fa-ellipsis-v" />
-                          </DropdownToggle>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                          </Tooltip>
                           <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem
                               href="#pablo"

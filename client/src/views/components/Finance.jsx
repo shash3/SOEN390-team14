@@ -22,6 +22,7 @@ import {
   chartTotalProfits,
 } from '../../variables/charts';
 import {Link} from "react-router-dom";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 
@@ -679,39 +680,60 @@ const Finance = () => {
                           <FormGroup>
                             <InputGroup>
                               <div>
-                                <Input
-                                    placeholder='Year'
-                                    type='number'
-                                    min={1000}
-                                    max={9999}
-                                    name = {'year'}
-                                    defaultValue={displayYear}
-                                    onChange = {(e) => onChangeDisplay(e)}
-                                    
-                                    
-                                />
+                                <Tooltip
+                                    title="Enter the Year you want displayed"
+                                    arrow
+                                    placement="top-start"
+                                    enterDelay={750}
+                                >
+                                  <Input
+                                      placeholder='Year'
+                                      type='number'
+                                      min={1000}
+                                      max={9999}
+                                      name = {'year'}
+                                      defaultValue={displayYear}
+                                      onChange = {(e) => onChangeDisplay(e)}
+
+
+                                  />
+                                </Tooltip>
                               </div>
                             </InputGroup>
                           </FormGroup>
                         </Form>
-                        <Button
-                            className="mt-2 mb-3"
-                            color="default"
-                            onClick={() => {
-                              closeViewSales();
-                            }}
+                        <Tooltip
+                            title="Click to Toggle between Sales and Profits Graphs"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                         >
-                          Toggle Graph
-                        </Button>
-                        <Button
-                            className="mt-2 mb-3"
-                            color="default"
-                            onClick={() => {
-                             setDisplayYear(display.year);
-                            }}
+                          <Button
+                              className="mt-2 mb-3"
+                              color="default"
+                              onClick={() => {
+                                closeViewSales();
+                              }}
+                          >
+                            Toggle Graph
+                          </Button>
+                        </Tooltip>
+                        <Tooltip
+                            title="Click here to update the year to the selected year"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                         >
-                          Refresh Graph
-                        </Button>
+                          <Button
+                              className="mt-2 mb-3"
+                              color="default"
+                              onClick={() => {
+                               setDisplayYear(display.year);
+                              }}
+                          >
+                            Update Year
+                          </Button>
+                        </Tooltip>
                         <div className="chart mb-3">
                           <Bar data={graphData}
                                options={graphOptions}
@@ -734,17 +756,24 @@ const Finance = () => {
                               <span className="text-muted">Year</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="number"
-                                  name="year"
-                                  required
-                                  min={1000}
-                                  max={9999}
-                                  defaultValue = {0}
-                                  
-                                  onChange = {(e) => onChangeForm(e)}
+                              <Tooltip
+                                  title="Enter the Year you want to plan"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
                               >
-                              </Input>
+                                <Input
+                                    type="number"
+                                    name="year"
+                                    required
+                                    min={1000}
+                                    max={9999}
+                                    defaultValue = {0}
+
+                                    onChange = {(e) => onChangeForm(e)}
+                                >
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup className="mb-3">
@@ -752,16 +781,23 @@ const Finance = () => {
                               <span className="text-muted">Month</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="select"
-                                  name="month"
-                                  required
-                                  onChange = {(e) => onChangeForm(e)}
-                              > <option>Select a Month</option>
-                                {[...monthNames].map((m) => (
-                                    <option>{m}</option>
-                                ))}
-                              </Input>
+                              <Tooltip
+                                  title="Enter the Month you want to plan"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
+                              >
+                                <Input
+                                    type="select"
+                                    name="month"
+                                    required
+                                    onChange = {(e) => onChangeForm(e)}
+                                > <option>Select a Month</option>
+                                  {[...monthNames].map((m) => (
+                                      <option>{m}</option>
+                                  ))}
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup className="mb-3">
@@ -769,16 +805,23 @@ const Finance = () => {
                               <span className="text-muted">Location</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="select"
-                                  name="location"
-                                  required
-                                  onChange = {(e) => onChangeForm(e)}
-                              > <option>Select a Location</option>
-                                {[...allLoc].map((m) => (
-                                    <option key={m._id}>{m.location}</option>
-                                ))}
-                              </Input>
+                              <Tooltip
+                                  title="Enter the Plant you want to plan at"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
+                              >
+                                <Input
+                                    type="select"
+                                    name="location"
+                                    required
+                                    onChange = {(e) => onChangeForm(e)}
+                                > <option>Select a Location</option>
+                                  {[...allLoc].map((m) => (
+                                      <option key={m._id}>{m.location}</option>
+                                  ))}
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup className="mb-3">
@@ -786,16 +829,23 @@ const Finance = () => {
                               <span className="text-muted">Set Product</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="select"
-                                  name="item"
-                                  required
-                                  onChange = {(e) => onChangeForm(e)}
-                              > <option>Select a Product</option>
-                                {[...allBikes].map((t) => (
-                                    <option key={t._id}>{t.name}</option>
-                                ))}
-                              </Input>
+                              <Tooltip
+                                  title="Enter the Product you want to plan with"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
+                              >
+                                <Input
+                                    type="select"
+                                    name="item"
+                                    required
+                                    onChange = {(e) => onChangeForm(e)}
+                                > <option>Select a Product</option>
+                                  {[...allBikes].map((t) => (
+                                      <option key={t._id}>{t.name}</option>
+                                  ))}
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup className="mb-3">
@@ -803,13 +853,20 @@ const Finance = () => {
                               <span className="text-muted">Set Amount</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="number"
-                                  name="quantity"
-                                  required
-                                  onChange = {(e) => onChangeForm(e)}
+                              <Tooltip
+                                  title="Set the amount of the products you wish to plan for"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
                               >
-                              </Input>
+                                <Input
+                                    type="number"
+                                    name="quantity"
+                                    required
+                                    onChange = {(e) => onChangeForm(e)}
+                                >
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <FormGroup className="mb-3">
@@ -817,13 +874,20 @@ const Finance = () => {
                               <span className="text-muted">Sales Goal</span>
                             </label>
                             <InputGroup className="input-group-alternative">
-                              <Input
-                                  type="number"
-                                  name="salesGoal"
-                                  required
-                                  onChange = {(e) => onChangeForm(e)}
+                              <Tooltip
+                                  title="Enter the Sale goal for the selected products"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
                               >
-                              </Input>
+                                <Input
+                                    type="number"
+                                    name="salesGoal"
+                                    required
+                                    onChange = {(e) => onChangeForm(e)}
+                                >
+                                </Input>
+                              </Tooltip>
                             </InputGroup>
                           </FormGroup>
                           <div className="text-center">
