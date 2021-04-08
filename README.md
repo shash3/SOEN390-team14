@@ -43,7 +43,7 @@ The project is a simplified ERP website for our client who is the owner of a Bik
 ***
 ## Deployment
 The website is deployed and hosted on heroku. You can access the website through the following link:
-  * https://bikker.herokuapp.com/
+  * https://bikerr.herokuapp.com/
 
 ***
 
