@@ -52,9 +52,6 @@ it("Add plan Production", async () => {
 
 it("Add plan Sales", async () => {
   const res1 = await request(app).post("/api/Planning/addPlanSales", {
-
-  },{
-
       headers: {
         "x-auth-token": token
       }

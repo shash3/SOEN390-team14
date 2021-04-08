@@ -33,8 +33,36 @@ import {
 // core components
 import Tooltip from '@material-ui/core/Tooltip';
 import Header from '../../components/Headers/CardlessHeader.jsx';
+import {exportToJsonExcel} from "../../variables/export";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Transportation = () => {
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#trans-table'
+    })
+    doc.save('Transportation.pdf')
+  }
+
+  const exportToPDF2 = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#pack-table'
+    })
+    doc.save('Packaging.pdf')
+  }
+
+  const exportToPDF3 = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#comp-table'
+    })
+    doc.save('Completed Shipments.pdf')
+  }
+
   const userToken = JSON.parse(localStorage.getItem('user'));
   const [transportation, setTransportation] = useState([]);
   const [packaging, setPackaging] = useState([]);
@@ -338,6 +366,34 @@ const Transportation = () => {
                     Add Shipment
                   </Button>
                 </Tooltip>
+                <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="danger"
+                      onClick={() => exportToPDF()}
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to XLSX"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Transportation', transportation)}
+                  >
+                    Export to XLSX
+                  </Button>
+                </Tooltip>
                 <Modal
                   isOpen={modal1}
                   changeStatus={closeModal1}
@@ -460,7 +516,7 @@ const Transportation = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="trans-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -604,8 +660,36 @@ const Transportation = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Packaging</h2>
+                <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="danger"
+                      onClick={() => exportToPDF2()}
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to XLSX"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Packaging', packaging)}
+                  >
+                    Export to XLSX
+                  </Button>
+                </Tooltip>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="pack-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>
@@ -720,8 +804,36 @@ const Transportation = () => {
             <Card className="shadow">
               <CardHeader className="border-0">
                 <h2 className="mb-0">Completed Shipments</h2>
+                <Tooltip
+                    title="Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="danger"
+                      onClick={() => exportToPDF3()}
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to XLSX"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Completed Shipments', completed)}
+                  >
+                    Export to XLSX
+                  </Button>
+                </Tooltip>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="comp-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">ID</th>

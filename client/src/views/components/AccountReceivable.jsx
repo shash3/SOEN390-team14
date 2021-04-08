@@ -357,7 +357,7 @@ const AccountReceivable = () => {
                   <Button
                       className="mt-4 float-right"
                       color="success"
-                      onClick={() => exportToJsonExcel('AP Paid Receipts', receivablesP)}
+                      onClick={() => exportToJsonExcel('AR Paid Receipts', receivablesP)}
                   >
                     Export to XLSX
                   </Button>

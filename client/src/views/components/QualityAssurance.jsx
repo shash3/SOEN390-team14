@@ -34,8 +34,19 @@ import {
 import Tooltip from '@material-ui/core/Tooltip'
 import { exportToJsonExcel } from '../../variables/export'
 import Header from '../../components/Headers/CardlessHeader.jsx'
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const QualityAssurance = () => {
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#quality-table'
+    })
+    doc.save('Quality.pdf')
+  }
+
   const userToken = JSON.parse(localStorage.getItem('user'))
   const [userLocation, setUserLoc] = useState('')
 
@@ -630,19 +641,33 @@ const QualityAssurance = () => {
                 <Form>
                   <h2 className="mb-0 d-inline">Quality Parts</h2>
                   <Tooltip
+                      title="Export to PDF"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                  >
+                    <Button
+                        className="mt-4 float-right"
+                        color="danger"
+                        onClick={() => exportToPDF()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
                     title="Export quality table to a file"
                     arrow
                     placement="top-start"
                     enterDelay={750}
                   >
                     <Button
-                      className="float-right"
-                      color="danger"
+                        className="mt-4 float-right"
+                      color="success"
                       onClick={() =>
                         exportToJsonExcel('Quality Parts', searchQualityData)
                       }
                     >
-                      Export
+                      Export to XLSX
                     </Button>
                   </Tooltip>
                 </Form>
@@ -676,7 +701,7 @@ const QualityAssurance = () => {
                   </FormGroup>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table id="quality-table" className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
