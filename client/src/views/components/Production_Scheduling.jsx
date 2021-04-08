@@ -30,6 +30,9 @@ import { Bar } from 'react-chartjs-2'
 import { FormGroup } from '@material-ui/core'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
 
+const FileSaver = require('file-saver')
+const xml2js = require('xml2js')
+
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'))
 
@@ -97,6 +100,26 @@ const ProductionScheduling = () => {
       const newMachines = response.data
       setMachines(newMachines)
     }
+  }
+
+  /**
+   * Get the machine by its id.
+   */
+  const getMachineById = async (_id) => {
+    const response = await axios
+      .post(
+        '/api/machine/',
+        {
+          _id,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        },
+      )
+      .catch((err) => console.error('Error', err))
+    return response.data
   }
 
   /**
@@ -954,6 +977,27 @@ const ProductionScheduling = () => {
     }
   }, [graphYear, graphLinks, machineView, userLocation])
 
+  const exportMachineXML = async (key) => {
+    const machine = await getMachineById(key)
+    const xmlJson = {
+      "machines":
+      [
+        {
+          "machine": {
+            "id":machine._id,
+            "location":machine.location,
+            "product":machine.item,
+            "finishTime":machine.finish_time,
+          }
+        }
+      ]
+    }
+    const builder = new xml2js.Builder({ attrkey: 'ATTR' })
+    const xmlString = builder.buildObject(xmlJson)
+    const blob = new Blob([xmlString], {type: "application/xml"})
+    FileSaver.saveAs(blob, `Export_${machine._id}.xml`)
+  }
+
   /* -------------------------
    * Returns the HTML code for the productino tab.
    * -------------------------
@@ -1082,6 +1126,20 @@ const ProductionScheduling = () => {
                         hidden={m.item !== ''}
                       >
                         Destroy Machine
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title="Export the machine information to an XML format for communication"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                    >
+                      <Button
+                        color="info"
+                        onClick={() => exportMachineXML(m._id)}
+                        hidden={m.item === ''}
+                      >
+                        Export Machine
                       </Button>
                     </Tooltip>
                   </CardHeader>
