@@ -28,8 +28,27 @@ import {
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
 import {exportToJsonExcel} from "../../variables/export";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const AccountReceivable = () => {
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#arunpaid-table'
+    })
+    doc.save('AR Unpaid.pdf')
+  }
+
+  const exportToPDF2 = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#arpaid-table'
+    })
+    doc.save('AR paid.pdf')
+  }
+
   const [receivables, setReceivables] = useState([]);
   const [receivablesP, setReceivablesP] = useState([]);
   const userToken = JSON.parse(localStorage.getItem('user'));
@@ -150,12 +169,13 @@ const AccountReceivable = () => {
                   <Button
                     className="mt-4 float-right"
                     color="danger"
+                    onClick={() => exportToPDF()}
                   >
                     Export to PDF
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Click to export to CSV"
+                    title="Click to export to XLSX"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -165,7 +185,7 @@ const AccountReceivable = () => {
                       color="success"
                       onClick={() => exportToJsonExcel('AR Unpaid Receipts', receivables)}
                   >
-                    Export to CSV
+                    Export to XLSX
                   </Button>
                 </Tooltip>
                 <Modal
@@ -237,7 +257,7 @@ const AccountReceivable = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="arunpaid-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Invoice ID</th>
@@ -303,9 +323,7 @@ const AccountReceivable = () => {
                     </tr>
                   ))}
                 </tbody>
-
               </Table>
-
             </Card>
           </div>
         </Row>
@@ -317,7 +335,21 @@ const AccountReceivable = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Paid Accounts Receivable</h2>
                 <Tooltip
-                    title="Click to export to CSV"
+                    title="Click to Export to PDF"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="danger"
+                      onClick={() => exportToPDF2()}
+                  >
+                    Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to XLSX"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -327,11 +359,11 @@ const AccountReceivable = () => {
                       color="success"
                       onClick={() => exportToJsonExcel('AP Paid Receipts', receivablesP)}
                   >
-                    Export to CSV
+                    Export to XLSX
                   </Button>
                 </Tooltip>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="arpaid-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Invoice ID</th>

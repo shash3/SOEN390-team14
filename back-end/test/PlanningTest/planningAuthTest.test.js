@@ -45,18 +45,21 @@ it("Add plan Production", async () => {
         "x-auth-token": token
       }
     }).send({
-      "{}",
+      data: "{}"
     });
     expect(res1.body).toBeTruthy();
 });
 
 it("Add plan Sales", async () => {
   const res1 = await request(app).post("/api/Planning/addPlanSales", {
+
+  },{
+
       headers: {
         "x-auth-token": token
       }
     }).send({
-    "{}",
+    data: "{}"
     });
     expect(res1.body).toBeTruthy();
 });
@@ -67,7 +70,7 @@ it("Add Production Actual", async () => {
         "x-auth-token": token
       }
     }).send({
-      "{}",
+      data: "{}"
     });
     expect(res1.body).toBeTruthy();
 });
