@@ -28,6 +28,7 @@ import {
 // core components
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
+import {exportToJsonExcel} from "../../variables/export";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -172,6 +173,20 @@ const Sales = () => {
                     color="danger"
                   >
                     Export to PDF
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                    title="Click to export to CSV"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                >
+                  <Button
+                      className="mt-4 float-right"
+                      color="success"
+                      onClick={() => exportToJsonExcel('Sales Orders', sales)}
+                  >
+                    Export to CSV
                   </Button>
                 </Tooltip>
                 <Modal
