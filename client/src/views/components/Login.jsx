@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
-import React, { useState } from 'react';
-import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import React, { useState } from 'react'
+import axios from 'axios'
+import { Redirect } from 'react-router-dom'
 
 // reactstrap components
 import {
@@ -16,47 +16,48 @@ import {
   InputGroup,
   Row,
   Col,
-} from 'reactstrap';
+} from 'reactstrap'
 
 const Login = () => {
-  const [passwordVerification, setPasswordVerification] = useState(false);
+  const [passwordVerification, setPasswordVerification] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-  });
-  const [isAuthenticated, setAuthenticated] = useState(false);
-  const { email, password } = formData;
+  })
+  const [isAuthenticated, setAuthenticated] = useState(false)
+  const { email, password } = formData
 
-  const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const onSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const body = {
       email: formData.email,
       password: formData.password,
-    };
+    }
     await axios
       .post('/api/auth/login', body)
       .then((response) => {
         if (response.data.token) {
-          setPasswordVerification(false);
-          localStorage.setItem('user', JSON.stringify(response.data.token));
+          setPasswordVerification(false)
+          localStorage.setItem('user', JSON.stringify(response.data.token))
           localStorage.setItem(
             'permission',
             JSON.stringify(response.data.permission),
-          );
-          setAuthenticated(true);
+          )
+          setAuthenticated(true)
         }
       })
       .catch((error) => {
-        setPasswordVerification(true);
-        console.error(error);
-      });
-  };
+        setPasswordVerification(true)
+        console.error(error)
+      })
+  }
 
   // redirect when logged in
   if (isAuthenticated) {
-    return <Redirect to="/admin" />;
+    return <Redirect to="/admin" />
   }
 
   return (
@@ -100,16 +101,12 @@ const Login = () => {
                     minLength="8"
                   />
                 </InputGroup>
-               <br/>
+                <br />
                 {passwordVerification && (
-            
                   <div class="alert alert-danger" role="alert">
-                  Incorrect Password
+                    Incorrect Password
                   </div>
                 )}
-
-                
-              
               </FormGroup>
               <div className="custom-control custom-control-alternative custom-checkbox">
                 <input
@@ -142,7 +139,7 @@ const Login = () => {
         </Row>
       </Col>
     </>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
