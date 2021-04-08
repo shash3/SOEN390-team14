@@ -30,7 +30,8 @@
   },
   "jest": {
     "testRegex": "./test/.*.js$",
-    "rootDir": "."
+    "rootDir": ".",
+    "testTimeout" : 30000
   },
   "eslintConfig": {
     "extends": "react-app"
