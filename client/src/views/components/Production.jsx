@@ -64,7 +64,7 @@ const Production = () => {
     autoTable(doc, {
       html: "#pl-table"
     })
-    doc.save('Inventory.pdf')
+    doc.save('Product Line.pdf')
   }
 
   const userToken = JSON.parse(localStorage.getItem('user'))
