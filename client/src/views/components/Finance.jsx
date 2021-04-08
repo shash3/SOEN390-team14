@@ -96,8 +96,8 @@ const Finance = () => {
   const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
-  var proc;
-  var saleA;
+
+
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -123,51 +123,16 @@ const Finance = () => {
       [e.target.name]:e.target.value,
     })
   }
+  
   useEffect(() => {
-    const lookup0 = async() =>{
-    await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           proc = response.data;
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-       console.log("errorrrr");
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           saleA = response.data;
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-    lookup0();
-
-  },[]);
-  useEffect(() => {
-    
+    var proc;
+    var saleA;
     var prodP;
     var prodA;
     var salesP;
 
     const lookup1 = async() => {
-     /**  await axios
+        await axios
       .get('/api/procurement', {
         headers: {
           'x-auth-token': userToken,
@@ -180,7 +145,7 @@ const Finance = () => {
         }
       })
       .catch((error) => {
-       console.log("errorrrr");
+       
         console.error(error);
       });
       await axios
@@ -198,7 +163,7 @@ const Finance = () => {
       .catch((error) => {
         console.error(error);
       });
-      */
+      
       await axios
       .get('/api/planning/prod', {
         headers: {
@@ -231,20 +196,21 @@ const Finance = () => {
         setProdActual(response.data)}).catch((error)=>{
           console.error(error);
         });
-        console.log(prodA);
+        
        
+       console.log(proc);
+       console.log(saleA);
         var operMin = getOperationLog(prodA);
-        console.log(proc);
-        var procLog = getProcurementLog(procurement);
-        console.log(operMin);
-        console.log(procLog);
+  
+        var procLog = getProcurementLog(proc);
+     
         var monthC = getMonthlyCosts(operMin,procLog);
-        console.log(prodP);
+      
         var monthCP = getMonthlyCostsPlan(prodP);
-        console.log(salesP);
+       
         var monthSP = getMonthlySalesPlan(salesP)
-        console.log(saleA);
-        var salesLog = getSalesLog(salesActual);
+      
+        var salesLog = getSalesLog(saleA);
          getMonthlyProfitsPlan(monthSP,monthCP);
          getMonthlyProfits(salesLog,monthC);
 
@@ -252,71 +218,13 @@ const Finance = () => {
         
     };
     
-    const lookup = async() => {
-      await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/planning/prod', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-        
-        setProdPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-        await axios
-      .get('/api/planning/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-      
-        setSalesPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        }); 
-        
-        await axios
-      .get('/api/planning/prodActual', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-     
-        setProdActual(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-    };
     
-    lookup1(); 
+    setTimeout(() => {
+      lookup1();
+    getAllLoc();
+    setBikes();
+    },3000);
+   
     
     
 
@@ -443,7 +351,7 @@ const Finance = () => {
       const getMonthlySalesPlan = (salesPlans) => {
         
         var i;
-       var displayYear1 = 2021;
+       
         const updatedSalesPlan =[0,0,0,0,0,0,0,0,0,0,0,0];
         if(salesPlans[displayYear]==undefined){
         
@@ -548,10 +456,9 @@ const Finance = () => {
   
   
  
-  // use effect to get all bike types
-  useEffect(async () =>
-    {setAllBikes(await getAllBikes())} , []
-  );
+  //use effect to get all bike types
+  const setBikes = async () =>
+    {setAllBikes(await getAllBikes())} ;
 
   // Holds all final bike types
   const[allBikes, setAllBikes] = useState([]);
@@ -621,6 +528,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
+    
     setUpdateData(!updateData);
     setPlanFormData({
       year:0,
@@ -647,7 +555,7 @@ const Finance = () => {
   const [graphOptions, setGraphOptions] = useState(chartAnnualProfits.options);
 
   useEffect(()=> {
-    getAllLoc();
+    //getAllLoc();
     if(viewSales){
       setGraphData({
         labels: monthNames,
@@ -689,7 +597,7 @@ const Finance = () => {
       setGraphOptions(chartAnnualProfits.options);
       setGraphTitle("Annual Profits");
     }
-    console.log("hello00");
+  
   },
   [viewSales,monthlySalesPlans,monthlyProfitsPlan,monthlySales,monthlyProfits,displayYear]
   );
