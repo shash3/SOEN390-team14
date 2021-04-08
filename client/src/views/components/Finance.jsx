@@ -142,7 +142,7 @@ const Finance = () => {
         }
       })
       .catch((error) => {
-       
+       console.log("errorrrr");
         console.error(error);
       });
       await axios
@@ -192,13 +192,19 @@ const Finance = () => {
         setProdActual(response.data)}).catch((error)=>{
           console.error(error);
         });
+        console.log(prodA);
        
         var operMin = getOperationLog(prodA);
-   
+        console.log(proc);
         var procLog = getProcurementLog(proc);
+        console.log(operMin);
+        console.log(procLog);
         var monthC = getMonthlyCosts(operMin,procLog);
+        console.log(prodP);
         var monthCP = getMonthlyCostsPlan(prodP);
+        console.log(salesP);
         var monthSP = getMonthlySalesPlan(salesP)
+        console.log(saleA);
         var salesLog = getSalesLog(saleA);
          getMonthlyProfitsPlan(monthSP,monthCP);
          getMonthlyProfits(salesLog,monthC);
@@ -644,6 +650,7 @@ const Finance = () => {
       setGraphOptions(chartAnnualProfits.options);
       setGraphTitle("Annual Profits");
     }
+    console.log("hello00");
   },
   [viewSales,monthlySalesPlans,monthlyProfitsPlan,monthlySales,monthlyProfits,displayYear]
   );
@@ -703,7 +710,7 @@ const Finance = () => {
                              setDisplayYear(display.year);
                             }}
                         >
-                          Update Year
+                          Refresh Graph
                         </Button>
                         <div className="chart mb-3">
                           <Bar data={graphData}
@@ -820,7 +827,7 @@ const Finance = () => {
                             </InputGroup>
                           </FormGroup>
                           <div className="text-center">
-                            <Button color="primary" type = "submit" onClick={addNewPlan}>
+                            <Button color="primary" type = "submit"  onClick={addNewPlan}>
                               Update Monthly Goals
                             </Button>
                           </div>

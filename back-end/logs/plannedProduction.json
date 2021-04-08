@@ -23,7 +23,11 @@
       "Plant 2": {
         "Large Aluminium Bike": 66,
         "Small Aluminium Bike": 54,
-        "test": 33
+        "test": 33,
+        "Small Carbon Bike": 30
+      },
+      "Plant 1": {
+        "Small Steel Bike": 55
       }
     },
     "October": {
@@ -34,7 +38,11 @@
     },
     "May": {
       "Plant 2": {
-        "Medium Aluminium Bike": 44
+        "Medium Aluminium Bike": 44,
+        "Large Aluminium Bike": 66
+      },
+      "Plant 1": {
+        "Small Aluminium Bike": 85
       }
     },
     "February": {
@@ -55,12 +63,24 @@
       "Plant 1": {
         "Medium Aluminium Bike": 65,
         "Large Steel Bike": 98
+      },
+      "Plant 3": {
+        "Small Steel Bike": 52
       }
     },
     "April": {
       "Plant 2": {
-        "Small Aluminium Bike": 56,
-        "Small Carbon Bike": 43
+        "Small Aluminium Bike": 32,
+        "Small Carbon Bike": 43,
+        "Medium Steel Bike": 45,
+        "Small Steel Bike": 53
+      },
+      "Plant 3": {
+        "Small Aluminium Bike": 50
+      },
+      "Plant 1": {
+        "Medium Carbon Bike": 43,
+        "Small Steel Bike": 56
       }
     },
     "September": {
