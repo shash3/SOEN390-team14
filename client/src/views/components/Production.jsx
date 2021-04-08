@@ -49,6 +49,8 @@ import autoTable from 'jspdf-autotable'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
 import { exportToJsonExcel } from '../../variables/export'
 
+const xml2js = require('xml2js')
+
 const Production = () => {
   const exportToPDF = () => {
     const doc = new jsPDF()
@@ -112,7 +114,9 @@ const Production = () => {
   const [notCurLoc, setNotCurLoc] = useState([])
   const [locRetrieval, setLocRetrieval] = useState('')
   const [disabledTransferButton, setDisableTransferButton] = useState(false)
-  const [createTransferOutputHTML, setCreateTransferOutputHTML] = useState([])
+  const [createTransferOutputHTML, setCreateTransferOutputHTML] = useState(
+    <></>,
+  )
 
   // Shared between create product & transfer product
   const [hideConfirmBtns, setHiddenConfirmBtns] = useState(false)
@@ -121,7 +125,6 @@ const Production = () => {
   // create product modals
   const [createModal, setCreateModal] = useState(false)
   const [prodName, setProdName] = useState('')
-  const [prodType, setProdType] = useState('')
   const [prodQuant, setProdQuant] = useState(1)
   const [
     unstableCreateInputsValidation,
@@ -131,13 +134,20 @@ const Production = () => {
     quantity: '',
   })
   const [disabledCreateNewProd, setDisableCreateNewProd] = useState(false)
-  const [createProdOutputHTML, setCreateProdOutputHTML] = useState([])
+  const [createProdOutputHTML, setCreateProdOutputHTML] = useState(<></>)
 
   // Loading Circle
-  const { containerProps, indicatorEl } = useLoading({
+  const {
+    containerProps: loadingProps,
+    indicatorEl: loadingIndicator,
+  } = useLoading({
     loading: true,
     indicator: <Oval color="#11cdef" width="50px" />,
   })
+
+  const [displayMessageModal, setDisplayMessageModal] = useState(false)
+  const [messageModal, setMessageModal] = useState(<></>)
+  const toggleMessageModal = () => setDisplayMessageModal(!displayMessageModal)
 
   // Toggle product line modal
   const toggleAddModal = () => {
@@ -373,6 +383,31 @@ const Production = () => {
         if (response.data) {
           const productLineMat = response.data[0].material
           return productLineMat
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    return reply
+  }
+
+  const returnProductType = (productName) => {
+    // Get materials for product.
+    const reply = axios
+      .post(
+        '/api/product_line/itemType',
+        {
+          name: productName,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        },
+      )
+      .then((response) => {
+        if (response.data) {
+          return response.data
         }
       })
       .catch((error) => {
@@ -741,7 +776,7 @@ const Production = () => {
     setUnstableInputValidation({ prodName: true, quantities: [true] })
     setErrorMessages({ prodName: '', quantities: [''] })
     setDisableTransferButton(false)
-    setCreateTransferOutputHTML([])
+    setCreateTransferOutputHTML(<></>)
     setHiddenConfirmBtns(false)
     setHiddenLoading(true)
   }
@@ -851,11 +886,11 @@ const Production = () => {
      * @returns An array of HTML elements
      */
     const createInvalidHTML = (invalids) => {
-      let html = []
+      let arr = []
       invalids.forEach((element) => {
         const { name, quantNeed, quantHave } = element
-        html = [
-          ...html,
+        arr = [
+          ...arr,
           <FormGroup>
             <Button className="btn-danger" disabled>
               Don&apos;t have enough of{' '}
@@ -866,6 +901,13 @@ const Production = () => {
           </FormGroup>,
         ]
       })
+      const html = (
+        <div>
+          {arr.map((m, i) => (
+            <div key={`html:${i + 1}`}>{m}</div>
+          ))}
+        </div>
+      )
       return html
     }
 
@@ -875,15 +917,17 @@ const Production = () => {
      * @returns An array of HTML elements
      */
     const createSuccessHTML = () => {
-      const html = [
-        <FormGroup>
-          <Button className="btn-success" disabled>
-            Successfully requested materials to be shipped from location
-            {locRetrieval} to location
-            {userLoc}.
-          </Button>
-        </FormGroup>,
-      ]
+      const html = (
+        <div>
+          <FormGroup>
+            <Button className="btn-success" disabled>
+              Successfully requested materials to be shipped from location
+              {locRetrieval} to location
+              {userLoc}.
+            </Button>
+          </FormGroup>
+        </div>
+      )
       return html
     }
 
@@ -926,15 +970,14 @@ const Production = () => {
    *
    * @param {String} name the name of the product to create
    */
-  const initCreateModal = (name, type) => {
+  const initCreateModal = (name) => {
     toggleCreateModal()
     setProdName(name)
-    setProdType(type)
     setProdQuant(1)
     setUnstableCreateInputValidation({ quantity: true })
     setCreateErrorMessages({ quantity: '' })
     setDisableCreateNewProd(false)
-    setCreateProdOutputHTML([])
+    setCreateProdOutputHTML(<></>)
     setHiddenConfirmBtns(false)
     setHiddenLoading(true)
   }
@@ -987,7 +1030,8 @@ const Production = () => {
   /**
    * Creating product from product line.
    */
-  const createProduct = async () => {
+  const createProduct = async (productName, productQuantity, productLocation) => {
+
     /**
      * Returns the finish_time of the machine that has an item and the smallest finish_time.
      *
@@ -1024,12 +1068,15 @@ const Production = () => {
         const material = allMaterials[index]
         const name = material[0]
         const num = material[1]
-        const inInventory = await returnQuantityInInventory(name, userLoc)
+        const inInventory = await returnQuantityInInventory(
+          name,
+          productLocation,
+        )
 
-        if (inInventory < num * prodQuant) {
+        if (inInventory < num * productQuantity) {
           invalids = [
             ...invalids,
-            { name, quantNeed: num * prodQuant, quantHave: inInventory },
+            { name, quantNeed: num * productQuantity, quantHave: inInventory },
           ]
         }
       }
@@ -1045,8 +1092,8 @@ const Production = () => {
       matList.forEach((material) => {
         const name = material[0]
         const num = material[1]
-        const quantity = num * prodQuant
-        decrementInventory(name, userLoc, quantity)
+        const quantity = num * productQuantity
+        decrementInventory(name, productLocation, quantity)
       })
     }
 
@@ -1076,7 +1123,9 @@ const Production = () => {
       const html = [
         <FormGroup>
           <Button className="btn-danger" disabled>
-            There are not enough machines available at your location ({userLoc}
+            There are not enough machines available at your location (
+            {productLocation}
+
             ).
             {nextAvailTime == null
               ? ''
@@ -1095,16 +1144,18 @@ const Production = () => {
      * @returns An array of HTML elements
      */
     const createInvalidHTML = (invalids) => {
-      let html = []
+      let arr = []
       invalids.forEach((element) => {
         const { name, quantNeed, quantHave } = element
-        html = [
-          ...html,
+        arr = [
+          ...arr,
           <FormGroup>
             <Button className="btn-danger" disabled>
               Don&apos;t have enough of{' '}
               <label className="text-indigo strong">{name}</label> to make{' '}
-              {prodQuant} {prodName} at your location ({userLoc}
+              {productQuantity} {productName} at your location (
+              {productLocation}
+
               ).
               <br />
               Requires {quantNeed}, but only {quantHave} in inventory.
@@ -1112,6 +1163,13 @@ const Production = () => {
           </FormGroup>,
         ]
       })
+      const html = (
+        <div>
+          {arr.map((m, i) => (
+            <div key={`html:${i + 1}`}>{m}</div>
+          ))}
+        </div>
+      )
       return html
     }
 
@@ -1121,15 +1179,17 @@ const Production = () => {
      * @returns An array of HTML elements
      */
     const createSuccessHTML = () => {
-      const html = [
+      const html = (
         <FormGroup>
           <Button className="btn-success" disabled>
             Successfully creating
-            {prodQuant} <label className="text-indigo strong">{prodName}</label>{' '}
-            in production machines at {userLoc}.
+            {productQuantity}{' '}
+            <label className="text-indigo strong">{productName}</label> in
+            production machines at {productLocation}.
+
           </Button>
-        </FormGroup>,
-      ]
+        </FormGroup>
+      )
       return html
     }
 
@@ -1137,44 +1197,127 @@ const Production = () => {
      * The main function to create the product.
      */
     const main = async () => {
-      setHiddenConfirmBtns(true)
-      setHiddenLoading(false)
+      // Get all available machine at the user's location.
+      const availMachines = await returnAvailableMachines(productLocation)
 
-      try {
-        // Get all available machine at the user's location.
-        const availMachines = await returnAvailableMachines(userLoc)
-
-        // Check if there are enough machines to make the products.
-        if (prodQuant > availMachines.length) {
-          const allMachines = await returnAllMachines(userLoc)
-          const nextAvailable = await returnNextAvailable(allMachines)
-          setCreateProdOutputHTML(
-            createNoMachineHTML(availMachines.length, nextAvailable),
-          )
-          return
-        }
-
-        // Get the materials to create the product.
-        const matList = await returnProductLine(prodName)
-        const invalids = await returnInvalidMaterials(matList)
-
-        // Check if there is are materials with not enough quantity to make the products.
-        if (invalids.length > 0) {
-          setCreateProdOutputHTML(createInvalidHTML(invalids))
-          return
-        }
-
-        // Start the process to create the product by removing from inventory and adding it to production machines. Indicate that it was successful.
-        addToMachines(availMachines, prodName, prodType, prodQuant, userLoc)
-        removeFromInventory(materialList)
-        setCreateProdOutputHTML(createSuccessHTML())
-      } finally {
-        setHiddenLoading(true)
-        updateInventoryView(!inventoryView)
+      // Check if there are enough machines to make the products.
+      if (productQuantity > availMachines.length) {
+        const allMachines = await returnAllMachines(productLocation)
+        const nextAvailable = await returnNextAvailable(allMachines)
+        return createNoMachineHTML(availMachines.length, nextAvailable)
       }
+
+      // Get the materials to create the product.
+      const matList = await returnProductLine(productName)
+      const invalids = await returnInvalidMaterials(matList)
+
+
+      // Check if there is are materials with not enough quantity to make the products.
+      if (invalids.length > 0) {
+        return createInvalidHTML(invalids)
+      }
+
+      // Start the process to create the product by removing from inventory and adding it to production machines. Indicate that it was successful.
+      const prodType = await returnProductType(productName)
+      addToMachines(
+        availMachines,
+        productName,
+        prodType,
+        productQuantity,
+        productLocation,
+      )
+      removeFromInventory(matList)
+      return createSuccessHTML()
     }
 
-    main()
+    return main()
+  }
+
+  const createProductUsingWebservice = async () => {
+    setHiddenConfirmBtns(true)
+    setHiddenLoading(false)
+
+    const reply = await createProduct(prodName, prodQuant, userLoc)
+    setCreateProdOutputHTML(reply)
+
+    setHiddenLoading(true)
+    updateInventoryView(!inventoryView)
+  }
+
+  const createProductionUsingXML = () => {
+    const parseResult = async (result, xmlFile) => {
+      let html
+      console.log(result)
+      if (result === null || result.processes === undefined) {
+        html = (
+          <Form>
+            <h2 className="mb-3">XML Error:</h2>
+            <Button className="btn-danger" disabled>
+              Invalid syntax for {xmlFile}
+            </Button>
+          </Form>
+        )
+        return html
+      }
+      if (result.processes.product === undefined) {
+        html = (
+          <Form>
+            <h2 className="mb-4">XML Error:</h2>
+            <Button className="btn-danger" disabled>
+              No products requested to create
+            </Button>
+          </Form>
+        )
+        return html
+      }
+
+      let arr = []
+      const products = result.processes.product
+
+      for (let index = 0; index < products.length; index+=1) {
+        const { name, amount, location } = products[index]
+        const itemHTML = (
+          <Form className="my-2">
+            <h2 className="mb-2">Results for item: {name[0]}</h2>
+            {await createProduct(name[0], parseInt(amount[0], 10), location[0])}
+          </Form>
+        )
+        arr = [...arr, itemHTML]
+      }
+
+      html = (
+        <div>
+          {arr.map((m, i) => (
+            <div key={`itemHTML:${i + 1}`}>{m}</div>
+          ))}
+        </div>
+      )
+      return html
+    }
+
+    const getFile = document.createElement('input')
+    getFile.type = 'file'
+    getFile.accept = '.xml'
+    getFile.title = 'Select Production Command XML'
+    getFile.onchange = () => {
+      setHiddenLoading(false)
+      const xmlFile = getFile.files[0]
+      const reader = new FileReader()
+      reader.onload = () => {
+        const data = reader.result.replace('data:text/xml;base64,', '')
+
+        const parser = new xml2js.Parser({ attrkey: 'ATTR' })
+        const xmlString = window.atob(data)
+        parser.parseString(xmlString, async (error, result) => {
+          setMessageModal(await parseResult(result, xmlFile.name))
+
+          setHiddenLoading(true)
+          setDisplayMessageModal(true)
+        })
+      }
+      reader.readAsDataURL(xmlFile)
+    }
+    getFile.click()
   }
 
   const exportProductLine = async () => {
@@ -1309,7 +1452,6 @@ const Production = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
-                    <th scope="col"> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1333,6 +1475,40 @@ const Production = () => {
                             <i className="bg-success" />
                             {m.location}
                           </Badge>
+                        </td>
+                        <td className="text-right">
+                          <UncontrolledDropdown>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                              <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                Action
+                              </DropdownItem>
+                              <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                Another action
+                              </DropdownItem>
+                              <DropdownItem
+                                href="#pablo"
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                Something else here
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
                         </td>
                       </tr>
                     ))}
@@ -1491,8 +1667,31 @@ const Production = () => {
                       onClick={() => exportProductLine()}
                     >
                       Export to XLSX
+
                     </Button>
                   </Tooltip>
+                  <Tooltip
+                    title="Create a product through an imported XML file"
+                    arrow
+                    placement="top-start"
+                    enterDelay={750}
+                  >
+                    <Button
+                      disabled={!hideLoading}
+                      className="float-right"
+                      color="info"
+                      onClick={() => createProductionUsingXML()}
+                    >
+                      Create Pruduct Using XML
+                    </Button>
+                  </Tooltip>
+                  <section
+                    hidden={hideLoading}
+                    className="float-right"
+                    {...loadingProps}
+                  >
+                    {loadingIndicator}
+                  </section>
                 </Form>
               </CardHeader>
               <Table
@@ -1530,7 +1729,7 @@ const Production = () => {
                           >
                             <Button
                               onClick={() => {
-                                initCreateModal(m.name, m.type)
+                                initCreateModal(m.name)
                               }}
                             >
                               Create
@@ -1822,11 +2021,9 @@ const Production = () => {
             </Form>
           </ModalBody>
           <ModalFooter>
-            {createProdOutputHTML.map((m, i) => (
-              <div key={`html:${i + 1}`}>{m}</div>
-            ))}
+            {createProdOutputHTML}
             <FormGroup hidden={hideLoading}>
-              <section {...containerProps}>{indicatorEl}</section>
+              <section {...loadingProps}>{loadingIndicator}</section>
             </FormGroup>
             <Tooltip
               title="There must be no errors to be able to confirm"
@@ -1843,7 +2040,7 @@ const Production = () => {
                   disabled={disabledCreateNewProd}
                   color="primary"
                   onClick={() => {
-                    createProduct()
+                    createProductUsingWebservice()
                   }}
                 >
                   Confirm
@@ -1983,11 +2180,9 @@ const Production = () => {
             </Button>
           </ModalBody>
           <ModalFooter>
-            {createTransferOutputHTML.map((m, i) => (
-              <div key={`html:${i + 1}`}>{m}</div>
-            ))}
+            {createTransferOutputHTML}
             <FormGroup hidden={hideLoading}>
-              <section {...containerProps}>{indicatorEl}</section>
+              <section {...loadingProps}>{loadingIndicator}</section>
             </FormGroup>
             <Tooltip
               title="There must be no errors to be able to confirm"
@@ -2020,6 +2215,13 @@ const Production = () => {
               Cancel
             </Button>
           </ModalFooter>
+        </Modal>
+      </div>
+
+      {/* Modal to display messages */}
+      <div>
+        <Modal isOpen={displayMessageModal} toggle={toggleMessageModal}>
+          <ModalBody>{messageModal}</ModalBody>
         </Modal>
       </div>
     </>
