@@ -96,8 +96,7 @@ const Finance = () => {
   const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
-  let proc;
-  let saleA;
+
 
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
@@ -124,8 +123,9 @@ const Finance = () => {
       [e.target.name]:e.target.value,
     })
   }
-   useEffect(() => {
+  /**  useEffect(() => {
     const lookup0 = async() =>{
+      
     await axios
       .get('/api/procurement', {
         headers: {
@@ -158,19 +158,23 @@ const Finance = () => {
         console.error(error);
       });
     }
-    lookup0();
+    setTimeout(() => {
+      lookup0();
     getAllLoc();
     setBikes();
+    },3000);
+    
 
-  },[]); 
+  },[]); */
   useEffect(() => {
-   
+    var proc;
+    var saleA;
     var prodP;
     var prodA;
     var salesP;
 
     const lookup1 = async() => {
-     /**   await axios
+        await axios
       .get('/api/procurement', {
         headers: {
           'x-auth-token': userToken,
@@ -201,7 +205,7 @@ const Finance = () => {
       .catch((error) => {
         console.error(error);
       });
-      **/
+      
       await axios
       .get('/api/planning/prod', {
         headers: {
@@ -237,6 +241,7 @@ const Finance = () => {
         
        
        console.log(proc);
+       console.log(saleA);
         var operMin = getOperationLog(prodA);
   
         var procLog = getProcurementLog(proc);
@@ -318,8 +323,12 @@ const Finance = () => {
         });
         
     };
-    
-    lookup1(); 
+    setTimeout(() => {
+      lookup1();
+    getAllLoc();
+    setBikes();
+    },3000);
+   
     
     
 
@@ -623,7 +632,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
-    setTimeout({},3000);
+    
     setUpdateData(!updateData);
     setPlanFormData({
       year:0,
