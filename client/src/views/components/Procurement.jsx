@@ -29,8 +29,20 @@ import {
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
 import {exportToJsonExcel} from "../../variables/export";
-
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 const Procurement = () => {
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: '#po-table'
+    })
+    doc.save('PO.pdf')
+  }
+
+
+
   const [procurement, setProcurement] = useState([]);
   const [locations, setLocations] = useState([]);
   const [materials, setMaterials] = useState([]);
@@ -224,12 +236,13 @@ const Procurement = () => {
                   <Button
                     className="mt-4 float-right"
                     color="danger"
+                    onClick={() => exportToPDF()}
                   >
                     Export to PDF
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Click to export to CSV"
+                    title="Click to export to XLSX"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -239,7 +252,7 @@ const Procurement = () => {
                       color="success"
                       onClick={() => exportToJsonExcel('Procurement Orders', procurement)}
                   >
-                    Export to CSV
+                    Export to XLSX
                   </Button>
                 </Tooltip>
                 <Modal
@@ -390,7 +403,7 @@ const Procurement = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="po-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Receipt ID</th>

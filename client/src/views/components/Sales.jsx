@@ -29,6 +29,17 @@ import {
 import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
 import Tooltip from "@material-ui/core/Tooltip";
 import {exportToJsonExcel} from "../../variables/export";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import autoTable from "jspdf-autotable";
+
+const exportToPDF = () =>{
+  const doc = new jsPDF()
+  autoTable(doc, {
+    html: '#sales-table'
+  })
+  doc.save('sales.pdf')
+}
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -171,12 +182,13 @@ const Sales = () => {
                   <Button
                     className="mt-4 float-right"
                     color="danger"
+                    onClick={() => exportToPDF()}
                   >
                     Export to PDF
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Click to export to CSV"
+                    title="Click to export to XLSX"
                     arrow
                     placement="top-start"
                     enterDelay={750}
@@ -186,7 +198,7 @@ const Sales = () => {
                       color="success"
                       onClick={() => exportToJsonExcel('Sales Orders', sales)}
                   >
-                    Export to CSV
+                    Export to XLSX
                   </Button>
                 </Tooltip>
                 <Modal
@@ -328,7 +340,7 @@ const Sales = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table className="align-items-center table-flush mb-6" responsive>
+              <Table id="sales-table" className="align-items-center table-flush mb-6" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Receipt ID</th>
