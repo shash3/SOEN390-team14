@@ -32,105 +32,112 @@
       }
     }
   },
+  "2020": {
+    "October": {
+      "Plant 2": {
+        "Small Aluminium Bike": 55
+      }
+    }
+  },
   "2021": {
     "August": {
       "Plant 2": {
-        "Large Aluminium Bike": 66,
-        "Small Aluminium Bike": 32,
+        "Large Aluminium Bike": 15,
+        "Small Aluminium Bike": 13,
         "test": 33,
-        "Small Carbon Bike": 23
+        "Small Carbon Bike": 17
       },
       "Plant 1": {
-        "Small Steel Bike": 55
+        "Small Steel Bike": 13
       }
     },
     "October": {
       "Plant 2": {
-        "Large Aluminium Bike": 83,
-        "Small Carbon Bike": 66
+        "Large Aluminium Bike": 12,
+        "Small Carbon Bike": 18
       }
     },
     "May": {
       "Plant 2": {
-        "Medium Aluminium Bike": 44,
-        "Large Aluminium Bike": 66
+        "Medium Aluminium Bike": 19,
+        "Large Aluminium Bike": 21
       },
       "Plant 1": {
-        "Small Aluminium Bike": 85,
+        "Small Aluminium Bike": 43,
         "test": 15
       }
     },
     "February": {
       "Plant 2": {
-        "Small Carbon Bike": 26,
-        "Large Aluminium Bike": 7
+        "Small Carbon Bike": 11,
+        "Large Aluminium Bike": 11
       },
       "Plant 1": {
-        "Small Steel Bike": 33
+        "Small Steel Bike": 21
       }
     },
     "June": {
       "Plant 2": {
-        "test": 77,
-        "Small Steel Bike": 21,
-        "Medium Carbon Bike": 21
+        "test": 11,
+        "Small Steel Bike": 12,
+        "Medium Carbon Bike": 12
       }
     },
     "July": {
       "Plant 1": {
-        "Medium Aluminium Bike": 65,
-        "Large Steel Bike": 98
+        "Medium Aluminium Bike": 23,
+        "Large Steel Bike": 10
       },
       "Plant 3": {
-        "Small Steel Bike": 52
+        "Small Steel Bike": 13
       }
     },
     "April": {
       "Plant 2": {
-        "Small Aluminium Bike": 32,
-        "Small Carbon Bike": 43,
-        "Medium Steel Bike": 45,
-        "Small Steel Bike": 53
+        "Small Aluminium Bike": 12,
+        "Small Carbon Bike": 13,
+        "Medium Steel Bike": 15,
+        "Small Steel Bike": 13
       },
       "Plant 3": {
-        "Small Aluminium Bike": 50
+        "Small Aluminium Bike": 10
       },
       "Plant 1": {
-        "Medium Carbon Bike": 43,
-        "Small Steel Bike": 56
+        "Medium Carbon Bike": 13,
+        "Small Steel Bike": 16
       }
     },
     "September": {
       "Plant 2": {
-        "Small Aluminium Bike": 64
+        "Small Aluminium Bike": 14
       },
       "Plant 1": {
-        "Medium Aluminium Bike": 23,
-        "test": 53
+        "Medium Aluminium Bike": 13,
+        "test": 13
       }
     },
     "March": {
       "Plant 2": {
-        "Medium Carbon Bike": 73,
-        "Small Carbon Bike": 63
+        "Medium Carbon Bike": 13,
+        "Small Carbon Bike": 13
       },
       "Plant 1": {
-        "Small Steel Bike": 66
+        "Small Steel Bike": 16
       }
     },
     "December": {
       "Plant 2": {
-        "Small Aluminium Bike": 62
+        "Small Aluminium Bike": 12
       }
     },
     "November": {
       "Plant 2": {
-        "Medium Steel Bike": 48
+        "Medium Steel Bike": 18
       }
     },
     "January": {
       "Plant 2": {
-        "Medium Carbon Bike": 46
+        "Medium Carbon Bike": 16
       }
     }
   }

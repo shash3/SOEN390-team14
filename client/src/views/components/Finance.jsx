@@ -335,7 +335,7 @@ const Finance = () => {
            }
            monthSum += plantSum;
          }
-         updatedMonthlyCostsPlan[i] = monthSum*45*operationCostPerMinute+monthSum*100;
+         updatedMonthlyCostsPlan[i] = monthSum*45*operationCostPerMinute+monthSum*25;
         
        }
        

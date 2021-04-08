@@ -1703,4 +1703,182 @@
     "August": 99,
     "October": 31
   }
-} by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:45:02 GMT] added a new sale of item hh and quantity: 66 to hh for a value of 7600 by 6034ca0591512954d86a6932
+} by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:45:02 GMT] added a new sale of item hh and quantity: 66 to hh for a value of 7600 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:51:12 GMT] added a planned production {
+  "0": {
+    "": {
+      "": {
+        "": 0
+      }
+    },
+    "August": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 83
+      }
+    }
+  },
+  "54": {
+    "March": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 77
+      }
+    }
+  },
+  "1995": {
+    "July": {
+      "Plant 2": {
+        "Small Steel Bike": 533
+      }
+    }
+  },
+  "2012": {
+    "August": {
+      "Plant 2": {
+        "Small Aluminium Bike": 43
+      }
+    }
+  },
+  "2020": {
+    "October": {
+      "Plant 2": {
+        "Small Aluminium Bike": 55
+      }
+    }
+  },
+  "2021": {
+    "August": {
+      "Plant 2": {
+        "Large Aluminium Bike": 66,
+        "Small Aluminium Bike": 32,
+        "test": 33,
+        "Small Carbon Bike": 23
+      },
+      "Plant 1": {
+        "Small Steel Bike": 55
+      }
+    },
+    "October": {
+      "Plant 2": {
+        "Large Aluminium Bike": 83,
+        "Small Carbon Bike": 66
+      }
+    },
+    "May": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 44,
+        "Large Aluminium Bike": 66
+      },
+      "Plant 1": {
+        "Small Aluminium Bike": 85,
+        "test": 15
+      }
+    },
+    "February": {
+      "Plant 2": {
+        "Small Carbon Bike": 26,
+        "Large Aluminium Bike": 7
+      },
+      "Plant 1": {
+        "Small Steel Bike": 33
+      }
+    },
+    "June": {
+      "Plant 2": {
+        "test": 77,
+        "Small Steel Bike": 21,
+        "Medium Carbon Bike": 21
+      }
+    },
+    "July": {
+      "Plant 1": {
+        "Medium Aluminium Bike": 65,
+        "Large Steel Bike": 98
+      },
+      "Plant 3": {
+        "Small Steel Bike": 52
+      }
+    },
+    "April": {
+      "Plant 2": {
+        "Small Aluminium Bike": 32,
+        "Small Carbon Bike": 43,
+        "Medium Steel Bike": 45,
+        "Small Steel Bike": 53
+      },
+      "Plant 3": {
+        "Small Aluminium Bike": 50
+      },
+      "Plant 1": {
+        "Medium Carbon Bike": 43,
+        "Small Steel Bike": 56
+      }
+    },
+    "September": {
+      "Plant 2": {
+        "Small Aluminium Bike": 64
+      },
+      "Plant 1": {
+        "Medium Aluminium Bike": 23,
+        "test": 53
+      }
+    },
+    "March": {
+      "Plant 2": {
+        "Medium Carbon Bike": 73,
+        "Small Carbon Bike": 63
+      },
+      "Plant 1": {
+        "Small Steel Bike": 66
+      }
+    },
+    "December": {
+      "Plant 2": {
+        "Small Aluminium Bike": 62
+      }
+    },
+    "November": {
+      "Plant 2": {
+        "Medium Steel Bike": 48
+      }
+    },
+    "January": {
+      "Plant 2": {
+        "Medium Carbon Bike": 46
+      }
+    }
+  }
+} by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:51:12 GMT] added a planned sales {
+  "0": {
+    "": 0,
+    "August": 900
+  },
+  "54": {
+    "March": 49500
+  },
+  "1995": {
+    "July": 44000
+  },
+  "2020": {
+    "October": 11000
+  },
+  "2021": {
+    "April": 346500,
+    "August": 10500,
+    "October": 49500,
+    "May": 16000,
+    "February": 37500,
+    "June": 16500,
+    "July": 16000,
+    "September": 44000,
+    "March": 43500,
+    "December": 31500,
+    "November": 41000,
+    "January": 44000
+  },
+  "2022": {
+    "March": 99,
+    "July": 47,
+    "June": 88,
+    "August": 99,
+    "October": 31
+  }
+} by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:56:50 GMT] added a new sale of item john james and quantity: 50 to john adams for a value of 6000 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:57:41 GMT] added a new sale of item james johnson and quantity: 42 to robert dawson for a value of 5000 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:58:18 GMT] added a new sale of item harold pumpkins and quantity: 66 to johnny man for a value of 7600 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:58:48 GMT] added a new sale of item adam adams and quantity: 66 to johny johnson for a value of 6600 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 02:59:21 GMT] added a new sale of item bob marley and quantity: 66 to celine dion for a value of 4300 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:00:07 GMT] added a new sale of item bobby bobson and quantity: 33 to rocky rockson for a value of 6200 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:01:10 GMT] added a new sale of item gary good and quantity: 43 to gary bad for a value of 2500 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:01:59 GMT] added a new sale of item honey hon and quantity: 33 to jack jackson for a value of 9300 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:02:34 GMT] added a new sale of item bobs springs and quantity: 33 to gretchen for a value of 4000 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:03:21 GMT] added a new sale of item yak yako and quantity: 64 to harry for a value of 2300 by 6034ca0591512954d86a6932[Thu, 08 Apr 2021 03:03:50 GMT] added a new sale of item boby and quantity: 44 to harold for a value of 4500 by 6034ca0591512954d86a6932
