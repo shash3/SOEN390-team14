@@ -59,7 +59,7 @@ const Finance = () => {
   const operationCostPerMinute = 0.05;
   const priceOfBicycle = 500;
   const [displayYear,setDisplayYear] = useState(2021);
-  const [displayMonth,setDisplayMonth] = useState(3);
+  const [displayMonth,setDisplayMonth] = useState(0);
   const [planFormData, setPlanFormData] = useState({
     year:0,
     month:'',
@@ -849,6 +849,32 @@ const Finance = () => {
                     <Card className="shadow">
                       <CardHeader className="bg-transparent text-center">
                         <h1 className=" mb-0">Monthly Breakdown for {monthNames[displayMonth]}</h1>
+                        <Form>
+                        <FormGroup className="mb-3">
+                            <label>
+                              <span className="text-muted"></span>
+                            </label>
+                            <InputGroup className="input-group-alternative">
+                              <Tooltip
+                                  title="Enter the Month you want to see the breakdown for"
+                                  arrow
+                                  placement="top-start"
+                                  enterDelay={750}
+                              >
+                                <Input
+                                    type="select"
+                                    name="month"
+                                    required
+                                    onChange = {(e)=> setDisplayMonth(monthNames.indexOf(e.target.value))}
+                                > <option>Select a Month</option>
+                                  {[...monthNames].map((m) => (
+                                      <option>{m}</option>
+                                  ))}
+                                </Input>
+                              </Tooltip>
+                            </InputGroup>
+                          </FormGroup>
+                          </Form>
                       </CardHeader>
                       <CardBody className="text-center">
                         <h2 className="mb-4">Total Profits</h2>
