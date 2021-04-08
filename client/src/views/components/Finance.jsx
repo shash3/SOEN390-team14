@@ -623,6 +623,7 @@ const Finance = () => {
         'x-auth-token': userToken,
       },
     });
+    setTimeout({},3000);
     setUpdateData(!updateData);
     setPlanFormData({
       year:0,
