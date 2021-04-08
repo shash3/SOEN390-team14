@@ -1337,7 +1337,6 @@ const Production = () => {
                     <th scope="col">Name</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Location</th>
-                    <th scope="col"> </th>
                   </tr>
                 </thead>
                 <tbody>

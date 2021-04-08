@@ -45,7 +45,10 @@ app.use('/api/locations', require('./routes/api/Locations/locationAuth'))
 
 app.use('/api/machine', require('./routes/api/Machines/machineAuth'))
 
+app.use('/api/email', require('./routes/api/Emails/emailAuth'))
+
 app.use('/api/planning', require('./routes/api/Planning/planningAuth'))
+
 
 // serve static assets react if production
 if (process.env.NODE_ENV === 'production') {
