@@ -24,9 +24,14 @@ import {
 
 // core components
 import Tooltip from '@material-ui/core/Tooltip'
+import refreshProduction from '../../variables/refreshProduction'
+
 import { Bar } from 'react-chartjs-2'
 import { FormGroup } from '@material-ui/core'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
+
+const FileSaver = require('file-saver')
+const xml2js = require('xml2js')
 
 const ProductionScheduling = () => {
   const userToken = JSON.parse(localStorage.getItem('user'))
@@ -63,189 +68,11 @@ const ProductionScheduling = () => {
   const MINUTES_TO_FINISH = 5
 
   /* ---------------------------
-   * Functions To Refresh Production Machines
+   * Refresh Production Machines
    * ---------------------------
    */
 
-  const [refreshMachine, setRefreshMachine] = useState(false)
-  /**
-   * Set a timer to refresh every few seconds.
-   */
-  useEffect(() => {
-    let refresh = true
-    setInterval(() => {
-      setRefreshMachine(refresh)
-      refresh = !refresh
-    }, 1000 * 15)
-  }, [])
-
-  /**
-   * Checks if the machines are finished producing the part. Removes it from the machine and adds it to quality assurance.
-   */
-  useEffect(async () => {
-    const returnUnavailableMachines = () => {
-      const reply = axios
-        .post(
-          '/api/machine/unavailable',
-          {
-            location: userLocation,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          },
-        )
-        .then((response) => response.data)
-        .catch((err) => console.error('Error', err))
-      return reply
-    }
-
-    const readMachineLog = async () => {
-      const reply = await axios
-        .get('/api/machine/json', {
-          headers: {
-            'x-auth-token': userToken,
-          },
-        })
-        .catch((err) => console.error('Error', err))
-      return reply.data
-    }
-
-    const writeMachineLog = async (qualityJson) => {
-      await axios
-        .post(
-          '/api/machine/json',
-          {
-            data: qualityJson,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          },
-        )
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-
-    const updateMachineLog = async (machineKey, item, date, location) => {
-      const machinesLog = await readMachineLog()
-      const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ]
-
-      const year = date.getUTCFullYear()
-      const month = monthNames[date.getUTCMonth()]
-
-      if (machinesLog[year] === undefined) {
-        machinesLog[year] = {}
-      }
-      const machineYear = machinesLog[year]
-
-      if (machineYear[month] === undefined) {
-        machineYear[month] = {}
-      }
-      const machineMonth = machineYear[month]
-
-      if (machineMonth[location] === undefined) {
-        machineMonth[location] = {}
-      }
-      const machineLocation = machineMonth[location]
-
-      if (machineLocation[machineKey] === undefined) {
-        machineLocation[machineKey] = {
-          items: {},
-          minutesLogged: 0,
-        }
-      }
-      const machineItems = machineLocation[machineKey].items
-
-      if (machineItems[item] === undefined) {
-        machineItems[item] = 0
-      }
-
-      machineItems[item] += 1
-      machineLocation[machineKey].minutesLogged += 5
-
-      writeMachineLog(machinesLog)
-    }
-
-    const addToQuality = async (name, type, location) => {
-      await axios
-        .post(
-          '/api/quality/add',
-          {
-            name,
-            type,
-            location,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          },
-        )
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-
-    const removeItemFromMachine = async (key) => {
-      await axios
-        .put(
-          '/api/machine/remove',
-          {
-            _id: key,
-          },
-          {
-            headers: {
-              'x-auth-token': userToken,
-            },
-          },
-        )
-        .catch((err) => console.error('Error', err))
-    }
-
-    const main = async () => {
-      if (userLocation === undefined) {
-        return
-      }
-      let updated = 0
-      const unavailMachines = await returnUnavailableMachines()
-      for (let index = 0; index < unavailMachines.length; index += 1) {
-        const machine = unavailMachines[index]
-        if (new Date(machine.finish_time).valueOf() < new Date().valueOf()) {
-          await updateMachineLog(
-            machine._id,
-            machine.item,
-            new Date(),
-            userLocation,
-          )
-          await addToQuality(machine.item, machine.type, userLocation)
-          await removeItemFromMachine(machine._id)
-          updated += 1
-        }
-      }
-      if (updated > 0) {
-        updateMachineView(!machineView)
-      }
-    }
-
-    main()
-  }, [refreshMachine])
+  refreshProduction()
 
   /* -----------------------
    * Functions for interacting with machines.
@@ -273,6 +100,26 @@ const ProductionScheduling = () => {
       const newMachines = response.data
       setMachines(newMachines)
     }
+  }
+
+  /**
+   * Get the machine by its id.
+   */
+  const getMachineById = async (_id) => {
+    const response = await axios
+      .post(
+        '/api/machine/',
+        {
+          _id,
+        },
+        {
+          headers: {
+            'x-auth-token': userToken,
+          },
+        },
+      )
+      .catch((err) => console.error('Error', err))
+    return response.data
   }
 
   /**
@@ -1130,6 +977,27 @@ const ProductionScheduling = () => {
     }
   }, [graphYear, graphLinks, machineView, userLocation])
 
+  const exportMachineXML = async (key) => {
+    const machine = await getMachineById(key)
+    const xmlJson = {
+      "machines":
+      [
+        {
+          "machine": {
+            "id":machine._id,
+            "location":machine.location,
+            "product":machine.item,
+            "finishTime":machine.finish_time,
+          }
+        }
+      ]
+    }
+    const builder = new xml2js.Builder({ attrkey: 'ATTR' })
+    const xmlString = builder.buildObject(xmlJson)
+    const blob = new Blob([xmlString], {type: "application/xml"})
+    FileSaver.saveAs(blob, `Export_${machine._id}.xml`)
+  }
+
   /* -------------------------
    * Returns the HTML code for the productino tab.
    * -------------------------
@@ -1258,6 +1126,20 @@ const ProductionScheduling = () => {
                         hidden={m.item !== ''}
                       >
                         Destroy Machine
+                      </Button>
+                    </Tooltip>
+                    <Tooltip
+                      title="Export the machine information to an XML format for communication"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                    >
+                      <Button
+                        color="info"
+                        onClick={() => exportMachineXML(m._id)}
+                        hidden={m.item === ''}
+                      >
+                        Export Machine
                       </Button>
                     </Tooltip>
                   </CardHeader>
