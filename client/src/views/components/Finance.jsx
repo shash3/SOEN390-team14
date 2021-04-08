@@ -96,7 +96,8 @@ const Finance = () => {
   const [monthlyProfitsPlan, setMonthlyProfitsPlan] = useState([
     0,0,0,0,0,0,0,0,0,0,0,0
   ])
-  
+  var proc;
+  var saleA;
   const [prodPlans,setProdPlans] = useState({});
   const [salesPlans,setSalesPlans] = useState({});
   const [prodActual,setProdActual] = useState({});
@@ -123,14 +124,8 @@ const Finance = () => {
     })
   }
   useEffect(() => {
-    var proc;
-    var saleA;
-    var prodP;
-    var prodA;
-    var salesP;
-
-    const lookup1 = async() => {
-      await axios
+    const lookup0 = async() =>{
+    await axios
       .get('/api/procurement', {
         headers: {
           'x-auth-token': userToken,
@@ -161,6 +156,49 @@ const Finance = () => {
       .catch((error) => {
         console.error(error);
       });
+    }
+    lookup0();
+
+  },[]);
+  useEffect(() => {
+    
+    var prodP;
+    var prodA;
+    var salesP;
+
+    const lookup1 = async() => {
+     /**  await axios
+      .get('/api/procurement', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+           proc = response.data;
+          setProcurement(response.data);
+        }
+      })
+      .catch((error) => {
+       console.log("errorrrr");
+        console.error(error);
+      });
+      await axios
+      .get('/api/sales', {
+        headers: {
+          'x-auth-token': userToken,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+           saleA = response.data;
+          setSalesActual(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+      */
       await axios
       .get('/api/planning/prod', {
         headers: {
@@ -197,7 +235,7 @@ const Finance = () => {
        
         var operMin = getOperationLog(prodA);
         console.log(proc);
-        var procLog = getProcurementLog(proc);
+        var procLog = getProcurementLog(procurement);
         console.log(operMin);
         console.log(procLog);
         var monthC = getMonthlyCosts(operMin,procLog);
@@ -206,7 +244,7 @@ const Finance = () => {
         console.log(salesP);
         var monthSP = getMonthlySalesPlan(salesP)
         console.log(saleA);
-        var salesLog = getSalesLog(saleA);
+        var salesLog = getSalesLog(salesActual);
          getMonthlyProfitsPlan(monthSP,monthCP);
          getMonthlyProfits(salesLog,monthC);
 
