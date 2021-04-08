@@ -1352,34 +1352,6 @@ const Production = () => {
               <CardHeader className="border-0">
                 <Form>
                   <h2 className="mb-0 d-inline">Inventory</h2>
-                  <Tooltip
-                    title="Export to PDF"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
-                  >
-                    <Button
-                      className="mt-4 float-right"
-                      color="danger"
-                      onClick={() => exportToPDF()}
-                    >
-                      Export to PDF
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    title="Export inventory table to a XLSX file"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
-                  >
-                    <Button
-                      className="mt-4 float-right"
-                      color="success"
-                      onClick={() => exportToJsonExcel('Inventory', inventory)}
-                    >
-                      Export to XLSX
-                    </Button>
-                  </Tooltip>
                 </Form>
                 <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-sm-flex ml-lg-auto">
                   <FormGroup className="mt-3">
@@ -1621,34 +1593,6 @@ const Production = () => {
               <CardHeader className="border-0">
                 <Form>
                   <h2 className="mb-0 d-inline">Product Line</h2>
-                  <Tooltip
-                    title="Export product line table to a XLSX file"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
-                  >
-                    <Button
-                      className="float-right"
-                      color="danger"
-                      onClick={() => exportToPDF2()}
-                    >
-                      Export to PDF
-                    </Button>
-                  </Tooltip>
-                  <Tooltip
-                    title="Export product line table to a XLSX file"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
-                  >
-                    <Button
-                      className="float-right"
-                      color="success"
-                      onClick={() => exportProductLine()}
-                    >
-                      Export to XLSX
-                    </Button>
-                  </Tooltip>
                 </Form>
                 <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-sm-flex ml-lg-auto">
                   <FormGroup className="mt-3">
