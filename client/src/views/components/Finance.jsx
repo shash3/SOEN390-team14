@@ -123,49 +123,7 @@ const Finance = () => {
       [e.target.name]:e.target.value,
     })
   }
-  /**  useEffect(() => {
-    const lookup0 = async() =>{
-      
-    await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           proc = response.data;
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-    
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-           saleA = response.data;
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-    setTimeout(() => {
-      lookup0();
-    getAllLoc();
-    setBikes();
-    },3000);
-    
-
-  },[]); */
+  
   useEffect(() => {
     var proc;
     var saleA;
@@ -260,69 +218,7 @@ const Finance = () => {
         
     };
     
-    const lookup = async() => {
-      await axios
-      .get('/api/procurement', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setProcurement(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          setSalesActual(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-      await axios
-      .get('/api/planning/prod', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-        
-        setProdPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-        await axios
-      .get('/api/planning/sales', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-      
-        setSalesPlans(response.data)}).catch((error)=>{
-          console.error(error);
-        }); 
-        
-        await axios
-      .get('/api/planning/prodActual', {
-        headers: {
-          'x-auth-token': userToken,
-        },
-      }).then((response) => {
-     
-        setProdActual(response.data)}).catch((error)=>{
-          console.error(error);
-        });
-        
-    };
+    
     setTimeout(() => {
       lookup1();
     getAllLoc();
@@ -455,7 +351,7 @@ const Finance = () => {
       const getMonthlySalesPlan = (salesPlans) => {
         
         var i;
-       var displayYear1 = 2021;
+       
         const updatedSalesPlan =[0,0,0,0,0,0,0,0,0,0,0,0];
         if(salesPlans[displayYear]==undefined){
         
