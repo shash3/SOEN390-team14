@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-undef */
@@ -34,7 +33,7 @@ import {
 // core components
 import Tooltip from '@material-ui/core/Tooltip'
 import { exportToJsonExcel } from '../../variables/export'
-import Header from '../../components/Headers/Header.jsx'
+import Header from '../../components/Headers/CardlessHeader.jsx'
 
 const QualityAssurance = () => {
   const userToken = JSON.parse(localStorage.getItem('user'))

@@ -31,8 +31,8 @@ import {
   Modal,
 } from 'reactstrap';
 // core components
-import Header from '../../components/Headers/CardlessHeader.jsx';
 import Tooltip from '@material-ui/core/Tooltip';
+import Header from '../../components/Headers/CardlessHeader.jsx';
 
 const Transportation = () => {
   const userToken = JSON.parse(localStorage.getItem('user'));
