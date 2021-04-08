@@ -47,7 +47,8 @@ import Tooltip from '@material-ui/core/Tooltip'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
-import { exportToJsonExcel } from '../../variables/export
+import { exportToJsonExcel } from '../../variables/export'
+
 const xml2js = require('xml2js')
 
 const Production = () => {
