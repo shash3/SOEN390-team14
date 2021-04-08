@@ -1,1 +1,119 @@
-[Wed, 07 Apr 2021 23:21:34 GMT] set paid status of invoice 60536a32c40703218c910db1 to true by 603526621e4e246054d2a992
+[Wed, 07 Apr 2021 23:21:34 GMT] set paid status of invoice 60536a32c40703218c910db1 to true by 603526621e4e246054d2a992[Thu, 08 Apr 2021 00:56:58 GMT] added a planned production {
+  "0": {
+    "": {
+      "": {
+        "": 0
+      }
+    },
+    "August": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 83
+      }
+    }
+  },
+  "54": {
+    "March": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 77
+      }
+    }
+  },
+  "2021": {
+    "August": {
+      "Plant 2": {
+        "Large Aluminium Bike": 66,
+        "Small Aluminium Bike": 54,
+        "test": 33,
+        "Small Carbon Bike": 30
+      },
+      "Plant 1": {
+        "Small Steel Bike": 55
+      }
+    },
+    "October": {
+      "Plant 2": {
+        "Large Aluminium Bike": 83,
+        "Small Carbon Bike": 66
+      }
+    },
+    "May": {
+      "Plant 2": {
+        "Medium Aluminium Bike": 44,
+        "Large Aluminium Bike": 66
+      },
+      "Plant 1": {
+        "Small Aluminium Bike": 85
+      }
+    },
+    "February": {
+      "Plant 2": {
+        "Small Carbon Bike": 26,
+        "Large Aluminium Bike": 7
+      },
+      "Plant 1": {
+        "Small Steel Bike": 50
+      }
+    },
+    "June": {
+      "Plant 2": {
+        "test": 77
+      }
+    },
+    "July": {
+      "Plant 1": {
+        "Medium Aluminium Bike": 65,
+        "Large Steel Bike": 98
+      },
+      "Plant 3": {
+        "Small Steel Bike": 52
+      }
+    },
+    "April": {
+      "Plant 2": {
+        "Small Aluminium Bike": 32,
+        "Small Carbon Bike": 43,
+        "Medium Steel Bike": 45,
+        "Small Steel Bike": 53
+      },
+      "Plant 3": {
+        "Small Aluminium Bike": 50
+      },
+      "Plant 1": {
+        "Medium Carbon Bike": 43,
+        "Small Steel Bike": 56
+      }
+    },
+    "September": {
+      "Plant 2": {
+        "Small Aluminium Bike": 64
+      },
+      "Plant 1": {
+        "Medium Aluminium Bike": 23
+      }
+    },
+    "March": {
+      "Plant 2": {
+        "Medium Carbon Bike": 73,
+        "Small Carbon Bike": 63
+      },
+      "Plant 1": {
+        "Small Steel Bike": 66
+      }
+    },
+    "December": {
+      "Plant 2": {
+        "Small Aluminium Bike": 62
+      }
+    },
+    "November": {
+      "Plant 2": {
+        "Medium Steel Bike": 48
+      }
+    },
+    "January": {
+      "Plant 2": {
+        "Medium Carbon Bike": 46
+      }
+    }
+  }
+} by 6034ca0591512954d86a6932

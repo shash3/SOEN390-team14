@@ -8,6 +8,7 @@ const User = require('../../../models/User')
 
 router.get('/', auth, async (req, res) => {
   try {
+    console.log("hello");
     const procurement = await Procurement.find()
     res.json(procurement)
   } catch (err) {
