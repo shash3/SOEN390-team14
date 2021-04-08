@@ -21,43 +21,42 @@ const createWorkBook = (data, excelSheet) => {
   try {
     // Write Data in Excel file
     const totalHeader = []
-    for (let index = 0; index < data.length; index+=1) {
-      const record = data[index];
-      
+    for (let index = 0; index < data.length; index += 1) {
+      const record = data[index]
+
       // Get all column names (converts from unstructured to structured data format)
-      Object.keys(record).forEach(column => {
-        if (!totalHeader.includes(column)){
+      Object.keys(record).forEach((column) => {
+        if (!totalHeader.includes(column)) {
           totalHeader.push(column)
         }
-      });
+      })
 
       // Write data to the cell based on column name
       Object.keys(record).forEach((columnName) => {
         const columnIndex = totalHeader.indexOf(columnName)
         if (typeof record[columnName] === 'number') {
-          ws.cell(index+2, columnIndex+1).number(record[columnName])
+          ws.cell(index + 2, columnIndex + 1).number(record[columnName])
         } else {
-          ws.cell(index+2, columnIndex+1).string(record[columnName])
+          ws.cell(index + 2, columnIndex + 1).string(record[columnName])
         }
       })
-
     }
 
     // Write all column names
-    for (let index = 0; index < totalHeader.length; index+=1) {
-      const heading = totalHeader[index];
-      ws.cell(1, index+1).string(heading)
+    for (let index = 0; index < totalHeader.length; index += 1) {
+      const heading = totalHeader[index]
+      ws.cell(1, index + 1).string(heading)
     }
   } catch (err) {
     console.error('invalid data type when saving to file')
   }
 
-  return wb;
+  return wb
 }
 
 /**
  * Exports json data to an MS Excel file.
- * 
+ *
  * @param {String} defaultFilename the name of the file name
  * @param {Array} data the array of json data to export
  */
@@ -69,7 +68,7 @@ const exportToJsonExcel = (defaultFilename, data) => {
 
 /**
  * Exports json data to a Comma Seperated file.
- * 
+ *
  * @param {String} defaultFilename the name of the file name
  * @param {Array} data the array of json data to export
  */
@@ -79,12 +78,9 @@ const exportJsonToCSV = (defaultFilename, data) => {
   saveExcelFile(wb, defaultFilename, extension)
 }
 
-
-const exportGraphPDF = (defaultFilename, graphData) => {
-
-}
+const exportGraphPDF = (defaultFilename, graphData) => {}
 
 module.exports = {
   exportToJsonExcel,
-  exportJsonToCSV
+  exportJsonToCSV,
 }

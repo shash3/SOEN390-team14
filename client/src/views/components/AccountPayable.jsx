@@ -1,7 +1,8 @@
+/* eslint-disable new-cap */
 /* eslint-disable no-undef */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
-import axios from 'axios';
+import axios from 'axios'
 // reactstrap components
 import {
   Card,
@@ -23,36 +24,35 @@ import {
   ModalFooter,
   Button,
   Modal,
-} from 'reactstrap';
+} from 'reactstrap'
 // core components
-import FinanceHeader from '../../components/Headers/FinanceHeader.jsx';
-import Tooltip from "@material-ui/core/Tooltip";
-import {exportToJsonExcel} from "../../variables/export";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import Tooltip from '@material-ui/core/Tooltip'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import { exportToJsonExcel } from '../../variables/export'
+import FinanceHeader from '../../components/Headers/FinanceHeader.jsx'
 
 const AccountPayable = () => {
-
-  const exportToPDF = () =>{
+  const exportToPDF = () => {
     const doc = new jsPDF()
     autoTable(doc, {
-      html: '#apunpaid-table'
+      html: '#apunpaid-table',
     })
     doc.save('AP Unpaid.pdf')
   }
 
-  const exportToPDF2 = () =>{
+  const exportToPDF2 = () => {
     const doc = new jsPDF()
     autoTable(doc, {
-      html: '#appaid-table'
+      html: '#appaid-table',
     })
     doc.save('AP paid.pdf')
   }
 
-  const [payables, setPayables] = useState([]);
-  const [payablesP, setPayablesP] = useState([]);
-  const userToken = JSON.parse(localStorage.getItem('user'));
-  const [updated, setUpdated] = useState(false);
+  const [payables, setPayables] = useState([])
+  const [payablesP, setPayablesP] = useState([])
+  const userToken = JSON.parse(localStorage.getItem('user'))
+  const [updated, setUpdated] = useState(false)
   useEffect(() => {
     // retrieve information
     const lookup = async () => {
@@ -64,12 +64,12 @@ const AccountPayable = () => {
         })
         .then((response) => {
           if (response.data) {
-            setPayables(response.data);
+            setPayables(response.data)
           }
         })
         .catch((error) => {
-          console.error(error);
-        });
+          console.error(error)
+        })
 
       await axios
         .get('/api/procurement/payablesP', {
@@ -79,22 +79,21 @@ const AccountPayable = () => {
         })
         .then((response) => {
           if (response.data) {
-            setPayablesP(response.data);
+            setPayablesP(response.data)
           }
         })
         .catch((error) => {
-          console.error(error);
-        });
-    };
-    lookup();
-  }, [updated]);
+          console.error(error)
+        })
+    }
+    lookup()
+  }, [updated])
 
   const onDelete = async (_id) => {
     const salesId = {
       _id,
-
-    };
-    const body = JSON.stringify(salesId);
+    }
+    const body = JSON.stringify(salesId)
     try {
       await axios
         .post('/api/procurement/delete', body, {
@@ -103,17 +102,16 @@ const AccountPayable = () => {
             'Content-Type': 'application/json',
           },
         })
-        .then(setUpdated(!updated));
+        .then(setUpdated(!updated))
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
   const onSetPaid = async (_id) => {
     const salesId = {
       _id,
-
-    };
-    const body = JSON.stringify(salesId);
+    }
+    const body = JSON.stringify(salesId)
     try {
       await axios
         .post('/api/procurement/setPaid', body, {
@@ -122,16 +120,16 @@ const AccountPayable = () => {
             'Content-Type': 'application/json',
           },
         })
-        .then(setUpdated(!updated));
+        .then(setUpdated(!updated))
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false)
 
   function closeModal() {
-    setModal(!modal);
+    setModal(!modal)
   }
 
   return (
@@ -145,26 +143,26 @@ const AccountPayable = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Accounts Payable</h2>
                 <Tooltip
-                    title="Click to create a new AR receipt"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
+                  title="Click to create a new AR receipt"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
                     className="mt-4"
                     color="primary"
                     onClick={() => {
-                      closeModal();
+                      closeModal()
                     }}
                   >
                     Add AR Receipt
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Export to PDF"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
+                  title="Export to PDF"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
                     className="mt-4 float-right"
@@ -175,23 +173,22 @@ const AccountPayable = () => {
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Click to export to XLSX"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
+                  title="Click to export to XLSX"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
-                      className="mt-4 float-right"
-                      color="success"
-                      onClick={() => exportToJsonExcel('AP Unpaid Receipts', payables)}
+                    className="mt-4 float-right"
+                    color="success"
+                    onClick={() =>
+                      exportToJsonExcel('AP Unpaid Receipts', payables)
+                    }
                   >
                     Export to XLSX
                   </Button>
                 </Tooltip>
-                <Modal
-                  isOpen={modal}
-                  changeStatus={closeModal}
-                >
+                <Modal isOpen={modal} changeStatus={closeModal}>
                   <ModalHeader changeStatus={closeModal}>
                     Fill In The Form Below
                   </ModalHeader>
@@ -200,26 +197,22 @@ const AccountPayable = () => {
                       <FormGroup>
                         <InputGroup>
                           <Tooltip
-                              title="Enter a date for when the receipt was created"
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
+                            title="Enter a date for when the receipt was created"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
-                            <Input
-                              type="date"
-                              placeholder="Date"
-                              name="date"
-                            />
+                            <Input type="date" placeholder="Date" name="date" />
                           </Tooltip>
                         </InputGroup>
                       </FormGroup>
                       <FormGroup>
                         <InputGroup>
                           <Tooltip
-                              title="Enter the status of the receipt"
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
+                            title="Enter the status of the receipt"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
                             <Input
                               type="text"
@@ -231,24 +224,22 @@ const AccountPayable = () => {
                       </FormGroup>
                       <div className="text-center">
                         <Tooltip
-                            title="Click here to create the AR receipt"
-                            arrow
-                            placement="top-start"
-                            enterDelay={750}
+                          title="Click here to create the AR receipt"
+                          arrow
+                          placement="top-start"
+                          enterDelay={750}
                         >
-                          <Button color="primary">
-                            Add AR Receipt
-                          </Button>
+                          <Button color="primary">Add AR Receipt</Button>
                         </Tooltip>
                       </div>
                     </Form>
                   </ModalBody>
                   <ModalFooter>
                     <Tooltip
-                        title="Cancel the creation of the receipt"
-                        arrow
-                        placement="top-start"
-                        enterDelay={750}
+                      title="Cancel the creation of the receipt"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
                     >
                       <Button color="secondary" onClick={closeModal}>
                         Cancel
@@ -257,7 +248,11 @@ const AccountPayable = () => {
                   </ModalFooter>
                 </Modal>
               </CardHeader>
-              <Table id="apunpaid-table" className="align-items-center table-flush mb-6" responsive>
+              <Table
+                id="apunpaid-table"
+                className="align-items-center table-flush mb-6"
+                responsive
+              >
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Invoice ID</th>
@@ -279,17 +274,14 @@ const AccountPayable = () => {
                       </th>
                       <td>{t.date.substr(0, 10)}</td>
                       <td>{t.value}</td>
-                      <td>
-                        {t.paid ? 'Paid' : 'Not Paid'}
-                        {' '}
-                      </td>
+                      <td>{t.paid ? 'Paid' : 'Not Paid'} </td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <Tooltip
-                              title="More Options"
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
+                            title="More Options"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
                             <DropdownToggle
                               className="btn-icon-only text-light"
@@ -333,35 +325,41 @@ const AccountPayable = () => {
               <CardHeader className="border-0">
                 <h2 className="mb-0">Paid Accounts Payable</h2>
                 <Tooltip
-                    title="Export to PDF"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
+                  title="Export to PDF"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
-                      className="mt-4 float-right"
-                      color="danger"
-                      onClick={() => exportToPDF2()}
+                    className="mt-4 float-right"
+                    color="danger"
+                    onClick={() => exportToPDF2()}
                   >
                     Export to PDF
                   </Button>
                 </Tooltip>
                 <Tooltip
-                    title="Click to export to XLSX"
-                    arrow
-                    placement="top-start"
-                    enterDelay={750}
+                  title="Click to export to XLSX"
+                  arrow
+                  placement="top-start"
+                  enterDelay={750}
                 >
                   <Button
-                      className="mt-4 float-right"
-                      color="success"
-                      onClick={() => exportToJsonExcel('AP Paid Receipts', payablesP)}
+                    className="mt-4 float-right"
+                    color="success"
+                    onClick={() =>
+                      exportToJsonExcel('AP Paid Receipts', payablesP)
+                    }
                   >
                     Export to XLSX
                   </Button>
                 </Tooltip>
               </CardHeader>
-              <Table id="appaid-table" className="align-items-center table-flush mb-6" responsive>
+              <Table
+                id="appaid-table"
+                className="align-items-center table-flush mb-6"
+                responsive
+              >
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Invoice ID</th>
@@ -384,17 +382,14 @@ const AccountPayable = () => {
 
                       <td>{t.date.substr(0, 10)}</td>
                       <td>{t.value}</td>
-                      <td>
-                        {t.paid ? 'Paid' : 'Not Paid'}
-                        {' '}
-                      </td>
+                      <td>{t.paid ? 'Paid' : 'Not Paid'} </td>
                       <td className="text-right">
                         <UncontrolledDropdown>
                           <Tooltip
-                              title="More Options"
-                              arrow
-                              placement="top-start"
-                              enterDelay={750}
+                            title="More Options"
+                            arrow
+                            placement="top-start"
+                            enterDelay={750}
                           >
                             <DropdownToggle
                               className="btn-icon-only text-light"
@@ -414,23 +409,19 @@ const AccountPayable = () => {
                             >
                               Delete
                             </DropdownItem>
-
                           </DropdownMenu>
                         </UncontrolledDropdown>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-
               </Table>
-
             </Card>
           </div>
         </Row>
-
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default AccountPayable;
+export default AccountPayable
