@@ -17,7 +17,7 @@ describe("Post Endpoints", () => {
       password: "12345678",
     });
   });
-  
+
   it("test logging in ", async () => {
     const res = await request(app).post("/api/auth/login").send({
       email: "admin@gmail.com",
@@ -70,6 +70,7 @@ describe("Post Endpoints", () => {
     });
     expect(res1.body).toBeTruthy();
   });
+
   it("Change a specific inventory item to a new quantity", async () => {
     const res1 = await request(app).put("/api/inventory/remove", {
       headers: {
