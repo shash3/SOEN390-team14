@@ -29,7 +29,7 @@ describe('LoginTest', () => {
     await driver.quit()
   })
   it('LoginTest', async () => {
-    await driver.get('https://bikker.herokuapp.com/auth/login')
+    await driver.get('https://bikerr.herokuapp.com/auth/login')
     await driver.manage().window().setRect(1098, 678)
     await driver.findElement(By.name('email')).click()
     await driver.findElement(By.name('email')).sendKeys('admin@gmail.com')
