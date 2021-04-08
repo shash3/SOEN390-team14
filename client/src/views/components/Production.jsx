@@ -46,8 +46,27 @@ import { useLoading, Oval } from '@agney/react-loading'
 import Tooltip from '@material-ui/core/Tooltip'
 import ProductionHeader from '../../components/Headers/productionHeader.jsx'
 import { exportToJsonExcel } from '../../variables/export';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Production = () => {
+
+  const exportToPDF = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: "#inv-table"
+    })
+    doc.save('Inventory.pdf')
+  }
+
+  const exportToPDF2 = () =>{
+    const doc = new jsPDF()
+    autoTable(doc, {
+      html: "#pl-table"
+    })
+    doc.save('Inventory.pdf')
+  }
+
   const userToken = JSON.parse(localStorage.getItem('user'))
   const [userLoc, setUserLoc] = useState('')
 
@@ -1164,6 +1183,7 @@ const Production = () => {
       exportedProduct.push(exportedProdLine)
     });
 
+
     exportToJsonExcel('Product Line', exportedProduct)
   }
   /* -------------------------
@@ -1182,17 +1202,31 @@ const Production = () => {
                 <Form>
                   <h2 className="mb-0 d-inline">Inventory</h2>
                   <Tooltip
-                    title="Export inventory table to a file"
+                      title="Export to PDF"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                  >
+                    <Button
+                        className="mt-4 float-right"
+                        color="danger"
+                        onClick={() => exportToPDF()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export inventory table to a XLSX file"
                     arrow
                     placement="top-start"
                     enterDelay={750}
                   >
                     <Button
-                      className="float-right"
-                      color="danger"
+                      className="mt-4 float-right"
+                      color="success"
                       onClick={() => exportToJsonExcel('Inventory', inventory)}
                     >
-           Export
+           Export to XLSX
                     </Button>
                   </Tooltip>
                 </Form>
@@ -1256,7 +1290,7 @@ const Production = () => {
                   </Tooltip>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table id="inv-table" className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
@@ -1387,17 +1421,31 @@ const Production = () => {
                 <Form>
                   <h2 className="mb-0 d-inline">Product Line</h2>
                   <Tooltip
-                    title="Export product line table to a file"
+                      title="Export product line table to a XLSX file"
+                      arrow
+                      placement="top-start"
+                      enterDelay={750}
+                  >
+                    <Button
+                        className="float-right"
+                        color="danger"
+                        onClick={() => exportToPDF2()}
+                    >
+                      Export to PDF
+                    </Button>
+                  </Tooltip>
+                  <Tooltip
+                    title="Export product line table to a XLSX file"
                     arrow
                     placement="top-start"
                     enterDelay={750}
                   >
                     <Button
                       className="float-right"
-                      color="danger"
+                      color="success"
                       onClick={() => exportProductLine()}
                     >
-           Export
+           Export to XLSX
                     </Button>
                   </Tooltip>
                 </Form>
@@ -1450,7 +1498,7 @@ const Production = () => {
                   </Tooltip>
                 </Form>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
+              <Table id="pl-table" className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Name</th>
