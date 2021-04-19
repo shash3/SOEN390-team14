@@ -204,9 +204,9 @@ const Transportation = () => {
   const onAdd = async () => {
     if (
       name === '' ||
-      quantity === 0 ||
+      quantity <= 0 ||
       location === '' ||
-      destination === 0 ||
+      destination <= 0 ||
       type === ''
     ) {
       alert('Please Enter Data Into All Fields')

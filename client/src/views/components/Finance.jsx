@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-alert */
 /* eslint-disable radix */
 /* eslint-disable no-loop-func */
@@ -361,7 +362,7 @@ const Finance = () => {
     const updatedProcurements = []
     const procurementsInYear = []
     procurement.forEach((p) => {
-      if (new Date(p.date).getFullYear() === displayYear) {
+      if (new Date(p.date).getFullYear() == displayYear) {
         procurementsInYear.push(p)
       }
     })
@@ -438,7 +439,7 @@ const Finance = () => {
     const salesInYear = []
     const updatedSales = []
     salesActual.forEach((p) => {
-      if (new Date(p.date).getFullYear() === displayYear) {
+      if (new Date(p.date).getFullYear() == displayYear) {
         salesInYear.push(p)
       }
     })
@@ -527,12 +528,12 @@ const Finance = () => {
   const addNewPlan = async () => {
     const { year, month, location, item, quantity, salesGoal } = planFormData
     if (
-      year === 0 ||
+      year <= 0 ||
       month === '' ||
       location === '' ||
       item === '' ||
-      quantity === 0 ||
-      salesGoal === 0
+      quantity <= 0 ||
+      salesGoal <= 0
     ) {
       window.alert('invalid input')
       return

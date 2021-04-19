@@ -123,7 +123,7 @@ const Profile = () => {
       permission: newPermission,
     }
     await axios
-      .put('http://localhost:5000/api/auth/permission', body, {
+      .put('/api/auth/permission', body, {
         headers: {
           'x-auth-token': userToken,
         },
@@ -332,12 +332,6 @@ const Profile = () => {
                                     </Button>
                                   </ModalFooter>
                                 </Modal>
-
-                                <DropdownItem
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Change Location
-                                </DropdownItem>
                               </DropdownMenu>
                             </UncontrolledDropdown>
                           </td>
