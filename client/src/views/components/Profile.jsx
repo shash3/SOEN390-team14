@@ -332,12 +332,6 @@ const Profile = () => {
                                     </Button>
                                   </ModalFooter>
                                 </Modal>
-
-                                <DropdownItem
-                                  onClick={(e) => e.preventDefault()}
-                                >
-                                  Change Location
-                                </DropdownItem>
                               </DropdownMenu>
                             </UncontrolledDropdown>
                           </td>
